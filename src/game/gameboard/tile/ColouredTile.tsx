@@ -17,8 +17,7 @@ export default class ColouredTile extends React.Component<Props> {
   private readonly pathRef = React.createRef<Konva.Path>();
   private readonly svgTileWidth = 63;
   private readonly svgTileHeight = 63;
-  private readonly svgData =
-    `M64,56c0-6,8-4,8-11s-8-2-8-9s8-1.73,8-8s-8-6-8-12s3-9,3-9l-1.1-1.1C63.84,3.92,59.28,0,55,0
+  private readonly svgData = `M64,56c0-6,8-4,8-11s-8-2-8-9s8-1.73,8-8s-8-6-8-12s3-9,3-9l-1.1-1.1C63.84,3.92,59.28,0,55,0
 		c-5.5,0-5.5,8-11,8c-5.87,0-3-8-8-8s-1.55,8-7.5,8S21,0,16,0S7,3,7,3c0.5,0.5,1.5,2.5,0,4S3.5,7.5,3,7c0,0-3,3-3,9s8,5.73,8,12
 		s-8,1-8,8s8,2,8,9s-8,5-8,11s6.5,10.5,7,11c0.07-0.07,0.19-0.15,0.36-0.25C8.43,66.04,11.87,64,16,64c5,0,6.55,8,12.5,8
 		s2.5-8,7.5-8s2.13,8,8,8c5.5,0,5.5-8,11-8c0.31,0,0.63,0.03,0.94,0.07c0.09,0.01,0.19,0.03,0.28,0.05
