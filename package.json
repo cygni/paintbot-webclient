@@ -6,7 +6,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "lint": "tslint --project tsconfig.json",
+    "typecheck": "tsc --noEmit",
+    "lint": "tslint --project tsconfig.json --format stylish --exclude '**/*.json'",
     "prettier": "prettier --write '**/*.{md,yml,js,jsx,json,ts,tsx}'"
   },
   "dependencies": {
