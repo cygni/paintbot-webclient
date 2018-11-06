@@ -30,7 +30,7 @@ export default class GameDirector extends React.Component<Props, State> {
     this.events.push(JSON.parse(evt.data));
   }
 
-  private updateGameSpeedInterval = (milliseconds: number) => {
+  private readonly updateGameSpeedInterval = (milliseconds: number) => {
     if (this.updateInterval !== undefined) {
       clearInterval(this.updateInterval);
     }
@@ -61,13 +61,13 @@ export default class GameDirector extends React.Component<Props, State> {
     }
   }
 
-  private pauseGame = () => {
+  private readonly pauseGame = () => {
     if (this.updateInterval !== undefined) {
       clearInterval(this.updateInterval);
     }
   };
 
-  private restartGame = () => {
+  private readonly restartGame = () => {
     this.currentEventIndex = 0;
   };
 

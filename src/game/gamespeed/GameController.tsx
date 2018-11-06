@@ -71,7 +71,7 @@ export class GameController extends React.Component<Props, State> {
             minValue={Config.GameSpeedMin}
             maxValue={Config.GameSpeedMax}
             defaultValue={Config.DefaultGameSpeed}
-            reverse={true}
+            reverse
             sliderChange={this.gameSpeedChange}
           />
         </GameSpeedContainer>

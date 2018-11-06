@@ -1,0 +1,103 @@
+version: 2
+
+defaults: &defaults
+  working_directory: ~/project
+  docker:
+    - image: circleci/node:dubnium
+
+jobs:
+  install:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          name: Restore Yarn cache
+          keys:
+            - yarn-cache-{{ checksum "yarn.lock" }}
+            - yarn-cache-
+      - run:
+          name: Install dependencies
+          command: yarn install --frozen-lockfile --cache-folder ~/.yarn-cache
+      - save_cache:
+          name: Save Yarn cache
+          key: yarn-cache-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.yarn-cache
+      - persist_to_workspace:
+          root: ~/project
+          paths: .
+
+  typecheck:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Run type checker
+          command: yarn run typecheck
+
+  lint:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Run linter
+          command: yarn run lint
+
+  test:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Run tests
+          command: yarn run test --ci --coverage --runInBand
+      - store_artifacts:
+          path: coverage
+
+  build:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Build app
+          command: yarn run build
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - build
+
+  deploy:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: List directory content
+          command: ls -la
+
+workflows:
+  version: 2
+  install-test-and-build:
+    jobs:
+      - install
+      - typecheck:
+          requires:
+            - install
+      - lint:
+          requires:
+            - install
+      - test:
+          requires:
+            - install
+      - build:
+          requires:
+            - install
+      - deploy:
+          requires:
+            - typecheck
+            - lint
+            - test
+            - build
