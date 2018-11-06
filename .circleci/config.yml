@@ -71,6 +71,15 @@ jobs:
           paths:
             - build
 
+  deploy:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: List directory content
+          command: ls -la
+
 workflows:
   version: 2
   install-test-and-build:
@@ -88,3 +97,9 @@ workflows:
       - build:
           requires:
             - install
+      - deploy:
+          requires:
+            - typecheck
+            - lint
+            - test
+            - build
