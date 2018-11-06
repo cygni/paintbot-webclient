@@ -58,9 +58,22 @@ jobs:
       - store_artifacts:
           path: coverage
 
+  build:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Build app
+          command: yarn run build
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - build
+
 workflows:
   version: 2
-  install-and-test:
+  install-test-and-build:
     jobs:
       - install
       - typecheck:
@@ -70,5 +83,8 @@ workflows:
           requires:
             - install
       - test:
+          requires:
+            - install
+      - build:
           requires:
             - install
