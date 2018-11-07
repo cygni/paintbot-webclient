@@ -71,12 +71,17 @@ jobs:
 
   deploy:
     <<: *defaults
+    docker:
+      - image: circleci/python:3.6-jessie
     steps:
       - attach_workspace:
           at: ~/project
       - run:
-          name: List directory content
-          command: ls -la
+          name: Install AWS CLI
+          command: sudo pip install awscli
+      - run:
+          name: Deploy to S3
+          command: aws --version
 
 workflows:
   version: 2
@@ -95,9 +100,13 @@ workflows:
       - build:
           requires:
             - install
-      - deploy:
+      - approve-deploy:
+          type: approval
           requires:
             - typecheck
             - lint
             - test
             - build
+      - deploy:
+          requires:
+            - approve-deploy
