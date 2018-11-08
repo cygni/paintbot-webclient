@@ -64,19 +64,46 @@ jobs:
       - run:
           name: Build app
           command: yarn run build
+          environment:
+            PUBLIC_URL: '.'
+            REACT_APP_USE_HASH_ROUTER: 'true'
       - persist_to_workspace:
           root: ~/project
           paths:
             - build
 
   deploy:
-    <<: *defaults
+    working_directory: ~/project/infrastructure
+    docker:
+      - image: circleci/python:3.6-jessie
     steps:
       - attach_workspace:
           at: ~/project
       - run:
-          name: List directory content
-          command: ls -la
+          name: Install Terraform
+          command: |
+            curl -O https://releases.hashicorp.com/terraform/0.11.10/terraform_0.11.10_linux_amd64.zip
+            unzip terraform_0.11.10_linux_amd64.zip
+      - run:
+          name: Initialize Terraform
+          command: ./terraform init
+      - run:
+          name: Create Terraform plan
+          command: ./terraform plan --out terraform.plan
+      - run:
+          name: Apply Terraform plan
+          command: ./terraform apply --auto-approve terraform.plan
+      - run:
+          name: Install AWS CLI
+          command: sudo pip install awscli
+      - run:
+          name: Sync S3 bucket
+          command:
+            aws s3 sync ../build s3://$(./terraform output bucket_name) --delete --metadata-directive REPLACE
+            --cache-control no-cache,no-store,max-age=0
+      - run:
+          name: Output website endpoint
+          command: ./terraform output website_endpoint
 
 workflows:
   version: 2
@@ -95,9 +122,18 @@ workflows:
       - build:
           requires:
             - install
-      - deploy:
+      - approve-deploy:
+          type: approval
           requires:
             - typecheck
             - lint
             - test
             - build
+          filters:
+            branches:
+              only:
+                - master
+                - develop
+      - deploy:
+          requires:
+            - approve-deploy
