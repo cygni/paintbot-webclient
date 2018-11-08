@@ -129,6 +129,11 @@ workflows:
             - lint
             - test
             - build
+          filters:
+            branches:
+              only:
+                - master
+                - develop
       - deploy:
           requires:
             - approve-deploy
