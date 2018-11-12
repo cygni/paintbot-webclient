@@ -39,7 +39,7 @@ export default class GameBoardFactory {
     this.gameMap.bombPositions.forEach(bombPosition => {
       const bomb = {} as PowerUp;
       bomb.coordinate = this.getCoordinateFromMapPosition(bombPosition);
-      bomb.image = '/images/bomb.png';
+      bomb.image = '/images/star.png';
       bombs.push(bomb);
     });
     return bombs;

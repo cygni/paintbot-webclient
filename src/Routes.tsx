@@ -20,7 +20,7 @@ export default function Routes() {
       <React.Suspense fallback={null}>
         <Switch>
           <Route path="/" exact component={WelcomeScreen} />
-          <Route path="/game" component={LazyGameScreen} />
+          <Route path="/game/:id?" component={LazyGameScreen} />
           <Route component={GoHome} />
         </Switch>
       </React.Suspense>
