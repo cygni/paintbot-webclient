@@ -23,6 +23,10 @@ const Container = styled.div`
   max-width: 400px;
 `;
 
+const Score = styled.h1`
+  margin-left: 10px;
+`;
+
 export default class ScoreBoardContainer extends React.Component<Props> {
   private getPlayers() {
     const sortedPlayers = sortPlayers(this.props.players, SortOrder.DESCENDING);
@@ -38,7 +42,7 @@ export default class ScoreBoardContainer extends React.Component<Props> {
     return (
       <Container>
         <Row style={{ backgroundColor: StandardColors.Black }}>
-          <h1>Score</h1>
+          <Score>Score</Score>
         </Row>
         <Indent>
           <FlipMove>{this.getPlayers()}</FlipMove>
