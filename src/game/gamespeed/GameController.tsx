@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import { Row } from '../../common/ui/Row';
 import Slider from '../../common/ui/Slider';
+import { Spacing } from '../../common/ui/Spacing';
 import Config from '../../Config';
 
 import { PlayControllButton } from './PlayControllButton';
@@ -62,20 +63,22 @@ export class GameController extends React.Component<Props, State> {
   render() {
     const playing = this.state.playing;
     return (
-      <Row>
-        <PlayControllButton onClick={this.playOrPause} playing={playing} />
-        <GameSpeedContainer>
-          <div>Game Speed</div>
-          <Slider
-            ref={this.sliderRef}
-            minValue={Config.GameSpeedMin}
-            maxValue={Config.GameSpeedMax}
-            defaultValue={Config.DefaultGameSpeed}
-            reverse
-            sliderChange={this.gameSpeedChange}
-          />
-        </GameSpeedContainer>
-      </Row>
+      <Spacing>
+        <Row>
+          <PlayControllButton onClick={this.playOrPause} playing={playing} />
+          <GameSpeedContainer>
+            <div>Game Speed</div>
+            <Slider
+              ref={this.sliderRef}
+              minValue={Config.GameSpeedMin}
+              maxValue={Config.GameSpeedMax}
+              defaultValue={Config.DefaultGameSpeed}
+              reverse
+              sliderChange={this.gameSpeedChange}
+            />
+          </GameSpeedContainer>
+        </Row>
+      </Spacing>
     );
   }
 }

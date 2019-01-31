@@ -1,10 +1,7 @@
 import React from 'react';
 import FlipMove from 'react-flip-move';
-import styled from 'styled-components';
 
-import { ScoreBoardColors, StandardColors } from '../../common/Constants';
 import { Indent } from '../../common/ui/Indent';
-import { Row } from '../../common/ui/Row';
 import { Character } from '../type';
 
 import ScoreBoardEntry from './ScoreBoardEntry';
@@ -14,18 +11,6 @@ interface Props {
   players: Character[];
   worldTick?: number;
 }
-
-const Container = styled.div`
-  text-align: center;
-  background-color: ${ScoreBoardColors.Background};
-  margin-left: 10px;
-  display: inline-block;
-  max-width: 400px;
-`;
-
-const Score = styled.h1`
-  margin-left: 10px;
-`;
 
 export default class ScoreBoardContainer extends React.Component<Props> {
   private getPlayers() {
@@ -40,14 +25,9 @@ export default class ScoreBoardContainer extends React.Component<Props> {
 
   render() {
     return (
-      <Container>
-        <Row style={{ backgroundColor: StandardColors.Black }}>
-          <Score>Score</Score>
-        </Row>
-        <Indent>
-          <FlipMove>{this.getPlayers()}</FlipMove>
-        </Indent>
-      </Container>
+      <Indent>
+        <FlipMove>{this.getPlayers()}</FlipMove>
+      </Indent>
     );
   }
 }

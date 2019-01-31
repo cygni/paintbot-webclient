@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { StandardColors } from '../../common/Constants';
 import { DefaultText } from '../../common/ui/DefaultText';
 import { Row } from '../../common/ui/Row';
 import { Spacing } from '../../common/ui/Spacing';
@@ -17,7 +16,8 @@ interface ScoreLabelContainerProps {
 
 const ScoreLabelContainer = styled.div<ScoreLabelContainerProps>`
   opacity: 1;
-  color: ${props => props.playerColour};
+  background-color: ${props => props.playerColour};
+  color: white;
   font-size: 32px;
   transition: position 0.5s linear;
 `;
@@ -32,14 +32,14 @@ export default class ScoreBoardEntry extends React.Component<Props> {
     const playerName = player.name;
     const playerScore = `${player.points}`;
     return (
-      <ScoreLabelContainer playerColour={player.colour}>
-        <Spacing num={3}>
+      <Spacing>
+        <ScoreLabelContainer playerColour={player.colour}>
           <Row justifyContent={'space-between'} style={styles.row}>
             <DefaultText style={styles.name}>{playerName}</DefaultText>
             <DefaultText style={styles.points}>{playerScore}</DefaultText>
           </Row>
-        </Spacing>
-      </ScoreLabelContainer>
+        </ScoreLabelContainer>
+      </Spacing>
     );
   }
 }
@@ -65,7 +65,6 @@ const styles = {
   },
   row: {
     display: 'flex',
-    backgroundColor: StandardColors.Black,
-    borderRadius: '5px',
+    boxShadow: '0 3px 3px rgba(0,0,0,0.5)',
   },
 };
