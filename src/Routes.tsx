@@ -1,13 +1,12 @@
-import React from 'react';
-import { BrowserRouter, HashRouter, Redirect, Route, Switch } from 'react-router-dom';
+import React, { ComponentProps, ComponentType } from 'react';
+import { BrowserRouter, HashRouter, Route, Switch } from 'react-router-dom';
 
 import WelcomeScreen from './welcome/WelcomeScreen';
 
 const LazyGameScreen = React.lazy(() => import(/* webpackPrefetch: true */ './game/GameScreen'));
 
-const Router = process.env.REACT_APP_USE_HASH_ROUTER === 'true' ? HashRouter : BrowserRouter;
-
-const GoHome = () => <Redirect to="/" />;
+const Router: ComponentType<ComponentProps<typeof HashRouter> | ComponentProps<typeof BrowserRouter>> =
+  process.env.REACT_APP_USE_HASH_ROUTER === 'true' ? HashRouter : BrowserRouter;
 
 // React-Router needs te to figure out were the page is served.
 // PUBLIC_URL gives us the absolute URL where the page is served, so the basename
@@ -21,7 +20,6 @@ export default function Routes() {
         <Switch>
           <Route path="/" exact component={WelcomeScreen} />
           <Route path="/game/:id?" component={LazyGameScreen} />
-          <Route component={GoHome} />
         </Switch>
       </React.Suspense>
     </Router>
