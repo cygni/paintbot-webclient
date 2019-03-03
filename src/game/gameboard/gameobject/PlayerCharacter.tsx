@@ -1,6 +1,6 @@
 import Konva from 'konva';
 import React from 'react';
-import { Circle, Group } from 'react-konva';
+import { Circle, Group, Star } from 'react-konva';
 
 import { CharacterColors } from '../../../common/Constants';
 import { Coordinate } from '../../type';
@@ -14,6 +14,7 @@ interface Props {
   playerId: string;
   previousCoordinate: Coordinate;
   carryingBomb: boolean;
+  stunned: boolean;
 }
 
 export default class PlayerCharacter extends React.Component<Props> {
@@ -60,10 +61,6 @@ export default class PlayerCharacter extends React.Component<Props> {
   }
 
   render() {
-    return this.props.carryingBomb ? this.renderUltimate() : this.renderNormal();
-  }
-
-  renderNormal() {
     return (
       <Group
         x={this.props.previousCoordinate.x}
@@ -73,6 +70,15 @@ export default class PlayerCharacter extends React.Component<Props> {
         listening={false}
         ref={this.characterRef}
       >
+        {this.props.carryingBomb ? this.renderUltimate() : this.renderNormal()}
+        {this.props.stunned && this.renderStars()}
+      </Group>
+    );
+  }
+
+  renderNormal() {
+    return (
+      <>
         <Circle // base
           perfectDrawEnabled={false}
           x={this.props.width / 2}
@@ -138,7 +144,7 @@ export default class PlayerCharacter extends React.Component<Props> {
           fill={'#fff'}
           rotation={this.getRotation()}
         />
-      </Group>
+      </>
     );
   }
 
@@ -172,14 +178,7 @@ export default class PlayerCharacter extends React.Component<Props> {
 
   renderUltimate() {
     return (
-      <Group
-        x={this.props.previousCoordinate.x}
-        y={this.props.previousCoordinate.y}
-        width={this.props.width}
-        height={this.props.height}
-        listening={false}
-        ref={this.characterRef}
-      >
+      <>
         <Circle // base
           perfectDrawEnabled={false}
           x={this.props.width / 2}
@@ -253,7 +252,39 @@ export default class PlayerCharacter extends React.Component<Props> {
           fill={'#fff'}
           rotation={this.getRotation()}
         />
-      </Group>
+      </>
+    );
+  }
+
+  renderStars() {
+    const stars = [];
+
+    for (let i = 0; i < 2; i++) {
+      const star = this.renderStar();
+      stars.push(star);
+    }
+
+    return stars;
+  }
+
+  renderStar() {
+    const outerRadius = this.props.width / (4 + Math.random() * 8);
+    const innerRadius = outerRadius / 2;
+
+    return (
+      <Star
+        perfectDrawEnabled={false}
+        numPoints={5}
+        x={this.props.width / 2}
+        y={this.props.height / 2}
+        offsetX={(Math.random() * this.props.width) / 2 - this.props.width / 4}
+        offsetY={(Math.random() * this.props.height) / 2 - this.props.height / 4}
+        innerRadius={innerRadius}
+        outerRadius={outerRadius}
+        fill={'#fff'}
+        stroke={CharacterColors.Stroke}
+        strokeWidth={1}
+      />
     );
   }
 }

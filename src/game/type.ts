@@ -65,6 +65,7 @@ export interface Character {
   colour: string;
   coordinate: Coordinate;
   carryingBomb: boolean;
+  stunned: boolean;
 }
 
 export interface PowerUp {

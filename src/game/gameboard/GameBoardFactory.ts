@@ -28,6 +28,7 @@ export default class GameBoardFactory {
         points: characterInfo.points,
         coordinate: this.getCoordinateFromMapPosition(characterInfo.position),
         carryingBomb: characterInfo.carryingBomb,
+        stunned: characterInfo.stunnedForGameTicks > 0,
       };
       characters.push(character);
     });

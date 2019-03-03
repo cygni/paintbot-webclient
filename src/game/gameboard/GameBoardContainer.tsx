@@ -63,6 +63,7 @@ export default class GameBoardContainer extends React.Component<Props> {
           playerId={character.id}
           previousCoordinate={previousCharacterCoordinate}
           carryingBomb={character.carryingBomb}
+          stunned={character.stunned}
         />
       );
     });
