@@ -55,6 +55,7 @@ export interface CharacterInfo {
   position: number;
   colouredPositions: number[];
   stunnedForGameTicks: number;
+  carryingBomb: boolean;
 }
 
 export interface Character {
@@ -63,6 +64,7 @@ export interface Character {
   points: number;
   colour: string;
   coordinate: Coordinate;
+  carryingBomb: boolean;
 }
 
 export interface PowerUp {

@@ -62,6 +62,7 @@ export default class GameBoardContainer extends React.Component<Props> {
           height={this.calculateTileSize(width)}
           playerId={character.id}
           previousCoordinate={previousCharacterCoordinate}
+          carryingBomb={character.carryingBomb}
         />
       );
     });
