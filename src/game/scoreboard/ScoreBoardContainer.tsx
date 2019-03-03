@@ -1,7 +1,7 @@
 import React from 'react';
 import FlipMove from 'react-flip-move';
+import styled from 'styled-components';
 
-import { Indent } from '../../common/ui/Indent';
 import { Character } from '../type';
 
 import ScoreBoardEntry from './ScoreBoardEntry';
@@ -11,6 +11,12 @@ interface Props {
   players: Character[];
   worldTick?: number;
 }
+
+const Container = styled.div`
+  padding-left: 20px;
+  padding-right: 20px;
+  width: 200px;
+`;
 
 export default class ScoreBoardContainer extends React.Component<Props> {
   private getPlayers() {
@@ -25,9 +31,9 @@ export default class ScoreBoardContainer extends React.Component<Props> {
 
   render() {
     return (
-      <Indent>
+      <Container>
         <FlipMove>{this.getPlayers()}</FlipMove>
-      </Indent>
+      </Container>
     );
   }
 }
