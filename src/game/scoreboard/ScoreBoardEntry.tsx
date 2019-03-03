@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import tinycolor from 'tinycolor2';
 
 import { DefaultText } from '../../common/ui/DefaultText';
 import { Row } from '../../common/ui/Row';
@@ -14,10 +15,15 @@ interface ScoreLabelContainerProps {
   playerColour: string;
 }
 
+function isDarkColor(color: string) {
+  const c = tinycolor(color);
+  return c.isDark();
+}
+
 const ScoreLabelContainer = styled.div<ScoreLabelContainerProps>`
   opacity: 1;
   background-color: ${props => props.playerColour};
-  color: white;
+  color: ${props => (isDarkColor(props.playerColour) ? 'white' : 'black')};
   font-size: 32px;
   transition: position 0.5s linear;
 `;
