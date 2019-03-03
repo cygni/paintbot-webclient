@@ -44,6 +44,20 @@ export default class PlayerCharacter extends React.Component<Props> {
     });
   }
 
+  getRotation() {
+    let angle = 0;
+
+    if (this.props.coordinate.x > this.props.previousCoordinate.x) {
+      angle = 90;
+    } else if (this.props.coordinate.x < this.props.previousCoordinate.x) {
+      angle = 270;
+    } else if (this.props.coordinate.y > this.props.previousCoordinate.y) {
+      angle = 180;
+    }
+
+    return angle;
+  }
+
   render() {
     return (
       <Group
@@ -54,29 +68,70 @@ export default class PlayerCharacter extends React.Component<Props> {
         listening={false}
         ref={this.characterRef}
       >
-        <Circle
+        <Circle // base
           perfectDrawEnabled={false}
-          offsetX={-this.props.width / 2}
-          offsetY={-this.props.height / 2}
+          x={this.props.width / 2}
+          y={this.props.height / 2}
           radius={this.props.width / 2}
           fill={this.props.colour}
           stroke={CharacterColors.Stroke}
+          strokeWidth={1}
         />
-        <Circle
+        <Circle // left eye
           perfectDrawEnabled={false}
-          offsetX={-this.props.width / 2}
-          offsetY={-this.props.height / 2}
-          radius={this.props.width / 4}
-          fill={this.props.colour}
-          stroke={CharacterColors.Stroke}
-        />
-        <Circle
-          perfectDrawEnabled={false}
-          offsetX={-this.props.width / 2}
-          offsetY={-this.props.height / 2}
+          x={this.props.width / 2}
+          y={this.props.height / 2}
+          offsetX={this.props.width / 4}
+          offsetY={this.props.height / 4}
           radius={this.props.width / 16}
-          fill={CharacterColors.Eye}
-          stroke={CharacterColors.Stroke}
+          fill={CharacterColors.Stroke}
+          rotation={this.getRotation()}
+        />
+        <Circle // right eye
+          perfectDrawEnabled={false}
+          x={this.props.width / 2}
+          y={this.props.height / 2}
+          offsetX={-this.props.width / 4}
+          offsetY={this.props.height / 4}
+          radius={this.props.width / 16}
+          fill={CharacterColors.Stroke}
+          rotation={this.getRotation()}
+        />
+        <Circle // shadow spot
+          perfectDrawEnabled={false}
+          x={this.props.width / 2}
+          y={this.props.height / 2}
+          offsetY={(-this.props.height * 3) / 8}
+          radius={this.props.width / 6}
+          fill={'rgba(0,0,0,0.3)'}
+          rotation={this.getRotation()}
+        />
+        <Circle // normal color overlaying shadow spot
+          perfectDrawEnabled={false}
+          x={this.props.width / 2}
+          y={this.props.height / 2}
+          offsetY={(-this.props.height * 2) / 8}
+          radius={this.props.width / 6}
+          fill={this.props.colour}
+          rotation={this.getRotation()}
+        />
+        <Circle // big shine
+          perfectDrawEnabled={false}
+          x={this.props.width / 2}
+          y={this.props.height / 2}
+          offsetY={(-this.props.height * 3) / 8}
+          radius={this.props.width / 16}
+          fill={'#fff'}
+          rotation={this.getRotation()}
+        />
+        <Circle // little shine
+          perfectDrawEnabled={false}
+          x={this.props.width / 2}
+          y={this.props.height / 2}
+          offsetY={(-this.props.height * 2) / 8}
+          radius={this.props.width / 24}
+          fill={'#fff'}
+          rotation={this.getRotation()}
         />
       </Group>
     );
