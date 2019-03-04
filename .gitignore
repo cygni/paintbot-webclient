@@ -29,7 +29,7 @@ package-lock.json
 !.vscode/*.json
 
 #IDEA
-./idea
+.idea/
 
 # Logs
 *.log
