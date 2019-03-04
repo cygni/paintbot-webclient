@@ -27,7 +27,7 @@ export default class GameBoardFactory {
         name: characterInfo.name,
         points: characterInfo.points,
         coordinate: this.getCoordinateFromMapPosition(characterInfo.position),
-        carryingBomb: characterInfo.carryingBomb,
+        carryingPowerUp: characterInfo.carryingPowerUp,
         stunned: characterInfo.stunnedForGameTicks > 0,
       };
       characters.push(character);
@@ -37,14 +37,14 @@ export default class GameBoardFactory {
   }
 
   private createPowerUps() {
-    const bombs: PowerUp[] = [];
-    this.gameMap.bombPositions.forEach(bombPosition => {
-      const bomb = {} as PowerUp;
-      bomb.coordinate = this.getCoordinateFromMapPosition(bombPosition);
-      bomb.image = '/images/star.png';
-      bombs.push(bomb);
+    const powerUps: PowerUp[] = [];
+    this.gameMap.powerUpPositions.forEach(powerUpPosition => {
+      const powerUp = {} as PowerUp;
+      powerUp.coordinate = this.getCoordinateFromMapPosition(powerUpPosition);
+      powerUp.image = '/images/star.png';
+      powerUps.push(powerUp);
     });
-    return bombs;
+    return powerUps;
   }
 
   private getPreviousCharacters() {
@@ -83,9 +83,9 @@ export default class GameBoardFactory {
   }
 
   private addObstacleTiles(obstaclePositions: number[], tiles: Map<string, Tile>): void {
-    obstaclePositions.forEach(bombPosition => {
+    obstaclePositions.forEach(powerUpPosition => {
       const obstacleTile = {} as Tile;
-      obstacleTile.coordinate = this.getCoordinateFromMapPosition(bombPosition);
+      obstacleTile.coordinate = this.getCoordinateFromMapPosition(powerUpPosition);
       obstacleTile.type = TileType.OBSTACLE;
       obstacleTile.colour = TileColors.Obstacle;
       tiles.set(JSON.stringify(obstacleTile.coordinate), obstacleTile);
@@ -105,7 +105,7 @@ export default class GameBoardFactory {
       tiles: this.createTiles(),
       currentCharacters: this.createCharacters(),
       previousCharacters: this.getPreviousCharacters(),
-      bombs: this.createPowerUps(),
+      powerUps: this.createPowerUps(),
       worldTick: this.getWorldTick(),
       width: this.getWidth(),
       height: this.getHeight(),

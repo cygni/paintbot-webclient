@@ -24,7 +24,7 @@ export interface Game {
   tiles: Map<string, Tile>;
   currentCharacters: Character[];
   previousCharacters: Character[];
-  bombs: PowerUp[];
+  powerUps: PowerUp[];
   worldTick: number;
   width: number;
   height: number;
@@ -42,7 +42,7 @@ export interface GameState {
 export interface GameMap {
   width: number;
   height: number;
-  bombPositions: number[];
+  powerUpPositions: number[];
   obstaclePositions: number[];
   characterInfos: CharacterInfo[];
   worldTick: number;
@@ -55,7 +55,7 @@ export interface CharacterInfo {
   position: number;
   colouredPositions: number[];
   stunnedForGameTicks: number;
-  carryingBomb: boolean;
+  carryingPowerUp: boolean;
 }
 
 export interface Character {
@@ -64,7 +64,7 @@ export interface Character {
   points: number;
   colour: string;
   coordinate: Coordinate;
-  carryingBomb: boolean;
+  carryingPowerUp: boolean;
   stunned: boolean;
 }
 
@@ -74,8 +74,8 @@ export interface PowerUp {
 }
 
 export enum EventType {
-  GAME_STARTING_EVENT = 'se.cygni.snake.api.event.GameStartingEvent',
-  GAME_UPDATE_EVENT = 'se.cygni.snake.api.event.MapUpdateEvent',
-  GAME_RESULT_EVENT = 'se.cygni.snake.api.event.GameResultEvent',
-  GAME_ENDED_EVENT = 'se.cygni.snake.api.event.GameEndedEvent',
+  GAME_STARTING_EVENT = 'se.cygni.paintbot.api.event.GameStartingEvent',
+  GAME_UPDATE_EVENT = 'se.cygni.paintbot.api.event.MapUpdateEvent',
+  GAME_RESULT_EVENT = 'se.cygni.paintbot.api.event.GameResultEvent',
+  GAME_ENDED_EVENT = 'se.cygni.paintbot.api.event.GameEndedEvent',
 }

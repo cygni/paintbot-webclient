@@ -13,7 +13,7 @@ interface Props {
   height: number;
   playerId: string;
   previousCoordinate: Coordinate;
-  carryingBomb: boolean;
+  carryingPowerUp: boolean;
   stunned: boolean;
 }
 
@@ -70,7 +70,7 @@ export default class PlayerCharacter extends React.Component<Props> {
         listening={false}
         ref={this.characterRef}
       >
-        {this.props.carryingBomb ? this.renderUltimate() : this.renderNormal()}
+        {this.props.carryingPowerUp ? this.renderUltimate() : this.renderNormal()}
         {this.props.stunned && this.renderStars()}
       </Group>
     );
