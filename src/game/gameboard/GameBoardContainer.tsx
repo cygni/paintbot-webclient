@@ -5,8 +5,8 @@ import styled from 'styled-components';
 import { GameBoardConstants } from '../../common/Constants';
 import { Coordinate, Game } from '../type';
 
-import Bomb from './gameobject/Bomb';
 import PlayerCharacter from './gameobject/PlayerCharacter';
+import PowerUpObject from './gameobject/PowerUpObject';
 import ColouredTile from './tile/ColouredTile';
 
 interface Props {
@@ -62,19 +62,24 @@ export default class GameBoardContainer extends React.Component<Props> {
           height={this.calculateTileSize(width)}
           playerId={character.id}
           previousCoordinate={previousCharacterCoordinate}
-          carryingBomb={character.carryingBomb}
+          carryingPowerUp={character.carryingPowerUp}
           stunned={character.stunned}
         />
       );
     });
   }
 
-  private renderBombComponents() {
-    const { bombs, width } = this.props.game;
-    return bombs.map((bomb, index) => {
-      bomb.coordinate = this.getBoardCoordinate(bomb.coordinate);
+  private renderPowerUpsComponents() {
+    const { powerUps, width } = this.props.game;
+    return powerUps.map((powerUp, index) => {
+      powerUp.coordinate = this.getBoardCoordinate(powerUp.coordinate);
       return (
-        <Bomb key={index} bomb={bomb} width={this.calculateTileSize(width)} height={this.calculateTileSize(width)} />
+        <PowerUpObject
+          key={index}
+          powerUp={powerUp}
+          width={this.calculateTileSize(width)}
+          height={this.calculateTileSize(width)}
+        />
       );
     });
   }
@@ -98,7 +103,7 @@ export default class GameBoardContainer extends React.Component<Props> {
           <Layer hitGraphEnabled={false} listening={false}>
             {this.renderTileComponents()}
             {this.renderCharacterComponents()}
-            {this.renderBombComponents()}
+            {this.renderPowerUpsComponents()}
           </Layer>
         </Stage>
       </Container>
