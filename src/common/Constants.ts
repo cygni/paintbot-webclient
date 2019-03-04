@@ -10,7 +10,9 @@ export enum StandardColors {
 }
 
 export enum GameBoardConstants {
-  Border = '5px solid rgba(0, 0, 0, 0.7)',
+  Border = '1px solid #ddd',
+  BoxShadow = '0 1px 4px rgba(0,0,0,0.5)',
+  BackgroundColor = 'white',
 }
 
 export enum ScoreBoardColors {

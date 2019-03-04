@@ -1,4 +1,5 @@
 import React from 'react';
+import { RouteComponentProps } from 'react-router';
 import styled from 'styled-components';
 
 import background from '../resources/background.jpg';
@@ -18,10 +19,10 @@ const WindowContainer = styled.div`
   background-repeat: no-repeat;
 `;
 
-export default function GameScreen() {
+export default function GameScreen(props: RouteComponentProps<{ id: string }>) {
   return (
     <WindowContainer>
-      <GameDirector />
+      <GameDirector id={props.match.params.id} />
     </WindowContainer>
   );
 }

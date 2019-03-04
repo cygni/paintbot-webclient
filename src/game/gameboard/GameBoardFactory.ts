@@ -27,6 +27,8 @@ export default class GameBoardFactory {
         name: characterInfo.name,
         points: characterInfo.points,
         coordinate: this.getCoordinateFromMapPosition(characterInfo.position),
+        carryingBomb: characterInfo.carryingBomb,
+        stunned: characterInfo.stunnedForGameTicks > 0,
       };
       characters.push(character);
     });
@@ -39,7 +41,7 @@ export default class GameBoardFactory {
     this.gameMap.bombPositions.forEach(bombPosition => {
       const bomb = {} as PowerUp;
       bomb.coordinate = this.getCoordinateFromMapPosition(bombPosition);
-      bomb.image = '/images/bomb.png';
+      bomb.image = '/images/star.png';
       bombs.push(bomb);
     });
     return bombs;
@@ -67,14 +69,14 @@ export default class GameBoardFactory {
     });
   }
 
-  private addColouredTilesForPlayer(character: CharacterInfo, tiles: Map<string, Tile>): void {
-    character.colouredPositions.forEach(colouredPosition => {
+  private addColouredTilesForPlayer(characterInfo: CharacterInfo, tiles: Map<string, Tile>): void {
+    characterInfo.colouredPositions.forEach(colouredPosition => {
       const colouredTile = {} as Tile;
       colouredTile.coordinate = this.getCoordinateFromMapPosition(colouredPosition);
 
       colouredTile.type = TileType.COLOURED;
-      const theCharacter = this.currentCharacters.filter(c => c.id === character.id)[0];
-      colouredTile.colour = theCharacter ? theCharacter.colour : StandardColors.White;
+      const character = this.currentCharacters.filter(c => c.id === characterInfo.id)[0];
+      colouredTile.colour = character ? character.colour : StandardColors.White;
 
       tiles.set(JSON.stringify(colouredTile.coordinate), colouredTile);
     });

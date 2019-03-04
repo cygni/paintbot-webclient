@@ -5,7 +5,9 @@ import Config from '../Config';
 import GameContainer from './GameContainer';
 import { EventType, GameSettings, GameState } from './type';
 
-interface Props {}
+interface Props {
+  id?: string;
+}
 
 interface State {
   gameSettings: GameSettings | undefined;
@@ -71,10 +73,15 @@ export default class GameDirector extends React.Component<Props, State> {
     this.currentEventIndex = 0;
   };
 
-  componentDidMount() {
+  async componentDidMount() {
+    if (this.props.id) {
+      const response = await fetch(`${Config.BackendUrl}/history/${this.props.id}`).then(r => r.json());
+      response.messages.forEach((msg: any) => this.events.push(msg));
+    } else {
+      this.ws = new WebSocket(Config.WebSocketApiUrl);
+      this.ws.onmessage = (evt: MessageEvent) => this.onUpdateFromServer(evt);
+    }
     this.updateGameSpeedInterval(Config.DefaultGameSpeed);
-    this.ws = new WebSocket(Config.WebSocketApiUrl);
-    this.ws.onmessage = (evt: MessageEvent) => this.onUpdateFromServer(evt);
   }
 
   componentWillUnmount() {

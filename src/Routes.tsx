@@ -1,5 +1,5 @@
 import React, { ComponentProps, ComponentType } from 'react';
-import { BrowserRouter, HashRouter, Redirect, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, HashRouter, Route, Switch } from 'react-router-dom';
 
 import WelcomeScreen from './welcome/WelcomeScreen';
 
@@ -19,8 +19,7 @@ export default function Routes() {
       <React.Suspense fallback={null}>
         <Switch>
           <Route path="/" exact component={WelcomeScreen} />
-          <Route path="/game" component={LazyGameScreen} />
-          <Redirect to="/" />
+          <Route path="/game/:id?" component={LazyGameScreen} />
         </Switch>
       </React.Suspense>
     </Router>

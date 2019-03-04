@@ -1,5 +1,6 @@
 const Config = {
-  WebSocketApiUrl: 'ws://localhost:8999',
+  BackendUrl: 'http://localhost:8080',
+  WebSocketApiUrl: 'ws://localhost:8080/events-native',
   TimerSeconds: 20,
   GameSpeedMin: 50,
   GameSpeedMax: 600,

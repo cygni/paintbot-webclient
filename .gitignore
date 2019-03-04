@@ -28,6 +28,9 @@ package-lock.json
 .vscode/*
 !.vscode/*.json
 
+#IDEA
+.idea/
+
 # Logs
 *.log
 

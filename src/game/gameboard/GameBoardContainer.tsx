@@ -15,6 +15,8 @@ interface Props {
 
 const Container = styled.div`
   border: ${GameBoardConstants.Border};
+  box-shadow: ${GameBoardConstants.BoxShadow};
+  background-color: ${GameBoardConstants.BackgroundColor};
 `;
 
 export default class GameBoardContainer extends React.Component<Props> {
@@ -60,6 +62,8 @@ export default class GameBoardContainer extends React.Component<Props> {
           height={this.calculateTileSize(width)}
           playerId={character.id}
           previousCoordinate={previousCharacterCoordinate}
+          carryingBomb={character.carryingBomb}
+          stunned={character.stunned}
         />
       );
     });

@@ -2,9 +2,6 @@ import React from 'react';
 import FlipMove from 'react-flip-move';
 import styled from 'styled-components';
 
-import { ScoreBoardColors, StandardColors } from '../../common/Constants';
-import { Indent } from '../../common/ui/Indent';
-import { Row } from '../../common/ui/Row';
 import { Character } from '../type';
 
 import ScoreBoardEntry from './ScoreBoardEntry';
@@ -16,11 +13,9 @@ interface Props {
 }
 
 const Container = styled.div`
-  text-align: center;
-  background-color: ${ScoreBoardColors.Background};
-  margin-left: 10px;
-  display: inline-block;
-  max-width: 400px;
+  padding-left: 20px;
+  padding-right: 20px;
+  width: 200px;
 `;
 
 export default class ScoreBoardContainer extends React.Component<Props> {
@@ -37,12 +32,7 @@ export default class ScoreBoardContainer extends React.Component<Props> {
   render() {
     return (
       <Container>
-        <Row style={{ backgroundColor: StandardColors.Black }}>
-          <h1>Score</h1>
-        </Row>
-        <Indent>
-          <FlipMove>{this.getPlayers()}</FlipMove>
-        </Indent>
+        <FlipMove>{this.getPlayers()}</FlipMove>
       </Container>
     );
   }
