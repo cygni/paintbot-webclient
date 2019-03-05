@@ -3,7 +3,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import styled from 'styled-components/macro';
 
 import { StandardColors } from '../common/Constants';
-import { DefaultButton } from '../common/ui/DefaultButton';
+import { LinkButton } from '../common/ui/DefaultButton';
 import { Indent } from '../common/ui/Indent';
 import { Row } from '../common/ui/Row';
 import { Spacing } from '../common/ui/Spacing';
@@ -12,35 +12,29 @@ import background from '../resources/background.jpg';
 import introImage from './images/welcome.png';
 import yellowCharacter from './images/yellow_character.png';
 
-export default class WelcomeScreen extends React.Component<RouteComponentProps> {
-  private readonly startGame = () => {
-    this.props.history.push('/game');
-  };
-
-  render() {
-    return (
-      <Container>
-        <MenuContainer>
-          <Row justifyContent={'space-between'}>
-            <Spacing>
-              <Row>
-                <HeaderText>PAINTBOT</HeaderText>
-                <YellowCharacter src={yellowCharacter} />
-              </Row>
-            </Spacing>
-            <Spacing>
-              <Indent num={2}>
-                <DefaultButton onClick={this.startGame}>Start</DefaultButton>
-              </Indent>
-            </Spacing>
-          </Row>
-        </MenuContainer>
-        <BodyContainer>
-          <ComicImage src={introImage} />
-        </BodyContainer>
-      </Container>
-    );
-  }
+export default function WelcomeScreen(props: RouteComponentProps) {
+  return (
+    <Container>
+      <MenuContainer>
+        <Row justifyContent={'space-between'}>
+          <Spacing>
+            <Row>
+              <HeaderText>PAINTBOT</HeaderText>
+              <YellowCharacter src={yellowCharacter} />
+            </Row>
+          </Spacing>
+          <Spacing>
+            <Indent num={2}>
+              <LinkButton to="/game">Start</LinkButton>
+            </Indent>
+          </Spacing>
+        </Row>
+      </MenuContainer>
+      <BodyContainer>
+        <ComicImage src={introImage} />
+      </BodyContainer>
+    </Container>
+  );
 }
 
 const Container = styled.div`

@@ -1,44 +1,41 @@
-import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components/macro';
+import tinycolor from 'tinycolor2';
 
 import { CharacterColors, StandardColors } from '../Constants';
 
-interface Props {
-  color?: string;
-  backgroundColor?: string;
-  children?: string;
-  onClick?: () => void;
-  width?: number;
-}
-
 interface ButtonProps {
   color?: string;
-  backgroundColor?: string;
   width?: number;
+  backgroundColor?: string;
 }
 
-const Span = styled.span`
-  cursor: pointer;
-  display: inline-block;
-  position: relative;
-`;
+export const DefaultButton = styled.button<ButtonProps>(
+  ({ backgroundColor = CharacterColors.RedCharacter, color = StandardColors.White, width }) => ({
+    borderRadius: 4,
+    backgroundColor,
+    border: 'none',
+    color,
+    textAlign: 'center',
+    fontSize: 18,
+    padding: 10,
+    width,
+    cursor: 'pointer',
 
-const Button = styled.button<ButtonProps>`
-  display: inline-block;
-  border-radius: 4px;
-  background-color: ${props => props.backgroundColor || CharacterColors.RedCharacter};
-  border: none;
-  color: ${props => props.color || StandardColors.White};
-  text-align: center;
-  font-size: 18px;
-  padding: 10px;
-  width: ${props => props.width}px;
-`;
+    ':hover': {
+      backgroundColor: tinycolor(backgroundColor)
+        .darken(5)
+        .toRgbString(),
+    },
 
-export const DefaultButton = ({ color, backgroundColor, children, onClick, width }: Props) => {
-  return (
-    <Button onClick={onClick} width={width} color={color} backgroundColor={backgroundColor}>
-      <Span>{children}</Span>
-    </Button>
-  );
-};
+    ':active': {
+      backgroundColor: tinycolor(backgroundColor)
+        .darken(10)
+        .toRgbString(),
+    },
+  }),
+);
+
+export const LinkButton = styled(DefaultButton.withComponent(Link))({
+  textDecoration: 'none',
+});
