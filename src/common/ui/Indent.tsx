@@ -1,11 +1,13 @@
-import React from 'react';
+import styled from 'styled-components/macro';
 
-interface Props {
+interface IndentProps {
   num?: number;
-  children?: React.ReactNode;
 }
 
-export const Indent = ({ num = 1, children }: Props) => {
-  const paddingSize = num * 10;
-  return <div style={{ paddingLeft: paddingSize, paddingRight: paddingSize }}>{children}</div>;
-};
+export const Indent = styled.div<IndentProps>(({ num = 1 }) => {
+  const paddingSize = 10 * num;
+  return {
+    paddingLeft: paddingSize,
+    paddingRight: paddingSize,
+  };
+});
