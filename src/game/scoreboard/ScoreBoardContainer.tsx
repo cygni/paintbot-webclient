@@ -1,6 +1,6 @@
 import React from 'react';
 import FlipMove from 'react-flip-move';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 import { Character } from '../type';
 

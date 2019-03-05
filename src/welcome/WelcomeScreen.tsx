@@ -1,6 +1,6 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 import { StandardColors } from '../common/Constants';
 import { DefaultButton } from '../common/ui/DefaultButton';

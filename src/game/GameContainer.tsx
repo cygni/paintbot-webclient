@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 import { GameControllerColors } from '../common/Constants';
 import { Row } from '../common/ui/Row';
