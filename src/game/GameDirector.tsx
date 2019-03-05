@@ -1,121 +1,148 @@
 import React from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useReducer, useRef, useState } from 'react';
 
 import Config from '../Config';
 
-import GameContainer from './GameContainer';
-import { EventType, GameSettings, GameState } from './type';
+import { EventType } from './type';
 
-interface Props {
-  id?: string;
+const increment = (state: number, amount = 1) => state + amount;
+
+interface WebSocketEvents {
+  onOpen(): void;
+  onMessage(data: any): void;
+  onClose(code: number, reason: string, wasClean: boolean): void;
 }
 
-interface State {
-  gameSettings: GameSettings | undefined;
-  gameState: GameState | undefined;
-}
+function useWebSocket(url: string, events: WebSocketEvents) {
+  const wsRef = useRef<WebSocket | null>(null);
+  const messageQueueRef = useRef<any[]>([]);
+  const [counter, incrementCounter] = useReducer(increment, 0);
+  const [readyState, setReadyState] = useState(WebSocket.CONNECTING);
 
-// TODO Handle receiving game settings when EventType === GAME_STARTING_EVENT
-// TODO Handle receiving results when EventType === GAME_RESULT_EVENT
+  // Allow changing the callbacks without restarting the socket
+  // https://reactjs.org/docs/hooks-faq.html#how-to-read-an-often-changing-value-from-usecallback
+  const eventsRef = useRef(events);
+  useLayoutEffect(() => {
+    eventsRef.current = events;
+  });
 
-export default class GameDirector extends React.Component<Props, State> {
-  private ws?: WebSocket;
-  private readonly events: any[] = [];
-  private currentEventIndex = 0;
-  private updateInterval?: NodeJS.Timer;
+  useEffect(() => {
+    const ws = new WebSocket(url);
+    wsRef.current = ws;
 
-  readonly state: State = {
-    gameSettings: undefined,
-    gameState: undefined,
-  };
+    setReadyState(ws.readyState);
 
-  private onUpdateFromServer(evt: MessageEvent) {
-    this.events.push(JSON.parse(evt.data));
-  }
+    function handleOpen(event: WebSocketEventMap['open']) {
+      setReadyState(ws.readyState);
+      eventsRef.current.onOpen();
 
-  private readonly updateGameSpeedInterval = (milliseconds: number) => {
-    if (this.updateInterval !== undefined) {
-      clearInterval(this.updateInterval);
-    }
-    this.updateInterval = setInterval(() => {
-      this.playOneTick(this.currentEventIndex);
-    }, milliseconds);
-  };
-
-  private playOneTick(eventIndex: number): void {
-    const data = this.events[eventIndex];
-    if (data) {
-      if (data.type === EventType.GAME_STARTING_EVENT) {
-        this.setState({ gameSettings: data.gameSettings as GameSettings });
-      } else if (data.type === EventType.GAME_UPDATE_EVENT) {
-        this.setState({ gameState: data as GameState });
+      // Dispatch queued messages
+      while (messageQueueRef.current.length !== 0) {
+        const message = messageQueueRef.current.shift();
+        ws.send(message);
       }
     }
 
-    this.currentEventIndex++;
-  }
-
-  private endGame() {
-    if (this.ws !== undefined) {
-      this.ws.close();
+    function handleMessage({ data }: WebSocketEventMap['message']) {
+      eventsRef.current.onMessage(data);
     }
-    if (this.updateInterval !== undefined) {
-      clearInterval(this.updateInterval);
+
+    function handleError(event: WebSocketEventMap['error']) {
+      setReadyState(ws.readyState);
     }
-  }
 
-  private readonly pauseGame = () => {
-    if (this.updateInterval !== undefined) {
-      clearInterval(this.updateInterval);
+    function handleClose({ code, reason, wasClean }: WebSocketEventMap['close']) {
+      setReadyState(ws.readyState);
+      eventsRef.current.onClose(code, reason, wasClean);
     }
-  };
 
-  private readonly restartGame = () => {
-    this.currentEventIndex = 0;
-  };
+    ws.addEventListener('open', handleOpen);
+    ws.addEventListener('message', handleMessage);
+    ws.addEventListener('error', handleError);
+    ws.addEventListener('close', handleClose);
 
-  async componentDidMount() {
-    if (this.props.id) {
-      const response = await fetch(`${Config.BackendUrl}/history/${this.props.id}`).then(r => r.json());
-      response.messages.forEach((msg: any) => this.events.push(msg));
+    return () => {
+      ws.removeEventListener('open', handleOpen);
+      ws.removeEventListener('message', handleMessage);
+      ws.removeEventListener('error', handleError);
+      ws.removeEventListener('close', handleClose);
+
+      if (ws.readyState !== WebSocket.CLOSING && ws.readyState !== WebSocket.CLOSED) {
+        ws.close();
+      }
+    };
+  }, [url, counter]);
+
+  const send = useCallback((message: any) => {
+    // Enqueue the message if the socket is connecting
+    if (wsRef.current === null || wsRef.current.readyState === WebSocket.CONNECTING) {
+      messageQueueRef.current.push(message);
     } else {
-      this.ws = new WebSocket(Config.WebSocketApiUrl);
-      this.ws.onmessage = (evt: MessageEvent) => this.onUpdateFromServer(evt);
+      wsRef.current.send(message);
     }
-    this.updateGameSpeedInterval(Config.DefaultGameSpeed);
-  }
+  }, []);
 
-  componentWillUnmount() {
-    this.endGame();
-  }
-
-  getComponentToRender() {
-    if (this.state.gameSettings && this.state.gameState) {
-      const gameStatus = this.state.gameState.type;
-      const { gameState, gameSettings } = this.state;
-
-      if (!gameStatus) {
-        return <h1>Waiting for game</h1>;
-      } else if (gameStatus === EventType.GAME_STARTING_EVENT) {
-        return <h1>Game is starting</h1>;
-      } else if (gameStatus === EventType.GAME_UPDATE_EVENT) {
-        return (
-          <GameContainer
-            gameMap={gameState.map}
-            gameSettings={gameSettings}
-            onGameSpeedChange={this.updateGameSpeedInterval}
-            onPauseGame={this.pauseGame}
-            onRestartGame={this.restartGame}
-          />
-        );
-      } else if (gameStatus === EventType.GAME_ENDED_EVENT) {
-        this.endGame();
-        return <h1>Game finished</h1>;
-      }
+  const close = useCallback(() => {
+    if (
+      wsRef.current !== null &&
+      wsRef.current.readyState !== WebSocket.CLOSING &&
+      wsRef.current.readyState !== WebSocket.CLOSED
+    ) {
+      wsRef.current.close();
     }
-    return null;
-  }
+  }, []);
 
-  render() {
-    return this.getComponentToRender();
-  }
+  const reconnect = useCallback(() => {
+    incrementCounter(1);
+  }, []);
+
+  return useMemo(() => ({ readyState, send, close, reconnect }), [readyState, send, close, reconnect]);
+}
+
+interface GameEvent {
+  type: EventType;
+}
+
+type GameState = ReadonlyArray<GameEvent>;
+
+const initialState: GameState = [];
+
+function eventReducer(state: GameState, event: GameEvent): GameState {
+  return [...state, event];
+}
+
+export interface GameDirectorProps {
+  id: string;
+}
+
+const readyStateMap = {
+  [WebSocket.CONNECTING]: 'CONNECTING',
+  [WebSocket.OPEN]: 'OPEN',
+  [WebSocket.CLOSING]: 'CLOSING',
+  [WebSocket.CLOSED]: 'CLOSED',
+};
+
+export default function GameDirector({ id }: GameDirectorProps) {
+  const [state, dispatch] = useReducer(eventReducer, initialState);
+
+  const ws = useWebSocket(Config.WebSocketApiUrl, {
+    onOpen() {
+      console.log('WebSocket connection opened');
+    },
+    onMessage(data) {
+      console.log('WebSocket message received', data);
+      dispatch(JSON.parse(data));
+    },
+    onClose(code, reason, wasClean) {
+      console.log('WebSocket connection closed', { code, reason, wasClean });
+    },
+  });
+
+  return (
+    <>
+      <button onClick={ws.reconnect}>Reconnect</button>
+      <pre>ReadyState: {readyStateMap[ws.readyState]}</pre>
+      <pre>{JSON.stringify(state, null, 2)}</pre>
+    </>
+  );
 }

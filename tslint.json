@@ -37,6 +37,7 @@
     "prefer-object-spread": true,
     "prefer-readonly": true,
     "prefer-template": true,
-    "no-inferrable-types": true
+    "no-inferrable-types": true,
+    "variable-name": false
   }
 }
