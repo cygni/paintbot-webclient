@@ -3,12 +3,12 @@ import React from 'react';
 import { GameControllerColors, StandardColors } from '../../common/Constants';
 import { DefaultButton } from '../../common/ui/DefaultButton';
 
-interface Props {
+export interface PlayControlButtonProps {
   playing: boolean;
-  onClick: () => void;
+  onClick: React.ComponentProps<typeof DefaultButton>['onClick'];
 }
 
-export const PlayControllButton = ({ playing, onClick }: Props) => {
+export const PlayControlButton = ({ playing, onClick }: PlayControlButtonProps) => {
   const playStatusText = playing ? 'Pause' : 'Play';
   return (
     <DefaultButton
