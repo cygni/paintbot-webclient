@@ -24,7 +24,7 @@ interface GameControllerProps {
 export function GameController({ onGameSpeedChange, onPauseGame }: GameControllerProps) {
   // These should be moved upward, since we just pass them upward in side effects anyway
   const [playing, togglePlaying] = useReducer(toggle, false);
-  const [gameSpeed, setGameSpeed] = useState(Config.GameSpeedMin);
+  const [gameSpeed, setGameSpeed] = useState(Config.DefaultGameSpeed);
 
   useEffect(() => {
     if (playing) {
