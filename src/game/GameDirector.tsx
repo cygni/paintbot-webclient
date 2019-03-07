@@ -1,114 +1,89 @@
-import React from 'react';
-import { useCallback, useEffect, useLayoutEffect, useMemo, useReducer, useRef, useState } from 'react';
+import React, { useReducer } from 'react';
 
+import { useWebSocket } from '../common/utils';
 import Config from '../Config';
 
-import { EventType } from './type';
+import { ApiMessage, GameMessage, GameSettings, Map, PlayerRank } from './types';
 
-const increment = (state: number, amount = 1) => state + amount;
+type GameEvent =
+  | { type: 'open' }
+  | { type: 'message'; message: ApiMessage | GameMessage }
+  | { type: 'close'; code: number; reason: string; wasClean: boolean };
 
-interface WebSocketEvents {
-  onOpen(): void;
-  onMessage(data: any): void;
-  onClose(code: number, reason: string, wasClean: boolean): void;
+interface GameState {
+  gameSettings?: GameSettings;
+  width?: number;
+  height?: number;
+  map?: Map;
+  playerRanks?: PlayerRank[];
+  playerWinnerId?: string;
+  playerWinnerName?: string;
 }
 
-function useWebSocket(url: string, events: WebSocketEvents) {
-  const wsRef = useRef<WebSocket | null>(null);
-  const messageQueueRef = useRef<any[]>([]);
-  const [counter, incrementCounter] = useReducer(increment, 0);
-  const [readyState, setReadyState] = useState(WebSocket.CONNECTING);
+type GamesState = Partial<Record<string, GameState>>;
 
-  // Allow changing the callbacks without restarting the socket
-  // https://reactjs.org/docs/hooks-faq.html#how-to-read-an-often-changing-value-from-usecallback
-  const eventsRef = useRef(events);
-  useLayoutEffect(() => {
-    eventsRef.current = events;
-  });
+const initialState: GamesState = {};
 
-  useEffect(() => {
-    const ws = new WebSocket(url);
-    wsRef.current = ws;
+function eventReducer(state: GamesState, event: GameEvent): GamesState {
+  switch (event.type) {
+    case 'open':
+      return initialState;
 
-    setReadyState(ws.readyState);
+    case 'message': {
+      switch (event.message.type) {
+        case 'se.cygni.paintbot.api.event.GameStartingEvent': {
+          const { gameId, gameSettings, width, height } = event.message;
+          return {
+            ...state,
+            [gameId]: {
+              ...state[gameId],
+              gameSettings,
+              width,
+              height,
+            },
+          };
+        }
 
-    function handleOpen(event: WebSocketEventMap['open']) {
-      setReadyState(ws.readyState);
-      eventsRef.current.onOpen();
+        case 'se.cygni.paintbot.api.event.MapUpdateEvent': {
+          const { gameId, map } = event.message;
+          return {
+            ...state,
+            [gameId]: {
+              ...state[gameId],
+              map,
+            },
+          };
+        }
 
-      // Dispatch queued messages
-      while (messageQueueRef.current.length !== 0) {
-        const message = messageQueueRef.current.shift();
-        ws.send(message);
+        case 'se.cygni.paintbot.api.event.GameResultEvent': {
+          const { gameId, playerRanks } = event.message;
+          return {
+            ...state,
+            [gameId]: {
+              ...state[gameId],
+              playerRanks,
+            },
+          };
+        }
+
+        case 'se.cygni.paintbot.api.event.GameEndedEvent': {
+          const { gameId, map, playerWinnerId, playerWinnerName } = event.message;
+          return {
+            ...state,
+            [gameId]: {
+              ...state[gameId],
+              map,
+              playerWinnerId,
+              playerWinnerName,
+            },
+          };
+        }
       }
     }
 
-    function handleMessage({ data }: WebSocketEventMap['message']) {
-      eventsRef.current.onMessage(data);
-    }
-
-    function handleError(event: WebSocketEventMap['error']) {
-      setReadyState(ws.readyState);
-    }
-
-    function handleClose({ code, reason, wasClean }: WebSocketEventMap['close']) {
-      setReadyState(ws.readyState);
-      eventsRef.current.onClose(code, reason, wasClean);
-    }
-
-    ws.addEventListener('open', handleOpen);
-    ws.addEventListener('message', handleMessage);
-    ws.addEventListener('error', handleError);
-    ws.addEventListener('close', handleClose);
-
-    return () => {
-      ws.removeEventListener('open', handleOpen);
-      ws.removeEventListener('message', handleMessage);
-      ws.removeEventListener('error', handleError);
-      ws.removeEventListener('close', handleClose);
-
-      if (ws.readyState !== WebSocket.CLOSING && ws.readyState !== WebSocket.CLOSED) {
-        ws.close();
-      }
-    };
-  }, [url, counter]);
-
-  const send = useCallback((message: any) => {
-    // Enqueue the message if the socket is connecting
-    if (wsRef.current === null || wsRef.current.readyState === WebSocket.CONNECTING) {
-      messageQueueRef.current.push(message);
-    } else {
-      wsRef.current.send(message);
-    }
-  }, []);
-
-  const close = useCallback(() => {
-    if (
-      wsRef.current !== null &&
-      wsRef.current.readyState !== WebSocket.CLOSING &&
-      wsRef.current.readyState !== WebSocket.CLOSED
-    ) {
-      wsRef.current.close();
-    }
-  }, []);
-
-  const reconnect = useCallback(() => {
-    incrementCounter(1);
-  }, []);
-
-  return useMemo(() => ({ readyState, send, close, reconnect }), [readyState, send, close, reconnect]);
-}
-
-interface GameEvent {
-  type: EventType;
-}
-
-type GameState = ReadonlyArray<GameEvent>;
-
-const initialState: GameState = [];
-
-function eventReducer(state: GameState, event: GameEvent): GameState {
-  return [...state, event];
+    default:
+      return state;
+  }
 }
 
 export interface GameDirectorProps {
@@ -125,16 +100,25 @@ const readyStateMap = {
 export default function GameDirector({ id }: GameDirectorProps) {
   const [state, dispatch] = useReducer(eventReducer, initialState);
 
-  const ws = useWebSocket(Config.WebSocketApiUrl, {
+  const ws = useWebSocket<ApiMessage | GameMessage>(Config.WebSocketApiUrl, {
     onOpen() {
-      console.log('WebSocket connection opened');
+      console.info('WebSocket connection opened');
+      dispatch({ type: 'open' });
     },
-    onMessage(data) {
-      console.log('WebSocket message received', data);
-      dispatch(JSON.parse(data));
+    onMessage(message) {
+      if (message.type === 'se.cygni.paintbot.eventapi.response.ActiveGamesList') {
+        ws.send({
+          type: 'se.cygni.paintbot.eventapi.request.SetGameFilter',
+          includedGameIds: message.games.map(game => game.gameId),
+        });
+      }
+
+      // console.info('WebSocket message received', message);
+      dispatch({ type: 'message', message });
     },
     onClose(code, reason, wasClean) {
-      console.log('WebSocket connection closed', { code, reason, wasClean });
+      console.info('WebSocket connection closed', { code, reason, wasClean });
+      dispatch({ type: 'close', code, reason, wasClean });
     },
   });
 
@@ -142,7 +126,7 @@ export default function GameDirector({ id }: GameDirectorProps) {
     <>
       <button onClick={ws.reconnect}>Reconnect</button>
       <pre>ReadyState: {readyStateMap[ws.readyState]}</pre>
-      <pre>{JSON.stringify(state, null, 2)}</pre>
+      <span>{JSON.stringify(state)}</span>
     </>
   );
 }
