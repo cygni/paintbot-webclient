@@ -1,20 +1,16 @@
 import React from 'react';
 import { ChangeEvent } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 import { StandardColors } from '../Constants';
 
-interface SliderProps {
-  sliderChange?: (changeNumber: number) => void;
+export interface SliderProps {
   maxValue: number;
   minValue: number;
-  defaultValue: number;
   reverse?: boolean;
   backgroundColor?: string;
-}
-
-interface State {
   value: number;
+  onChange(newValue: number): void;
 }
 
 interface InputProps {
@@ -33,44 +29,26 @@ const SliderInput = styled.input<InputProps>`
   transform: rotate(${props => props.rotateDegrees}deg);
 `;
 
-export default class Slider extends React.Component<SliderProps, State> {
-  constructor(props: SliderProps) {
-    super(props);
-    this.state = {
-      value: this.props.defaultValue,
-    };
-  }
-
-  private readonly sliderChange = (changeEvent: ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(changeEvent.target.value, 10);
-    if (!!this.props.sliderChange && !isNaN(value)) {
-      this.props.sliderChange(value);
-    }
-    if (!isNaN(value)) {
-      this.setState({
-        value,
-      });
+export default class Slider extends React.Component<SliderProps> {
+  private readonly handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const value = Number.parseInt(event.target.value, 10);
+    if (!Number.isNaN(value)) {
+      this.props.onChange(value);
     }
   };
 
-  currentValue(): number {
-    return this.state.value;
-  }
-
   render() {
-    const { minValue, maxValue, defaultValue, reverse, backgroundColor } = this.props;
-    const startValue = defaultValue.toString();
-    const color = backgroundColor ? backgroundColor : StandardColors.White;
+    const { minValue, maxValue, value, reverse, backgroundColor = StandardColors.White } = this.props;
     return (
       <SliderInput
+        type="range"
+        step="10"
         rotateDegrees={reverse ? 180 : 0}
-        backgroundColor={color}
-        type={'range'}
-        defaultValue={startValue}
+        backgroundColor={backgroundColor}
         min={minValue}
         max={maxValue}
-        step={'10'}
-        onChange={this.sliderChange}
+        value={value}
+        onChange={this.handleChange}
       />
     );
   }

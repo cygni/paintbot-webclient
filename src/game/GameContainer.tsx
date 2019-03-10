@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 import { GameControllerColors } from '../common/Constants';
 import { Row } from '../common/ui/Row';
@@ -12,19 +12,19 @@ import ScoreBoardContainer from './scoreboard/ScoreBoardContainer';
 import { TimerPane } from './timer/TimerPane';
 import { Game, GameMap, GameSettings } from './type';
 
-interface Props {
+interface GameContainerProps {
   gameMap: GameMap;
   gameSettings: GameSettings;
-  gameSpeedChange: (changeValue: number) => void;
-  gameSpeedPause: () => void;
-  restartGame: () => void;
+  onPauseGame(): void;
+  onRestartGame(): void;
+  onGameSpeedChange(newGameSpeed: number): void;
 }
 
-interface State {
+interface GameContainerState {
   game: Game;
 }
 
-export default class GameContainer extends React.Component<Props, State> {
+export default class GameContainer extends React.Component<GameContainerProps, GameContainerState> {
   private readonly gameBoardFactory = new GameBoardFactory();
 
   private transformGameMapToModel(gameMap: GameMap): Game {
@@ -32,7 +32,7 @@ export default class GameContainer extends React.Component<Props, State> {
   }
 
   render() {
-    const { gameSettings, gameMap, gameSpeedChange, gameSpeedPause, restartGame } = this.props;
+    const { gameSettings, gameMap, onGameSpeedChange, onPauseGame, onRestartGame: onRestartGame } = this.props;
     const game = this.transformGameMapToModel(gameMap);
     return (
       <div>
@@ -50,9 +50,9 @@ export default class GameContainer extends React.Component<Props, State> {
             <GameBoardContainer game={game} />
             <GamerControllerContainer>
               <GameController
-                gameSpeedChange={gameSpeedChange}
-                gameSpeedPause={gameSpeedPause}
-                restartGame={restartGame}
+                onGameSpeedChange={onGameSpeedChange}
+                onPauseGame={onPauseGame}
+                onRestartGame={onRestartGame}
               />
             </GamerControllerContainer>
           </div>
@@ -64,7 +64,7 @@ export default class GameContainer extends React.Component<Props, State> {
 
 const GamerControllerContainer = styled.div`
   padding: 5;
-  backgroundcolor: ${GameControllerColors.Background};
+  background-color: ${GameControllerColors.Background};
 `;
 
 const HeaderContainer = styled.div`

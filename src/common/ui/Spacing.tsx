@@ -1,11 +1,14 @@
-import React from 'react';
+import styled from 'styled-components/macro';
 
-interface Props {
+interface SpacingProps {
   num?: number;
   children?: React.ReactNode;
 }
 
-export const Spacing = ({ num = 1, children }: Props) => {
-  const paddingSize = num * 10;
-  return <div style={{ paddingTop: paddingSize, paddingBottom: paddingSize }}>{children}</div>;
-};
+export const Spacing = styled.div<SpacingProps>(({ num = 1 }) => {
+  const paddingSize = 10 * num;
+  return {
+    paddingTop: paddingSize,
+    paddingBottom: paddingSize,
+  };
+});

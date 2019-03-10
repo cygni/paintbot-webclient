@@ -1,6 +1,6 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 import background from '../resources/background.jpg';
 

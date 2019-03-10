@@ -1,33 +1,14 @@
-import { FlexDirectionProperty } from 'csstype';
 import React from 'react';
+import styled from 'styled-components/macro';
 
-interface Props {
-  children?: React.ReactNode;
-  justifyContent?: string;
-  alignItems?: string;
-  alignSelf?: string;
-  width?: number;
-  height?: number;
-  style?: object;
-}
+type RowProps = Pick<React.CSSProperties, 'justifyContent' | 'alignItems' | 'alignSelf' | 'width' | 'height'>;
 
-export class Row extends React.Component<Props> {
-  render() {
-    const { justifyContent, alignItems, alignSelf, width, height, style, children } = this.props;
-
-    const flexDirection: FlexDirectionProperty = 'row';
-    const display = 'flex';
-
-    const viewStyle = {
-      flexDirection,
-      display,
-      justifyContent,
-      alignItems,
-      alignSelf,
-      width,
-      height,
-      ...style,
-    };
-    return <div style={viewStyle}>{children}</div>;
-  }
-}
+export const Row = styled.div<RowProps>(({ justifyContent, alignItems, alignSelf, width, height }) => ({
+  display: 'flex',
+  flexDirection: 'row',
+  justifyContent,
+  alignItems,
+  alignSelf,
+  width,
+  height,
+}));

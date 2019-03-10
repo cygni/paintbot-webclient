@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import tinycolor from 'tinycolor2';
 
 import { DefaultText } from '../../common/ui/DefaultText';

@@ -102,9 +102,9 @@ export default class GameDirector extends React.Component<Props, State> {
           <GameContainer
             gameMap={gameState.map}
             gameSettings={gameSettings}
-            gameSpeedChange={this.updateGameSpeedInterval}
-            gameSpeedPause={this.pauseGame}
-            restartGame={this.restartGame}
+            onGameSpeedChange={this.updateGameSpeedInterval}
+            onPauseGame={this.pauseGame}
+            onRestartGame={this.restartGame}
           />
         );
       } else if (gameStatus === EventType.GAME_ENDED_EVENT) {
