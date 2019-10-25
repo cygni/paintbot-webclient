@@ -13,22 +13,17 @@ const Router: ComponentType<ComponentProps<typeof HashRouter> | ComponentProps<t
 // can be computed by resolving this URL relative to the current origin and extracting the pathname.
 const { pathname: BASENAME } = new URL(process.env.PUBLIC_URL, window.location.origin);
 
-// The Route's propTypes are incorrect in react-router 4.3, as it assumes all components are functions.
-// This isn't true for new "exotic" components like React.lazy or React.forwardRef, since they return objects.
-try {
-  // @ts-ignore
-  delete Route.propTypes.component;
-} catch {
-  // ¯\_(ツ)_/¯
-}
-
 export default function Routes() {
   return (
     <Router basename={BASENAME}>
       <React.Suspense fallback={null}>
         <Switch>
-          <Route path="/" exact component={WelcomeScreen} />
-          <Route path="/game/:id?" component={LazyGameScreen} />
+          <Route path="/" exact>
+            <WelcomeScreen />
+          </Route>
+          <Route path="/game/:id?">
+            <LazyGameScreen />
+          </Route>
         </Switch>
       </React.Suspense>
     </Router>

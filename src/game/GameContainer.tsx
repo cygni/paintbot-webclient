@@ -32,7 +32,7 @@ export default class GameContainer extends React.Component<GameContainerProps, G
   }
 
   render() {
-    const { gameSettings, gameMap, onGameSpeedChange, onPauseGame, onRestartGame: onRestartGame } = this.props;
+    const { gameSettings, gameMap, onGameSpeedChange, onPauseGame, onRestartGame } = this.props;
     const game = this.transformGameMapToModel(gameMap);
     return (
       <div>
