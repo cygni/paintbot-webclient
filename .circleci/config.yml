@@ -3,7 +3,7 @@ version: 2
 defaults: &defaults
   working_directory: ~/project
   docker:
-    - image: circleci/node:dubnium
+    - image: circleci/node:erbium
 
 jobs:
   install:
@@ -11,18 +11,18 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          name: Restore Yarn cache
+          name: Restore NPM cache
           keys:
-            - yarn-cache-{{ checksum "yarn.lock" }}
-            - yarn-cache-
+            - npm-cache-{{ checksum "package-lock.json" }}
+            - npm-cache-
       - run:
           name: Install dependencies
-          command: yarn install --frozen-lockfile --cache-folder ~/.yarn-cache
+          command: npm ci
       - save_cache:
-          name: Save Yarn cache
-          key: yarn-cache-{{ checksum "yarn.lock" }}
+          name: Save NPM cache
+          key: npm-cache-{{ checksum "package-lock.json" }}
           paths:
-            - ~/.yarn-cache
+            - ~/.npm
       - persist_to_workspace:
           root: ~/project
           paths: .
@@ -34,7 +34,7 @@ jobs:
           at: ~/project
       - run:
           name: Run type checker
-          command: yarn run typecheck
+          command: npm run typecheck
 
   lint:
     <<: *defaults
@@ -43,7 +43,7 @@ jobs:
           at: ~/project
       - run:
           name: Run linter
-          command: yarn run lint
+          command: npm run lint
 
   test:
     <<: *defaults
@@ -52,7 +52,7 @@ jobs:
           at: ~/project
       - run:
           name: Run tests
-          command: yarn run test --ci --coverage --runInBand
+          command: npm run test -- --ci --coverage --runInBand
       - store_artifacts:
           path: coverage
 
@@ -63,7 +63,7 @@ jobs:
           at: ~/project
       - run:
           name: Build app
-          command: yarn run build
+          command: npm run build
           environment:
             PUBLIC_URL: '.'
             REACT_APP_USE_HASH_ROUTER: 'true'
