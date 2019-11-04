@@ -26,17 +26,23 @@ export function GameController({ onGameSpeedChange, onPauseGame }: GameControlle
   const [playing, togglePlaying] = useReducer(toggle, false);
   const [gameSpeed, setGameSpeed] = useState(Config.DefaultGameSpeed);
 
-  useEffect(() => {
-    if (playing) {
-      onGameSpeedChange(gameSpeed);
-    }
-  }, [playing, gameSpeed, onGameSpeedChange]);
+  useEffect(
+    () => {
+      if (playing) {
+        onGameSpeedChange(gameSpeed);
+      }
+    },
+    [playing, gameSpeed, onGameSpeedChange],
+  );
 
-  useEffect(() => {
-    if (!playing) {
-      onPauseGame();
-    }
-  }, [playing, onPauseGame]);
+  useEffect(
+    () => {
+      if (!playing) {
+        onPauseGame();
+      }
+    },
+    [playing, onPauseGame],
+  );
 
   return (
     <Spacing>

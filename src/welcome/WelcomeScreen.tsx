@@ -1,5 +1,4 @@
 import React from 'react';
-import { RouteComponentProps } from 'react-router-dom';
 import styled from 'styled-components/macro';
 
 import { StandardColors } from '../common/Constants';
@@ -12,11 +11,11 @@ import background from '../resources/background.jpg';
 import introImage from './images/welcome.png';
 import yellowCharacter from './images/yellow_character.png';
 
-export default function WelcomeScreen(props: RouteComponentProps) {
+export default function WelcomeScreen() {
   return (
     <Container>
       <MenuContainer>
-        <Row justifyContent={'space-between'}>
+        <Row justifyContent="space-between">
           <Spacing>
             <Row>
               <HeaderText>PAINTBOT</HeaderText>
