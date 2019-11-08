@@ -1,34 +1,14 @@
 import React from 'react';
 import styled from 'styled-components/macro';
 
-import { StandardColors } from '../common/Constants';
-import { LinkButton } from '../common/ui/DefaultButton';
-import { Indent } from '../common/ui/Indent';
-import { Row } from '../common/ui/Row';
-import { Spacing } from '../common/ui/Spacing';
+import Header from '../common/Header';
 import background from '../resources/background.jpg';
-
-import introImage from './images/welcome.png';
-import yellowCharacter from './images/yellow_character.png';
+import introImage from '../resources/images/welcome.png';
 
 export default function WelcomeScreen() {
   return (
     <Container>
-      <MenuContainer>
-        <Row justifyContent="space-between">
-          <Spacing>
-            <Row>
-              <HeaderText>PAINTBOT</HeaderText>
-              <YellowCharacter src={yellowCharacter} />
-            </Row>
-          </Spacing>
-          <Spacing>
-            <Indent num={2}>
-              <LinkButton to="/game">Start</LinkButton>
-            </Indent>
-          </Spacing>
-        </Row>
-      </MenuContainer>
+      <Header />
       <BodyContainer>
         <ComicImage src={introImage} />
       </BodyContainer>
@@ -47,20 +27,6 @@ const Container = styled.div`
   left: 0;
 `;
 
-const MenuContainer = styled.div`
-  line-height: 50px;
-  background-color: rgba(0, 0, 0, 0.1);
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-`;
-
-const HeaderText = styled.span`
-  font-size: 30px;
-  font-weight: bold;
-  height: 100%;
-  padding-left: 20px;
-  color: ${StandardColors.White};
-`;
-
 const BodyContainer = styled.div`
   margin-top: 20px;
   display: flex;
@@ -70,9 +36,4 @@ const BodyContainer = styled.div`
 const ComicImage = styled.img`
   width: 70%;
   height: 70%;
-`;
-
-const YellowCharacter = styled.img`
-  width: 30px;
-  height: 30px;
 `;

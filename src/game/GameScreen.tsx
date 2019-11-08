@@ -2,6 +2,7 @@ import React from 'react';
 import { useParams } from 'react-router';
 import styled from 'styled-components/macro';
 
+import Header from '../common/Header';
 import background from '../resources/background.jpg';
 
 import GameDirector from './GameDirector';
@@ -24,6 +25,7 @@ export default function GameScreen() {
 
   return (
     <WindowContainer>
+      <Header />
       <GameDirector id={id} />
     </WindowContainer>
   );
