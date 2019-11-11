@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components/macro';
 
 import { StandardColors } from '../common/Constants';
@@ -8,12 +8,12 @@ import { Row } from '../common/ui/Row';
 import { Spacing } from '../common/ui/Spacing';
 import yellowCharacter from '../resources/images/yellow_character.png';
 
-export default function Header(props: any) {
-  let loggedIn = false;
-  if (props.loggedIn !== undefined && props.loggedIn) {
-    loggedIn = true;
-  }
+import AccountContext from './AccountContext';
 
+export default function Header(props: any) {
+  const accContext = useContext(AccountContext);
+  const loggedIn = accContext.loggedIn;
+  const user = accContext.username;
   return (
     <MenuContainer>
       <Row justifyContent="space-between">
@@ -23,32 +23,24 @@ export default function Header(props: any) {
             <YellowCharacter src={yellowCharacter} />
           </Row>
         </Spacing>
-        <Spacing>
-          <Indent num={2}>
-            <LinkButton to="/">Start</LinkButton>
-          </Indent>
-          <Indent num={2}>
-            <LinkButton to="/about">About</LinkButton>
-          </Indent>
-          <Indent num={2}>
-            <LinkButton to="/tutorial">Getting started</LinkButton>
-          </Indent>
-          <Indent num={2}>
-            <LinkButton to="/games">Games</LinkButton>
-          </Indent>
-          {loggedIn ? (
-            <Indent num={2}>
-              <LinkButton to="/tournament">Tournament</LinkButton>
-            </Indent>
-          ) : (
-            ''
-          )}
-          <Indent num={2}>
-            <LinkButton to="/account">{loggedIn ? 'Log out' : 'Log out'}</LinkButton>
-          </Indent>
-        </Spacing>
+        <MenuItem to="/">Start</MenuItem>
+        <MenuItem to="/about">About</MenuItem>
+        <MenuItem to="/tutorial">Getting started</MenuItem>
+        <MenuItem to="/games">Games</MenuItem>
+        <MenuItem to="/tournament">Tournament</MenuItem>
+        <MenuItem to="/account">{loggedIn ? user : 'Log in'}</MenuItem>
       </Row>
     </MenuContainer>
+  );
+}
+
+function MenuItem(props: any) {
+  return (
+    <Spacing>
+      <Indent num={2}>
+        <LinkButton to={props.to}>{props.children}</LinkButton>
+      </Indent>
+    </Spacing>
   );
 }
 

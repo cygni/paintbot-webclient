@@ -1,13 +1,14 @@
 import React from 'react';
 import styled from 'styled-components/macro';
 
+import Header from '../common/Header';
 import background from '../resources/background.jpg';
 import introImage from '../resources/images/welcome.png';
 
-export default function WelcomeScreen(props: any) {
+export default function TournamentScreen() {
   return (
     <Container>
-      {props.header}
+      <Header />
       <BodyContainer>
         <ComicImage src={introImage} />
       </BodyContainer>
