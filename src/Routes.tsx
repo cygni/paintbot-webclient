@@ -1,9 +1,10 @@
-import React, { ComponentProps, ComponentType, useState } from 'react';
+import React, { ComponentProps, ComponentType, useContext, useState } from 'react';
 import { BrowserRouter, HashRouter, Route, Switch /*, Redirect*/ } from 'react-router-dom';
 
 import AccountScreen from './account/AccountScreen';
-import AccountContext from './common/AccountContext';
-import Header from './common/Header';
+import { AccountContext, TournamentContext } from './common/Contexts';
+import TemplatePage from './common/TemplatePage';
+import TournamentScreen from './tournament/TournamentScreen';
 import WelcomeScreen from './welcome/WelcomeScreen';
 
 const LazyGameScreen = React.lazy(() => import(/* webpackPrefetch: true */ './game/GameScreen'));
@@ -19,12 +20,9 @@ const Router: ComponentType<ComponentProps<typeof HashRouter> | ComponentProps<t
 const { pathname: BASENAME } = new URL(process.env.PUBLIC_URL, window.location.origin);
 
 export default function Routes() {
-  const [accContext, setAccContext] = useState({
-    loggedIn: false,
-    username: '',
-    token: '',
-  });
-  const header = <Header />;
+  const [accContext, setAccContext] = useState(useContext(AccountContext));
+  const [tourContext, setTourContext] = useState(useContext(TournamentContext));
+
   const setter = (li: boolean, un: string, t: string) => {
     setAccContext({
       loggedIn: li,
@@ -36,22 +34,28 @@ export default function Routes() {
     <Router basename={BASENAME}>
       <React.Suspense fallback={null}>
         <Switch>
-          <Route path="/" exact>
-            <AccountContext.Provider value={accContext}>
-              <WelcomeScreen header={header} />
-            </AccountContext.Provider>
-          </Route>
-          <Route path="/account" exact>
-            <AccountContext.Provider value={accContext}>
-              <AccountScreen header={header} setLoggedIn={setter} />
-            </AccountContext.Provider>
-          </Route>
-          {/*<PrivateRoute path="/tournament">
-            <LazyTournamentScreen />
-  </PrivateRoute>*/}
-          <Route path="/game/:id?">
-            <LazyGameScreen />
-          </Route>
+          <AccountContext.Provider value={accContext}>
+            <TournamentContext.Provider value={tourContext}>
+              <Route path="/" exact>
+                <TemplatePage>
+                  <WelcomeScreen />
+                </TemplatePage>
+              </Route>
+              <Route path="/account" exact>
+                <TemplatePage>
+                  <AccountScreen setLoggedIn={setter} setTournament={setTourContext} />
+                </TemplatePage>
+              </Route>
+              <Route path="/tournament">
+                <TemplatePage>
+                  <TournamentScreen setTournament={setTourContext} />
+                </TemplatePage>
+              </Route>
+              <Route path="/game/:id?">
+                <LazyGameScreen />
+              </Route>
+            </TournamentContext.Provider>
+          </AccountContext.Provider>
         </Switch>
       </React.Suspense>
     </Router>

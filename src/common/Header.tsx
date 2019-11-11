@@ -8,10 +8,11 @@ import { Row } from '../common/ui/Row';
 import { Spacing } from '../common/ui/Spacing';
 import yellowCharacter from '../resources/images/yellow_character.png';
 
-import AccountContext from './AccountContext';
+import { AccountContext, TournamentContext } from './Contexts';
 
 export default function Header(props: any) {
   const accContext = useContext(AccountContext);
+  const tourContext = useContext(TournamentContext);
   const loggedIn = accContext.loggedIn;
   const user = accContext.username;
   return (
@@ -27,7 +28,9 @@ export default function Header(props: any) {
         <MenuItem to="/about">About</MenuItem>
         <MenuItem to="/tutorial">Getting started</MenuItem>
         <MenuItem to="/games">Games</MenuItem>
-        <MenuItem to="/tournament">Tournament</MenuItem>
+        <MenuItem to="/tournament">
+          {tourContext.tournamentName === '' ? 'Tournament' : tourContext.tournamentName}
+        </MenuItem>
         <MenuItem to="/account">{loggedIn ? user : 'Log in'}</MenuItem>
       </Row>
     </MenuContainer>

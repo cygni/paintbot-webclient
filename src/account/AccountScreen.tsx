@@ -1,10 +1,9 @@
 import React, { useContext, useState } from 'react';
-import styled from 'styled-components/macro';
 
-import AccountContext from '../common/AccountContext';
-import background from '../resources/background.jpg';
+import { AccountContext } from '../common/Contexts';
 
 import LoginForm from './LoginForm';
+import LogoutForm from './LogoutForm';
 
 export default function AccountScreen(props: any) {
   const accContext = useContext(AccountContext);
@@ -20,36 +19,14 @@ export default function AccountScreen(props: any) {
     }
   };
 
-  const logOut = () => props.setLoggedIn(false);
-
   return (
-    <Container>
-      {props.header}
-      <BodyContainer>
-        <h2>You are {accContext.loggedIn ? 'logged in!' : 'logged out!'}</h2>
-        {accContext.loggedIn ? (
-          <button onClick={logOut}>Log out</button>
-        ) : (
-          <LoginForm un={username} pw={password} hc={handleChange} setLoggedIn={props.setLoggedIn} />
-        )}
-      </BodyContainer>
-    </Container>
+    <div id="account-body">
+      <h2>You are {accContext.loggedIn ? 'logged in!' : 'logged out!'}</h2>
+      {accContext.loggedIn ? (
+        <LogoutForm {...props} />
+      ) : (
+        <LoginForm un={username} pw={password} hc={handleChange} setLoggedIn={props.setLoggedIn} />
+      )}
+    </div>
   );
 }
-
-const Container = styled.div`
-  background-image: url(${background});
-  position: absolute;
-  background-repeat: no-repeat;
-  background-size: cover;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-`;
-
-const BodyContainer = styled.div`
-  margin-top: 20px;
-  display: flex;
-  justify-content: center;
-`;

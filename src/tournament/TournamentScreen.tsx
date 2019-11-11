@@ -1,39 +1,21 @@
-import React from 'react';
-import styled from 'styled-components/macro';
+import React, { useContext } from 'react';
 
-import Header from '../common/Header';
-import background from '../resources/background.jpg';
-import introImage from '../resources/images/welcome.png';
+import { AccountContext, TournamentContext } from '../common/Contexts';
 
-export default function TournamentScreen() {
-  return (
-    <Container>
-      <Header />
-      <BodyContainer>
-        <ComicImage src={introImage} />
-      </BodyContainer>
-    </Container>
+import TournamentCreator from './TournamentCreator';
+import TournamentPropertySetter from './TournamentPropertySetter';
+
+export default function TournamentScreen(props: any) {
+  const accContext = useContext(AccountContext);
+  const tourContext = useContext(TournamentContext);
+  const child = accContext.loggedIn ? (
+    tourContext.tournamentName === '' ? (
+      <TournamentCreator {...props} />
+    ) : (
+      <TournamentPropertySetter {...props} />
+    )
+  ) : (
+    <h2>You need to log in to create a tournament!</h2>
   );
+  return <div id="tournament-body">{child}</div>;
 }
-
-const Container = styled.div`
-  background-image: url(${background});
-  position: absolute;
-  background-repeat: no-repeat;
-  background-size: cover;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-`;
-
-const BodyContainer = styled.div`
-  margin-top: 20px;
-  display: flex;
-  justify-content: center;
-`;
-
-const ComicImage = styled.img`
-  width: 70%;
-  height: 70%;
-`;

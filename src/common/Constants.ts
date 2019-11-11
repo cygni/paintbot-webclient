@@ -29,3 +29,7 @@ export enum CharacterColors {
   Eye = '#001638',
   RedCharacter = '#e61a25',
 }
+
+export const RESPONSE_TYPES = {
+  TOURNAMENT_CREATED: 'se.cygni.paintbot.eventapi.response.TournamentCreated',
+};
