@@ -4,6 +4,7 @@ import { BrowserRouter, HashRouter, Route, Switch /*, Redirect*/ } from 'react-r
 import AccountScreen from './account/AccountScreen';
 import { AccountContext, TournamentContext, validateTour } from './common/Contexts';
 import TemplatePage from './common/TemplatePage';
+import GamesScreen from './games/GamesScreen';
 import TournamentScreen from './tournament/TournamentScreen';
 import WelcomeScreen from './welcome/WelcomeScreen';
 
@@ -50,6 +51,11 @@ export default function Routes() {
               <Route path="/account" exact>
                 <TemplatePage>
                   <AccountScreen setLoggedIn={accSetter} setTournament={tourSetter} />
+                </TemplatePage>
+              </Route>
+              <Route path="/games" exact>
+                <TemplatePage>
+                  <GamesScreen />
                 </TemplatePage>
               </Route>
               <Route path="/tournament">

@@ -8,6 +8,14 @@ export const RESPONSE_TYPES = {
 export const REQUEST_TYPES = {
   CREATE_TOURNAMENT: 'se.cygni.paintbot.eventapi.request.CreateTournament',
   UPDATE_TOURNAMENT: 'se.cygni.paintbot.eventapi.request.UpdateTournamentSettings',
+  SET_CURRENT_ARENA: 'se.cygni.paintbot.eventapi.request.SetCurrentArena',
+  SET_GAME_FILTER: 'se.cygni.paintbot.eventapi.request.SetGameFilter',
+  START_TOURNAMENT_GAME: 'se.cygni.paintbot.eventapi.request.StartTournamentGame',
+  START_TOURNAMENT: 'se.cygni.paintbot.eventapi.request.StartTournament',
+  KILL_TOURNAMENT: 'se.cygni.paintbot.eventapi.request.KillTournament',
+  GET_ACTIVE_TOURNAMENT: 'se.cygni.paintbot.eventapi.request.GetActiveTournament',
+  START_ARENA_GAME: 'se.cygni.paintbot.eventapi.request.StartArenaGame',
+  START_GAME: 'se.cygni.paintbot.eventapi.request.StartGame',
 };
 
 export default function sendPaintBotMessage(mess: any, responseType: string, cb: any, onError: any) {
