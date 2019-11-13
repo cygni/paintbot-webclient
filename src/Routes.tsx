@@ -2,7 +2,7 @@ import React, { ComponentProps, ComponentType, useContext, useState } from 'reac
 import { BrowserRouter, HashRouter, Route, Switch /*, Redirect*/ } from 'react-router-dom';
 
 import AccountScreen from './account/AccountScreen';
-import { AccountContext, TournamentContext } from './common/Contexts';
+import { AccountContext, TournamentContext, validateTour } from './common/Contexts';
 import TemplatePage from './common/TemplatePage';
 import TournamentScreen from './tournament/TournamentScreen';
 import WelcomeScreen from './welcome/WelcomeScreen';
@@ -23,13 +23,19 @@ export default function Routes() {
   const [accContext, setAccContext] = useState(useContext(AccountContext));
   const [tourContext, setTourContext] = useState(useContext(TournamentContext));
 
-  const setter = (li: boolean, un: string, t: string) => {
+  const tourSetter = (t: any) => {
+    const newTour = validateTour(t);
+    setTourContext(newTour);
+  };
+
+  const accSetter = (li: boolean, un: string, t: string) => {
     setAccContext({
       loggedIn: li,
       username: un,
       token: t,
     });
   };
+
   return (
     <Router basename={BASENAME}>
       <React.Suspense fallback={null}>
@@ -43,12 +49,12 @@ export default function Routes() {
               </Route>
               <Route path="/account" exact>
                 <TemplatePage>
-                  <AccountScreen setLoggedIn={setter} setTournament={setTourContext} />
+                  <AccountScreen setLoggedIn={accSetter} setTournament={tourSetter} />
                 </TemplatePage>
               </Route>
               <Route path="/tournament">
                 <TemplatePage>
-                  <TournamentScreen setTournament={setTourContext} />
+                  <TournamentScreen setTournament={tourSetter} />
                 </TemplatePage>
               </Route>
               <Route path="/game/:id?">

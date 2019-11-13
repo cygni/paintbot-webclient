@@ -1,8 +1,7 @@
 import React, { useContext, useState } from 'react';
 
-import { RESPONSE_TYPES } from '../common/Constants';
 import { AccountContext } from '../common/Contexts';
-import Config from '../Config';
+import sendPaintBotMessage, { REQUEST_TYPES, RESPONSE_TYPES } from '../common/WebSockets';
 
 export default function TournamentCreator(props: any) {
   const accContext = useContext(AccountContext);
@@ -16,30 +15,13 @@ export default function TournamentCreator(props: any) {
 
   const handleSubmit = (event: any) => {
     event.preventDefault();
-    const ws = new WebSocket(Config.WebSocketApiUrl);
+
     const mess = {
       tournamentName: tourName,
       token: accContext.token,
-      type: 'se.cygni.paintbot.eventapi.request.CreateTournament',
+      type: REQUEST_TYPES.CREATE_TOURNAMENT,
     };
-    console.log(mess);
-    ws.onopen = () => {
-      ws.send(JSON.stringify(mess));
-    };
-    ws.onmessage = e => {
-      const response = JSON.parse(e.data);
-      console.log(response);
-      const { type, ...tournament } = response;
-      if (type === RESPONSE_TYPES.TOURNAMENT_CREATED) {
-        props.setTournament(tournament);
-        ws.close();
-      }
-    };
-    ws.onerror = e => {
-      console.log(e);
-      setErrMessage(JSON.stringify(e));
-      ws.close();
-    };
+    sendPaintBotMessage(mess, RESPONSE_TYPES.TOURNAMENT_CREATED, props.setTournament, setErrMessage);
   };
 
   return (
