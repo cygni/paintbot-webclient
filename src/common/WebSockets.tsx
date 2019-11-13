@@ -14,22 +14,24 @@ export default function sendPaintBotMessage(mess: any, responseType: string, cb:
   const ws = new WebSocket(Config.WebSocketApiUrl);
 
   ws.onopen = () => {
+    console.log(`OPENING SOCKET: ${ws.url}`);
     ws.send(JSON.stringify(mess));
   };
   ws.onmessage = e => {
     const jsonResponse = JSON.parse(e.data);
     const { type, ...response } = jsonResponse;
+    console.log(`MESSAGE RECEIVED FROM ${ws.url}`);
     console.log(jsonResponse);
     if (type === responseType) {
       cb(response);
-      console.log('CLOSING SOCKET');
+      console.log(`CLOSING SOCKET: ${ws.url}`);
       ws.close();
     }
   };
   ws.onerror = e => {
     console.log(e);
     onError(JSON.stringify(e));
-    console.log('CLOSING SOCKET');
+    console.log(`CLOSING SOCKET: ${ws.url}`);
     ws.close();
   };
 }
