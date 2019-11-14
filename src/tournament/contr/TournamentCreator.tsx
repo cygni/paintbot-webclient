@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 
-import { AccountContext } from '../common/Contexts';
-import sendPaintBotMessage, { REQUEST_TYPES, RESPONSE_TYPES } from '../common/WebSockets';
+import sendPaintBotMessage, { REQUEST_TYPES, RESPONSE_TYPES } from '../../common/API';
+import { AccountContext, defaultTournament } from '../../common/Contexts';
 
 export default function TournamentCreator(props: any) {
   const accContext = useContext(AccountContext);
@@ -14,6 +14,9 @@ export default function TournamentCreator(props: any) {
   };
 
   const handleSubmit = (event: any) => {
+    const cb = (response: any, type: string) => {
+      props.setTournament(response, defaultTournament, type);
+    };
     event.preventDefault();
 
     const mess = {
@@ -21,7 +24,7 @@ export default function TournamentCreator(props: any) {
       token: accContext.token,
       type: REQUEST_TYPES.CREATE_TOURNAMENT,
     };
-    sendPaintBotMessage(mess, RESPONSE_TYPES.TOURNAMENT_CREATED, props.setTournament, setErrMessage);
+    sendPaintBotMessage(mess, RESPONSE_TYPES.TOURNAMENT_CREATED, cb, setErrMessage);
   };
 
   return (
@@ -30,7 +33,7 @@ export default function TournamentCreator(props: any) {
       <form onSubmit={handleSubmit}>
         <label htmlFor="tournament-name">Tournament name: </label>
         <input name="tournament-name" id="tournament-name" type="text" value={tourName} onChange={handleChange} />
-        <input type="submit" value="Create tournament" />
+        <input type="submit" value="Set name" />
       </form>
     </div>
   );

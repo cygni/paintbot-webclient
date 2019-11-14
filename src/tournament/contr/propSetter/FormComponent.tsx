@@ -13,7 +13,6 @@ export default function FormComponent(props: any) {
       <label htmlFor={k}>{k}: </label>
       {t === 'checkbox' && <CheckBox k={k} v={props.v} oc={props.oc} />}
       {t !== 'checkbox' && <NumberInput k={k} range={range} t={t} oc={props.oc} v={props.v} />}
-      <p>Current value: {`${props.currentContextValue}`}</p>
     </div>
   );
 }

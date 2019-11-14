@@ -1,11 +1,11 @@
 import React, { useContext, useState } from 'react';
 
-import { AccountContext, TournamentContext } from '../common/Contexts';
-import sendPaintBotMessage, { REQUEST_TYPES, RESPONSE_TYPES, preProcessGameSettings } from '../common/WebSockets';
+import sendPaintBotMessage, { REQUEST_TYPES, RESPONSE_TYPES, preProcessGameSettings } from '../../../common/API';
+import { AccountContext, TournamentContext } from '../../../common/Contexts';
 
 import FormComponent from './FormComponent';
 
-export default function TournamentPropertySetter(props: any) {
+export default function TournamentController(props: any) {
   const tourContext = useContext(TournamentContext);
   const accContext = useContext(AccountContext);
   const [currentProperties, setCurrentProperties] = useState(JSON.parse(JSON.stringify(tourContext)));
@@ -19,7 +19,10 @@ export default function TournamentPropertySetter(props: any) {
       token: accContext.token,
       type: REQUEST_TYPES.UPDATE_TOURNAMENT,
     };
-    sendPaintBotMessage(mess, RESPONSE_TYPES.TOURNAMENT_GAME_PLAN, props.setTournament, (err: any) => {
+    const cb = (response: any, type: string) => {
+      props.setTournament({ gameSettings: gs, gamePlan: response }, tourContext, type);
+    };
+    sendPaintBotMessage(mess, RESPONSE_TYPES.TOURNAMENT_GAME_PLAN, cb, (err: any) => {
       console.log(err);
     });
   };
@@ -35,31 +38,26 @@ export default function TournamentPropertySetter(props: any) {
   };
 
   const inputs: any = [];
-  for (const k in gameSettings) {
-    if (gameSettings.hasOwnProperty(k)) {
-      const setting = gameSettings[k];
-      const { value, type, range } = setting;
-      inputs.push(
-        <FormComponent
-          key={k}
-          k={k}
-          v={value}
-          type={type}
-          range={range}
-          oc={updateProperty}
-          currentContextValue={tourContext.gameSettings[k].value}
-        />,
-      );
-    }
+  for (const k of Object.keys(gameSettings)) {
+    const setting = gameSettings[k];
+    const { value, type, range } = setting;
+    inputs.push(
+      <FormComponent
+        key={k}
+        k={k}
+        v={value}
+        type={type}
+        range={range}
+        oc={updateProperty}
+        currentContextValue={tourContext.gameSettings[k].value}
+      />,
+    );
   }
 
   return (
-    <div id="tournament-configuration-form">
-      <h1>Name: {tourContext.tournamentName}</h1>
-      <form onSubmit={handleSubmit}>
-        {inputs}
-        <input type="submit" value="Update tournament" />
-      </form>
-    </div>
+    <form onSubmit={handleSubmit}>
+      {inputs}
+      <input type="submit" value="Create tournament" />
+    </form>
   );
 }

@@ -24,8 +24,8 @@ export default function Routes() {
   const [accContext, setAccContext] = useState(useContext(AccountContext));
   const [tourContext, setTourContext] = useState(useContext(TournamentContext));
 
-  const tourSetter = (t: any) => {
-    const newTour = validateTour(t);
+  const tourSetter = (tournament: any, currentContext: any, messType: string) => {
+    const newTour = validateTour(tournament, currentContext, messType);
     setTourContext(newTour);
   };
 
