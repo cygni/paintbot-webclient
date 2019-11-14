@@ -6,6 +6,7 @@ export const RESPONSE_TYPES = {
   TOURNAMENT_INFO: 'se.cygni.paintbot.eventapi.model.TournamentInfo',
   TOURNAMENT_GAME_PLAN: 'se.cygni.paintbot.eventapi.model.TournamentGamePlan',
   UNAUTHORIZED: 'se.cygni.paintbot.eventapi.exception.Unauthorized',
+  API_MESSAGE_EXCEPTION: 'se.cygni.paintbot.eventapi.exception.ApiMessageException',
 };
 
 export const REQUEST_TYPES = {
@@ -40,7 +41,7 @@ export default function sendPaintBotMessage(mess: any, responseType: string, cb:
     const { type, ...response } = jsonResponse;
     console.log(`MESSAGE RECEIVED FROM ${ws.url}`);
     console.log(jsonResponse);
-    if (type === RESPONSE_TYPES.UNAUTHORIZED) {
+    if (type === RESPONSE_TYPES.UNAUTHORIZED || type === RESPONSE_TYPES.API_MESSAGE_EXCEPTION) {
       handleError(e);
     } else if (type === responseType) {
       cb(response, type);
@@ -55,10 +56,8 @@ export default function sendPaintBotMessage(mess: any, responseType: string, cb:
 
 export function preProcessGameSettings(gameSettings: any) {
   const gs = {};
-  for (const k in gameSettings) {
-    if (gameSettings.hasOwnProperty(k)) {
-      gs[k] = gameSettings[k].value;
-    }
+  for (const k of Object.keys(gameSettings)) {
+    gs[k] = gameSettings[k].value;
   }
   return gs;
 }
