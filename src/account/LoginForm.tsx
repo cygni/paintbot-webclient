@@ -1,23 +1,25 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 
+import SettersContext from '../common/contexts/SettersContext';
 import Config from '../Config';
 
 export default function LoginForm(props: any) {
+  const setters = useContext(SettersContext);
   const [errMessage, setErrMessage] = useState('');
-  const authenticate = async (event: any, un: string, pw: string, setLoggedIn: any) => {
+  const authenticate = async (event: any, un: string, pw: string) => {
     event.preventDefault();
     const response = await fetch(Config.LoginUrl(un, pw));
     response.text().then(text => {
       if (response.ok) {
         setErrMessage('');
-        setLoggedIn(true, un, text);
+        setters.setAcc(true, un, text);
       } else {
         setErrMessage(`Login attempt failed for username: ${un} and the provided password`);
       }
     });
   };
 
-  const handleSubmit = (event: any) => authenticate(event, props.un, props.pw, props.setLoggedIn);
+  const handleSubmit = (event: any) => authenticate(event, props.un, props.pw);
   return (
     <div id="login-form">
       {errMessage !== '' ? <h3>{errMessage}</h3> : ''}

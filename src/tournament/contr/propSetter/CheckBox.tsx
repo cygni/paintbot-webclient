@@ -8,6 +8,7 @@ export default function CheckBox(props: any) {
   };
   return (
     <>
+      <label htmlFor={k}>{k}: </label>
       {v && <input name={k} id={k} type="checkbox" onChange={oc} checked />}
       {!v && <input name={k} id={k} type="checkbox" onChange={oc} />}
     </>

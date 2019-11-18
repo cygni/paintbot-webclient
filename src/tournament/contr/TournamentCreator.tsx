@@ -1,10 +1,12 @@
 import React, { useContext, useState } from 'react';
 
 import sendPaintBotMessage, { REQUEST_TYPES, RESPONSE_TYPES } from '../../common/API';
-import { AccountContext, defaultTournament } from '../../common/Contexts';
+import { useRestAPIToGetActiveTournament } from '../../common/API';
+import AccountContext from '../../common/contexts/AccountContext';
 
-export default function TournamentCreator(props: any) {
+export default function TournamentCreator() {
   const accContext = useContext(AccountContext);
+  const tournamentUpdater = useRestAPIToGetActiveTournament();
   const [tourName, setTourName] = useState('');
   const [errMessage, setErrMessage] = useState('');
 
@@ -14,17 +16,27 @@ export default function TournamentCreator(props: any) {
   };
 
   const handleSubmit = (event: any) => {
-    const cb = (response: any, type: string) => {
-      props.setTournament(response, defaultTournament, type);
-    };
     event.preventDefault();
+    const creationCallback = (gameSettings: any, creationResponse: string) => {
+      const updateMess = {
+        gameSettings,
+        token: accContext.token,
+        type: REQUEST_TYPES.UPDATE_TOURNAMENT,
+      };
+      const updateCallback = (gamePlan: any, updateResponseType: string) => {
+        tournamentUpdater();
+      };
+      sendPaintBotMessage(updateMess, RESPONSE_TYPES.TOURNAMENT_GAME_PLAN, updateCallback, (err: any) => {
+        console.log(err);
+      });
+    };
 
-    const mess = {
+    const creationMess = {
       tournamentName: tourName,
       token: accContext.token,
       type: REQUEST_TYPES.CREATE_TOURNAMENT,
     };
-    sendPaintBotMessage(mess, RESPONSE_TYPES.TOURNAMENT_CREATED, cb, setErrMessage);
+    sendPaintBotMessage(creationMess, RESPONSE_TYPES.TOURNAMENT_CREATED, creationCallback, setErrMessage);
   };
 
   return (
@@ -33,7 +45,7 @@ export default function TournamentCreator(props: any) {
       <form onSubmit={handleSubmit}>
         <label htmlFor="tournament-name">Tournament name: </label>
         <input name="tournament-name" id="tournament-name" type="text" value={tourName} onChange={handleChange} />
-        <input type="submit" value="Set name" />
+        <input type="submit" value="Create tournament" />
       </form>
     </div>
   );

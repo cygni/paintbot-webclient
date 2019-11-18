@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
-import { defaultTournament } from '../common/Contexts';
+import SettersContext from '../common/contexts/SettersContext';
 
 export default function LogoutForm(props: any) {
+  const setters = useContext(SettersContext);
   const logOut = () => {
-    props.setLoggedIn(false);
-    props.setTournament(defaultTournament);
+    setters.setAcc(false, '', '');
   };
   return <button onClick={logOut}>Log out</button>;
 }

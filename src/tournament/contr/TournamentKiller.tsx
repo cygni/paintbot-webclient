@@ -1,9 +1,12 @@
 import React, { useContext } from 'react';
 
 import sendPaintBotMessage, { REQUEST_TYPES, RESPONSE_TYPES } from '../../common/API';
-import { AccountContext, TournamentContext, defaultTournament } from '../../common/Contexts';
+import AccountContext from '../../common/contexts/AccountContext';
+import SettersContext from '../../common/contexts/SettersContext';
+import TournamentContext, { defaultTournament } from '../../common/contexts/TournamentContext';
 
-export default function TournamentKiller(props: any) {
+export default function TournamentKiller() {
+  const setters = useContext(SettersContext);
   const accContext = useContext(AccountContext);
   const tourContext = useContext(TournamentContext);
   const handleClick = (event: any) => {
@@ -14,7 +17,7 @@ export default function TournamentKiller(props: any) {
       type: REQUEST_TYPES.KILL_TOURNAMENT,
     };
     const cb = (response: any, type: string) => {
-      props.setTournament(defaultTournament, tourContext, REQUEST_TYPES.KILL_TOURNAMENT);
+      setters.setTournament(defaultTournament, tourContext, REQUEST_TYPES.KILL_TOURNAMENT);
     };
     sendPaintBotMessage(mess, RESPONSE_TYPES.ACTIVE_GAMES_LIST, cb, (err: any) => {
       console.log(err);

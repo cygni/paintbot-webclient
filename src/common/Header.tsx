@@ -8,7 +8,8 @@ import { Row } from '../common/ui/Row';
 import { Spacing } from '../common/ui/Spacing';
 import yellowCharacter from '../resources/images/yellow_character.png';
 
-import { AccountContext, TournamentContext } from './Contexts';
+import AccountContext from './contexts/AccountContext';
+import TournamentContext from './contexts/TournamentContext';
 
 export default function Header(props: any) {
   const accContext = useContext(AccountContext);

@@ -1,11 +1,11 @@
 import React, { useContext, useState } from 'react';
 
-import { AccountContext } from '../common/Contexts';
+import AccountContext from '../common/contexts/AccountContext';
 
 import LoginForm from './LoginForm';
 import LogoutForm from './LogoutForm';
 
-export default function AccountScreen(props: any) {
+export default function AccountScreen() {
   const accContext = useContext(AccountContext);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -22,11 +22,7 @@ export default function AccountScreen(props: any) {
   return (
     <div id="account-body">
       <h2>You are {accContext.loggedIn ? 'logged in!' : 'logged out!'}</h2>
-      {accContext.loggedIn ? (
-        <LogoutForm {...props} />
-      ) : (
-        <LoginForm un={username} pw={password} hc={handleChange} setLoggedIn={props.setLoggedIn} />
-      )}
+      {accContext.loggedIn ? <LogoutForm /> : <LoginForm un={username} pw={password} hc={handleChange} />}
     </div>
   );
 }

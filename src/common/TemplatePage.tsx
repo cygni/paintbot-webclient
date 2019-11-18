@@ -1,10 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components/macro';
 
 import Header from '../common/Header';
 import background from '../resources/background.jpg';
 
-export default function TournamentScreen(props: any) {
+import { useRestAPIToGetActiveTournament } from './API';
+
+export default function TemplatePage(props: any) {
+  const getActiveTournament = useRestAPIToGetActiveTournament();
+
+  useEffect(() => {
+    getActiveTournament();
+  }, []);
+
   return (
     <Container>
       <Header />

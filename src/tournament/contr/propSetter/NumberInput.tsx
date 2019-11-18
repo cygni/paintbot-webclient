@@ -6,5 +6,10 @@ export default function NumberInput(props: any) {
   const oc = (event: any) => {
     props.oc(k, Number(event.target.value));
   };
-  return <input name={k} id={k} type={props.t} {...range} onChange={oc} value={props.v} />;
+  return (
+    <>
+      <label htmlFor={k}>{k}: </label>
+      <input name={k} id={k} type={props.t} {...range} onChange={oc} value={props.v} />
+    </>
+  );
 }

@@ -20,12 +20,13 @@ const WindowContainer = styled.div`
   background-repeat: no-repeat;
 `;
 
-export default function GameScreen() {
+export default function GameScreen(props: any) {
   const { id } = useParams<{ id: string }>();
 
   return (
     <WindowContainer>
       <Header />
+      {}
       <GameDirector id={id} />
     </WindowContainer>
   );

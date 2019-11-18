@@ -1,11 +1,11 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
-import { AccountContext, TournamentContext, defaultTournament } from '../common/Contexts';
-import Config from '../Config';
+import { useRestAPIToGetActiveTournament } from '../common/API';
+import AccountContext from '../common/contexts/AccountContext';
+import TournamentContext from '../common/contexts/TournamentContext';
 
 import TournamentController from './contr/TournamentController';
 import TournamentCreator from './contr/TournamentCreator';
-import TournamentRefresher from './tournamentRefresher';
 import TournamentViewer from './TournamentViewer';
 
 export default function TournamentScreen(props: any) {
@@ -13,39 +13,29 @@ export default function TournamentScreen(props: any) {
   const tourContext = useContext(TournamentContext);
   const [child, setChild] = useState(<p>Loading</p>);
   const [c, setC] = useState(0);
-
-  const getActiveTournament = async () => {
-    const response = await fetch(`${Config.BackendUrl}/tournament/active`);
-    if (response.ok) {
-      response.text().then(text => {
-        const { type, ...tournament } = JSON.parse(text);
-        props.setTournament(tournament, tourContext, type);
-        console.log(tournament);
-      });
-    } else {
-      props.setTournament(defaultTournament, tourContext);
-    }
-  };
+  const getActiveTournament = useRestAPIToGetActiveTournament();
 
   if (accContext.loggedIn && tourContext.tournamentName === '') {
     if (c !== 1) {
-      setChild(<TournamentCreator {...props} />);
+      getActiveTournament();
+      setChild(<TournamentCreator />);
       setC(1);
     }
   } else if (accContext.loggedIn) {
     if (c !== 2) {
-      setChild(<TournamentController {...props} hc={getActiveTournament} />);
+      getActiveTournament();
+      setChild(<TournamentController />);
       setC(2);
     }
   } else if (tourContext.tournamentName === '') {
     if (c !== 3) {
       getActiveTournament();
-      setChild(<NoTournament hc={getActiveTournament} />);
+      setChild(<NoTournament />);
       setC(3);
     }
   } else {
     if (c !== 4) {
-      setChild(<TournamentViewer hc={getActiveTournament} />);
+      setChild(<TournamentViewer />);
       setC(4);
     }
   }
@@ -54,10 +44,13 @@ export default function TournamentScreen(props: any) {
 }
 
 function NoTournament(props: any) {
+  const getActiveTournament = useRestAPIToGetActiveTournament();
+  useEffect(() => {
+    getActiveTournament();
+  });
   return (
     <>
       <h1>Log in to create a tournament!</h1>
-      <TournamentRefresher hc={props.hc} />
     </>
   );
 }

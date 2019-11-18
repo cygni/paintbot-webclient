@@ -1,12 +1,18 @@
+import { useContext } from 'react';
+
 import Config from '../Config';
+
+import SettersContext from './contexts/SettersContext';
+import TournamentContext, { defaultTournament } from './contexts/TournamentContext';
 
 export const RESPONSE_TYPES = {
   ACTIVE_GAMES_LIST: 'se.cygni.paintbot.eventapi.response.ActiveGamesList',
-  TOURNAMENT_CREATED: 'se.cygni.paintbot.eventapi.response.TournamentCreated',
-  TOURNAMENT_INFO: 'se.cygni.paintbot.eventapi.model.TournamentInfo',
-  TOURNAMENT_GAME_PLAN: 'se.cygni.paintbot.eventapi.model.TournamentGamePlan',
-  UNAUTHORIZED: 'se.cygni.paintbot.eventapi.exception.Unauthorized',
   API_MESSAGE_EXCEPTION: 'se.cygni.paintbot.eventapi.exception.ApiMessageException',
+  ARENA_UPDATE_EVENT: 'se.cygni.paintbot.api.event.ArenaUpdateEvent',
+  TOURNAMENT_CREATED: 'se.cygni.paintbot.eventapi.response.TournamentCreated',
+  TOURNAMENT_GAME_PLAN: 'se.cygni.paintbot.eventapi.model.TournamentGamePlan',
+  TOURNAMENT_INFO: 'se.cygni.paintbot.eventapi.model.TournamentInfo',
+  UNAUTHORIZED: 'se.cygni.paintbot.eventapi.exception.Unauthorized',
 };
 
 export const REQUEST_TYPES = {
@@ -44,9 +50,9 @@ export default function sendPaintBotMessage(mess: any, responseType: string, cb:
     if (type === RESPONSE_TYPES.UNAUTHORIZED || type === RESPONSE_TYPES.API_MESSAGE_EXCEPTION) {
       handleError(e);
     } else if (type === responseType) {
-      cb(response, type);
       console.log(`CLOSING SOCKET: ${ws.url}`);
       ws.close();
+      cb(response, type);
     }
   };
   ws.onerror = e => {
@@ -54,10 +60,19 @@ export default function sendPaintBotMessage(mess: any, responseType: string, cb:
   };
 }
 
-export function preProcessGameSettings(gameSettings: any) {
-  const gs = {};
-  for (const k of Object.keys(gameSettings)) {
-    gs[k] = gameSettings[k].value;
-  }
-  return gs;
+export function useRestAPIToGetActiveTournament() {
+  const setters = useContext(SettersContext);
+  const tourContext = useContext(TournamentContext);
+  return async () => {
+    const response = await fetch(`${Config.BackendUrl}/tournament/active`);
+    if (response.ok) {
+      response.text().then(text => {
+        const { type, ...tournament } = JSON.parse(text);
+        setters.setTournament(tournament, tourContext, type);
+        console.log(tournament);
+      });
+    } else {
+      setters.setTournament(defaultTournament, tourContext, '');
+    }
+  };
 }

@@ -1,26 +1,32 @@
 import React, { useContext, useState } from 'react';
 
-import sendPaintBotMessage, { REQUEST_TYPES, RESPONSE_TYPES, preProcessGameSettings } from '../../../common/API';
-import { AccountContext, TournamentContext } from '../../../common/Contexts';
+import sendPaintBotMessage, { REQUEST_TYPES, RESPONSE_TYPES } from '../../../common/API';
+import AccountContext from '../../../common/contexts/AccountContext';
+import SettersContext from '../../../common/contexts/SettersContext';
+import TournamentContext from '../../../common/contexts/TournamentContext';
 
-import FormComponent from './FormComponent';
+import CheckBox from './CheckBox';
+import NumberInput from './NumberInput';
 
-export default function TournamentController(props: any) {
+export default function TournamentController() {
   const tourContext = useContext(TournamentContext);
   const accContext = useContext(AccountContext);
-  const [currentProperties, setCurrentProperties] = useState(JSON.parse(JSON.stringify(tourContext)));
+  const setters = useContext(SettersContext);
+  const [currentProperties, setCurrentProperties] = useState(tourContext);
   const gameSettings = currentProperties.gameSettings;
+  const setTournament = setters.setTournament;
 
   const handleSubmit = (event: any) => {
-    event.preventDefault();
-    const gs = preProcessGameSettings(gameSettings);
+    if (event !== null) {
+      event.preventDefault();
+    }
     const mess = {
-      gameSettings: gs,
+      gameSettings,
       token: accContext.token,
       type: REQUEST_TYPES.UPDATE_TOURNAMENT,
     };
     const cb = (response: any, type: string) => {
-      props.setTournament({ gameSettings: gs, gamePlan: response }, tourContext, type);
+      setTournament({ gameSettings, gamePlan: response }, tourContext, type);
     };
     sendPaintBotMessage(mess, RESPONSE_TYPES.TOURNAMENT_GAME_PLAN, cb, (err: any) => {
       console.log(err);
@@ -32,32 +38,134 @@ export default function TournamentController(props: any) {
     if (propKey === 'tournamentId' || propKey === 'tournamentName') {
       copy[propKey] = propValue;
     } else {
-      copy.gameSettings[propKey].value = propValue;
+      copy.gameSettings[propKey] = propValue;
     }
     setCurrentProperties(copy);
   };
 
-  const inputs: any = [];
-  for (const k of Object.keys(gameSettings)) {
-    const setting = gameSettings[k];
-    const { value, type, range } = setting;
-    inputs.push(
-      <FormComponent
-        key={k}
-        k={k}
-        v={value}
-        type={type}
-        range={range}
-        oc={updateProperty}
-        currentContextValue={tourContext.gameSettings[k].value}
-      />,
-    );
-  }
-
   return (
     <form onSubmit={handleSubmit}>
-      {inputs}
-      <input type="submit" value="Create tournament" />
+      <h3>Game settings</h3>
+      <ul id="game-settings">
+        <li>
+          <CheckBox k="obstaclesEnabled" v={gameSettings.obstaclesEnabled} oc={updateProperty} />
+        </li>
+        <li>
+          <CheckBox k="powerUpsEnabled" v={gameSettings.powerUpsEnabled} oc={updateProperty} />
+        </li>
+        <li>
+          <CheckBox k="trainingGame" v={gameSettings.trainingGame} oc={updateProperty} />
+        </li>
+        <li>
+          <NumberInput
+            k="addPowerUpLikelihood"
+            range={{ min: 0, max: 100 }}
+            t="range"
+            oc={updateProperty}
+            v={gameSettings.addPowerUpLikelihood}
+          />
+        </li>
+        <li>
+          <NumberInput
+            k="removePowerUpLikelihood"
+            range={{ min: 0, max: 100 }}
+            t="range"
+            oc={updateProperty}
+            v={gameSettings.removePowerUpLikelihood}
+          />
+        </li>
+        <li>
+          <NumberInput
+            k="maxNoofPlayers"
+            range={{ min: 2, max: 20 }}
+            t="range"
+            oc={updateProperty}
+            v={gameSettings.maxNoofPlayers}
+          />
+        </li>
+        <li>
+          <NumberInput
+            k="startObstacles"
+            range={{ min: 0, max: null }}
+            t="number"
+            oc={updateProperty}
+            v={gameSettings.startObstacles}
+          />
+        </li>
+        <li>
+          <NumberInput
+            k="startPowerUps"
+            range={{ min: 0, max: null }}
+            t="number"
+            oc={updateProperty}
+            v={gameSettings.startPowerUps}
+          />
+        </li>
+        <li>
+          <NumberInput
+            k="explosionRange"
+            range={{ min: 0, max: null }}
+            t="number"
+            oc={updateProperty}
+            v={gameSettings.explosionRange}
+          />
+        </li>
+        <li>
+          <NumberInput
+            k="gameDurationInSeconds"
+            range={{ min: 0, max: null }}
+            t="number"
+            oc={updateProperty}
+            v={gameSettings.gameDurationInSeconds}
+          />
+        </li>
+        <li>
+          <NumberInput
+            k="noOfTicksInvulnerableAfterStun"
+            range={{ min: 0, max: null }}
+            t="number"
+            oc={updateProperty}
+            v={gameSettings.noOfTicksInvulnerableAfterStun}
+          />
+        </li>
+        <li>
+          <NumberInput
+            k="noOfTicksStunned"
+            range={{ min: 0, max: null }}
+            t="number"
+            oc={updateProperty}
+            v={gameSettings.noOfTicksStunned}
+          />
+        </li>
+        <li>
+          <NumberInput
+            k="pointsPerCausedStun"
+            range={{ min: 0, max: null }}
+            t="number"
+            oc={updateProperty}
+            v={gameSettings.pointsPerCausedStun}
+          />
+        </li>
+        <li>
+          <NumberInput
+            k="pointsPerTileOwned"
+            range={{ min: 0, max: null }}
+            t="number"
+            oc={updateProperty}
+            v={gameSettings.pointsPerTileOwned}
+          />
+        </li>
+        <li>
+          <NumberInput
+            k="timeInMsPerTick"
+            range={{ min: 0, max: null }}
+            t="number"
+            oc={updateProperty}
+            v={gameSettings.timeInMsPerTick}
+          />
+        </li>
+      </ul>
+      <input type="submit" value="Set configuration" />
     </form>
   );
 }
