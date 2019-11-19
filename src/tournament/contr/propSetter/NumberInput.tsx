@@ -8,7 +8,9 @@ export default function NumberInput(props: any) {
   };
   return (
     <>
-      <label htmlFor={k}>{k}: </label>
+      <label htmlFor={k}>
+        {k}: {props.t === 'range' && `${props.v}: `}
+      </label>
       <input name={k} id={k} type={props.t} {...range} onChange={oc} value={props.v} />
     </>
   );

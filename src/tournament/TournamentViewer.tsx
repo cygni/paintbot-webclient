@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import sendPaintBotMessage, { REQUEST_TYPES, RESPONSE_TYPES, useRestAPIToGetActiveTournament } from '../common/API';
@@ -8,11 +8,17 @@ import TournamentContext from '../common/contexts/TournamentContext';
 import { Game, GamePlan, TournamentLevel } from '../common/types';
 
 export default function TournamentViewer() {
+  const [showProps, setShowProps] = useState(false);
   const tourContext = useContext(TournamentContext);
   const gamePlan = tourContext.gamePlan;
   const gameSettings = tourContext.gameSettings;
   const players = gamePlan.players;
   const levels: TournamentLevel[] = gamePlan.tournamentLevels;
+
+  const oc = (event: any) => {
+    event.preventDefault();
+    setShowProps(!showProps);
+  };
 
   return (
     <div id="current-tournament">
@@ -30,15 +36,18 @@ export default function TournamentViewer() {
       {Boolean(levels[0]) && levels[0].tournamentGames[0].gameId !== null && <GamesList gamePlan={gamePlan} />}
       {Boolean(levels[0]) && levels[0].tournamentGames[0].gameId === null && <p>Tournament is not planned yet.</p>}
       <h3>
-        {' '}
-        Winner: {tourContext.winner !== null && tourContext.winner !== undefined ? tourContext.winner.name : 'None'}
+        Winner:{' '}
+        {tourContext.winner !== null && tourContext.winner !== undefined ? tourContext.winner.name : 'No winner yet'}
       </h3>
       <h2>Game settings</h2>
-      <ul id="game-settings">
-        {Object.keys(gameSettings).map(k => (
-          <li key={k}>{`${k}: ${gameSettings[k]}`}</li>
-        ))}
-      </ul>
+      <button onClick={oc}>{showProps ? 'Hide' : 'Show'} settings</button>
+      {showProps && (
+        <ul id="game-settings">
+          {Object.keys(gameSettings).map(k => (
+            <li key={k}>{`${k}: ${gameSettings[k]}`}</li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
@@ -77,8 +86,12 @@ function TournamentGameLink(props: any) {
   const hc = (event: any) => {
     event.preventDefault();
     const cb = (response: GamePlan, type: string) => {
+      let timeoutId: NodeJS.Timeout;
       setters.setTournament(response, tourContext, type);
-      getActiveTournament();
+      timeoutId = setTimeout(() => {
+        getActiveTournament();
+        clearTimeout(timeoutId);
+      }, 200);
     };
     const gameMess = {
       token: accContext.token,

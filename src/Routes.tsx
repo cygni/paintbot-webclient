@@ -5,7 +5,7 @@ import AccountScreen from './account/AccountScreen';
 import AccountContext from './common/contexts/AccountContext';
 import ArenaContext from './common/contexts/ArenaContext';
 import SettersContext from './common/contexts/SettersContext';
-import TournamentContext, { setGamePlayed, validateTour } from './common/contexts/TournamentContext';
+import TournamentContext, { isDifferent, setGamePlayed, validateTour } from './common/contexts/TournamentContext';
 import TemplatePage from './common/TemplatePage';
 import { Tournament } from './common/types';
 import GamesScreen from './games/GamesScreen';
@@ -31,8 +31,10 @@ export default function Routes() {
   useEffect(
     () => {
       const tourSetter = (tournament: any, currentContext: Tournament, messType: string) => {
-        const newTour = validateTour(tournament, currentContext, messType);
-        setTourContext(newTour);
+        const newTour: Tournament = validateTour(tournament, currentContext, messType);
+        if (isDifferent(newTour, currentContext)) {
+          setTourContext(newTour);
+        }
       };
 
       const setTourGamePlayed = (gameId: string, isPlayed: boolean) => {

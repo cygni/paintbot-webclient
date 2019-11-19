@@ -9,9 +9,12 @@ import { useRestAPIToGetActiveTournament } from './API';
 export default function TemplatePage(props: any) {
   const getActiveTournament = useRestAPIToGetActiveTournament();
 
-  useEffect(() => {
-    getActiveTournament();
-  }, []);
+  useEffect(
+    () => {
+      getActiveTournament();
+    },
+    [getActiveTournament],
+  );
 
   return (
     <Container>

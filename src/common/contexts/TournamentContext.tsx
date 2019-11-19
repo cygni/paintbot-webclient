@@ -102,5 +102,11 @@ export function setGamePlayed(gameId: string, tour: Tournament, isPlayed: boolea
   return newTour;
 }
 
+export function isDifferent(newTour: Tournament, oldTour: Tournament) {
+  const newString = JSON.stringify(newTour);
+  const oldString = JSON.stringify(oldTour);
+  return newString !== oldString;
+}
+
 const TournamentContext = React.createContext(defaultTournament);
 export default TournamentContext;
