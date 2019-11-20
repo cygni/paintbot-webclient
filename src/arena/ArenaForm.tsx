@@ -1,22 +1,21 @@
 import React, { useContext, useState } from 'react';
 
-import sendPaintBotMessage, { REQUEST_TYPES, RESPONSE_TYPES } from '../common/API';
+import { REQUEST_TYPES } from '../common/API';
 import ArenaContext from '../common/contexts/ArenaContext';
+import WebSocketContext from '../common/contexts/WebSocketContext';
 
-export default function ArenaForm(props: any) {
+export default function ArenaForm() {
   const arenaContext = useContext(ArenaContext);
-  const [currentProperties, setCurrentProperties] = useState(JSON.parse(JSON.stringify(arenaContext)));
+  const [currentProperties, setCurrentProperties] = useState(arenaContext);
+  const send = useContext(WebSocketContext);
 
   const handleSubmit = (event: any) => {
     event.preventDefault();
-    const mess = JSON.parse(JSON.stringify(currentProperties));
-    mess.type = REQUEST_TYPES.SET_CURRENT_ARENA;
-    const cb = (response: any, type: string) => {
-      props.setArena(currentProperties);
+    const mess = {
+      currentArena: currentProperties.currentArena,
+      type: REQUEST_TYPES.SET_CURRENT_ARENA,
     };
-    sendPaintBotMessage(mess, RESPONSE_TYPES.ARENA_UPDATE_EVENT, cb, (err: any) => {
-      console.log(err);
-    });
+    send(mess);
   };
 
   const updateProperty = (event: any) => {

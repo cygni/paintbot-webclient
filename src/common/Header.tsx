@@ -11,7 +11,7 @@ import yellowCharacter from '../resources/images/yellow_character.png';
 import AccountContext from './contexts/AccountContext';
 import TournamentContext from './contexts/TournamentContext';
 
-export default function Header(props: any) {
+export default function Header() {
   const accContext = useContext(AccountContext);
   const tourContext = useContext(TournamentContext);
   const loggedIn = accContext.loggedIn;
@@ -28,7 +28,7 @@ export default function Header(props: any) {
         <MenuItem to="/">Start</MenuItem>
         <MenuItem to="/about">About</MenuItem>
         <MenuItem to="/tutorial">Getting started</MenuItem>
-        <MenuItem to="/games">Games</MenuItem>
+        <MenuItem to="/arena">Arena</MenuItem>
         <MenuItem to="/tournament">
           {tourContext.tournamentName === '' ? 'Tournament' : tourContext.tournamentName}
         </MenuItem>

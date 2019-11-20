@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { REQUEST_TYPES, RESPONSE_TYPES } from '../API';
+import { RESPONSE_TYPES } from '../API';
 import { Game, Tournament, TournamentLevel } from '../types';
 
 export const defaultTournament: Tournament = {
@@ -26,7 +26,7 @@ export const defaultTournament: Tournament = {
     noOfTicksStunned: 10,
     pointsPerCausedStun: 5,
     pointsPerTileOwned: 1,
-    timeInMsPerTick: 4,
+    timeInMsPerTick: 250,
   },
   tournamentId: '',
   tournamentName: '',
@@ -81,7 +81,7 @@ export const validateTour = (tournamentInfo: any, currentContext: any, messType:
     case RESPONSE_TYPES.TOURNAMENT_INFO:
       validateNewTournament();
       break;
-    case REQUEST_TYPES.KILL_TOURNAMENT:
+    case RESPONSE_TYPES.TOURNAMENT_KILLED:
       return defaultTournament;
     default:
       break;
@@ -100,12 +100,6 @@ export function setGamePlayed(gameId: string, tour: Tournament, isPlayed: boolea
     });
   });
   return newTour;
-}
-
-export function isDifferent(newTour: Tournament, oldTour: Tournament) {
-  const newString = JSON.stringify(newTour);
-  const oldString = JSON.stringify(oldTour);
-  return newString !== oldString;
 }
 
 const TournamentContext = React.createContext(defaultTournament);

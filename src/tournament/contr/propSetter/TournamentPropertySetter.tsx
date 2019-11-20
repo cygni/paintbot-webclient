@@ -1,9 +1,9 @@
 import React, { useContext, useState } from 'react';
 
-import sendPaintBotMessage, { REQUEST_TYPES, RESPONSE_TYPES } from '../../../common/API';
+import { REQUEST_TYPES } from '../../../common/API';
 import AccountContext from '../../../common/contexts/AccountContext';
-import SettersContext from '../../../common/contexts/SettersContext';
 import TournamentContext from '../../../common/contexts/TournamentContext';
+import WebSocketContext from '../../../common/contexts/WebSocketContext';
 
 import CheckBox from './CheckBox';
 import NumberInput from './NumberInput';
@@ -12,10 +12,9 @@ export default function TournamentController() {
   const [showConfForm, setShowConfForm] = useState(true);
   const tourContext = useContext(TournamentContext);
   const accContext = useContext(AccountContext);
-  const setters = useContext(SettersContext);
   const [currentProperties, setCurrentProperties] = useState(tourContext);
   const gameSettings = currentProperties.gameSettings;
-  const setTournament = setters.setTournament;
+  const send = useContext(WebSocketContext);
 
   const toggleForm = (event: any) => {
     event.preventDefault();
@@ -31,12 +30,7 @@ export default function TournamentController() {
       token: accContext.token,
       type: REQUEST_TYPES.UPDATE_TOURNAMENT,
     };
-    const cb = (response: any, type: string) => {
-      setTournament({ gameSettings, gamePlan: response }, tourContext, type);
-    };
-    sendPaintBotMessage(mess, RESPONSE_TYPES.TOURNAMENT_GAME_PLAN, cb, (err: any) => {
-      console.log(err);
-    });
+    send(mess);
   };
 
   const updateProperty = (propKey: string, propValue: any) => {

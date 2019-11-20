@@ -1,27 +1,23 @@
 import React, { useContext } from 'react';
 
-import sendPaintBotMessage, { REQUEST_TYPES, RESPONSE_TYPES } from '../../common/API';
+import { REQUEST_TYPES } from '../../common/API';
 import AccountContext from '../../common/contexts/AccountContext';
-import SettersContext from '../../common/contexts/SettersContext';
-import TournamentContext, { defaultTournament } from '../../common/contexts/TournamentContext';
+import TournamentContext from '../../common/contexts/TournamentContext';
+import WebSocketContext from '../../common/contexts/WebSocketContext';
 
 export default function TournamentKiller() {
-  const setters = useContext(SettersContext);
   const accContext = useContext(AccountContext);
   const tourContext = useContext(TournamentContext);
+  const send = useContext(WebSocketContext);
+
   const handleClick = (event: any) => {
     event.preventDefault();
-    const mess = {
+    const killMess = {
       token: accContext.token,
       tournamentId: tourContext.tournamentId,
       type: REQUEST_TYPES.KILL_TOURNAMENT,
     };
-    const cb = (response: any, type: string) => {
-      setters.setTournament(defaultTournament, tourContext, REQUEST_TYPES.KILL_TOURNAMENT);
-    };
-    sendPaintBotMessage(mess, RESPONSE_TYPES.ACTIVE_GAMES_LIST, cb, (err: any) => {
-      console.log(err);
-    });
+    send(killMess);
   };
   return <button onClick={handleClick}>Kill tournament</button>;
 }

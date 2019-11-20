@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext /*, useEffect*/, useState } from 'react';
 
-import { useRestAPIToGetActiveTournament } from '../common/API';
+// import { useRestAPIToGetActiveTournament } from '../common/API';
 import AccountContext from '../common/contexts/AccountContext';
 import TournamentContext from '../common/contexts/TournamentContext';
 
@@ -13,23 +13,23 @@ export default function TournamentScreen(props: any) {
   const tourContext = useContext(TournamentContext);
   const [child, setChild] = useState(<p>Loading</p>);
   const [c, setC] = useState(0);
-  const getActiveTournament = useRestAPIToGetActiveTournament();
+  // const getActiveTournament = useRestAPIToGetActiveTournament();
 
   if (accContext.loggedIn && tourContext.tournamentName === '') {
     if (c !== 1) {
-      getActiveTournament();
+      // getActiveTournament();
       setChild(<TournamentCreator />);
       setC(1);
     }
   } else if (accContext.loggedIn) {
     if (c !== 2) {
-      getActiveTournament();
+      // getActiveTournament();
       setChild(<TournamentController />);
       setC(2);
     }
   } else if (tourContext.tournamentName === '') {
     if (c !== 3) {
-      getActiveTournament();
+      // getActiveTournament();
       setChild(<NoTournament />);
       setC(3);
     }
@@ -44,10 +44,10 @@ export default function TournamentScreen(props: any) {
 }
 
 function NoTournament(props: any) {
-  const getActiveTournament = useRestAPIToGetActiveTournament();
+  /*const getActiveTournament = useRestAPIToGetActiveTournament();
   useEffect(() => {
     getActiveTournament();
-  });
+  });*/
   return (
     <>
       <h1>Log in to create a tournament!</h1>

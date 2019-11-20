@@ -1,19 +1,27 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components/macro';
 
 import Header from '../common/Header';
 import background from '../resources/background.jpg';
 
 import { useRestAPIToGetActiveTournament } from './API';
+import SettersContext from './contexts/SettersContext';
+import TournamentContext from './contexts/TournamentContext';
 
 export default function TemplatePage(props: any) {
-  const getActiveTournament = useRestAPIToGetActiveTournament();
+  const tour = useContext(TournamentContext);
+  const setters = useContext(SettersContext);
+  const getActiveTournament = useRestAPIToGetActiveTournament(setters, tour);
+  const [shouldFetch, setShouldFetch] = useState(true);
 
   useEffect(
     () => {
-      getActiveTournament();
+      if (shouldFetch && setters.settersHasBeenSet) {
+        getActiveTournament();
+        setShouldFetch(false);
+      }
     },
-    [getActiveTournament],
+    [shouldFetch, getActiveTournament, setters.settersHasBeenSet],
   );
 
   return (

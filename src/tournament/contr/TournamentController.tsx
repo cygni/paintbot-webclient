@@ -1,6 +1,5 @@
 import React from 'react';
 
-import TournamentRefresher from '../TournamentRefresher';
 import TournamentViewer from '../TournamentViewer';
 
 import TournamentPropertySetter from './propSetter/TournamentPropertySetter';
@@ -12,7 +11,6 @@ export default function TournamentController(props: any) {
     <div id="tournament-configuration-form">
       <TournamentViewer />
       <TournamentPropertySetter />
-      <TournamentRefresher />
       <TournamentKiller />
       <TournamentStarter />
     </div>
