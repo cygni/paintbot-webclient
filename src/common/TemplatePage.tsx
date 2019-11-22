@@ -4,24 +4,29 @@ import styled from 'styled-components/macro';
 import Header from '../common/Header';
 import background from '../resources/background.jpg';
 
-import { useRestAPIToGetActiveTournament } from './API';
+import { REQUEST_TYPES, useRestAPIToGetActiveTournament } from './API';
 import SettersContext from './contexts/SettersContext';
 import TournamentContext from './contexts/TournamentContext';
+import WebSocketContext from './contexts/WebSocketContext';
 
 export default function TemplatePage(props: any) {
   const tour = useContext(TournamentContext);
   const setters = useContext(SettersContext);
   const getActiveTournament = useRestAPIToGetActiveTournament(setters, tour);
   const [shouldFetch, setShouldFetch] = useState(true);
+  const send = useContext(WebSocketContext);
 
   useEffect(
     () => {
       if (shouldFetch && setters.settersHasBeenSet) {
         getActiveTournament();
+        send({
+          type: REQUEST_TYPES.GET_CURRENT_ARENA,
+        });
         setShouldFetch(false);
       }
     },
-    [shouldFetch, getActiveTournament, setters.settersHasBeenSet],
+    [shouldFetch, getActiveTournament, setters.settersHasBeenSet, send],
   );
 
   return (
@@ -44,7 +49,8 @@ const Container = styled.div`
 `;
 
 const BodyContainer = styled.div`
-  margin-top: 20px;
+  margin: 20px 40px;
   display: flex;
   justify-content: center;
+  flex-direction: column;
 `;

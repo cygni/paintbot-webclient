@@ -22,12 +22,11 @@ const WindowContainer = styled.div`
 
 export default function GameScreen(props: any) {
   const { id } = useParams<{ id: string }>();
-
+  const decodedId = decodeURIComponent(id);
   return (
     <WindowContainer>
       <Header />
-      {}
-      <GameDirector id={id} />
+      <GameDirector id={decodedId} />
     </WindowContainer>
   );
 }

@@ -73,7 +73,7 @@ export interface ArenaHistory {
 }
 
 export interface Arena {
-  currentArena: string;
+  arenaName: string;
   gameId: string;
   ranked: boolean;
   onlinePlayers: string[];
@@ -85,4 +85,14 @@ export interface Account {
   loggedIn: boolean;
   username: string;
   token: string;
+}
+
+export interface HistoricGame {
+  gameDate: string;
+  gameId: string;
+  players: string[];
+}
+
+export interface PlayerHistory {
+  items: HistoricGame[];
 }

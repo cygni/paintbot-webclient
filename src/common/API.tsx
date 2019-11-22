@@ -1,8 +1,9 @@
-import React, { useCallback, useContext, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 
 import Config from '../Config';
 
 import AccountContext from './contexts/AccountContext';
+import ArenaContext, { defaultArena } from './contexts/ArenaContext';
 import SettersContext from './contexts/SettersContext';
 import TournamentContext, { defaultTournament } from './contexts/TournamentContext';
 import WebSocketContext from './contexts/WebSocketContext';
@@ -10,8 +11,9 @@ import { Tournament } from './types';
 
 export const RESPONSE_TYPES = {
   ACTIVE_GAMES_LIST: 'se.cygni.paintbot.eventapi.response.ActiveGamesList',
+  ARENA_UPDATE_EVENT_API_MESSAGE: 'se.cygni.paintbot.eventapi.response.ArenaUpdateEvent',
+  ARENA_UPDATE_EVENT_GAME_MESSAGE: 'se.cygni.paintbot.api.event.ArenaUpdateEvent',
   API_MESSAGE_EXCEPTION: 'se.cygni.paintbot.eventapi.exception.ApiMessageException',
-  ARENA_UPDATE_EVENT: 'se.cygni.paintbot.api.event.ArenaUpdateEvent',
   CURRENT_ARENA: 'se.cygni.paintbot.eventapi.response.CurrentArena',
   TOURNAMENT_CREATED: 'se.cygni.paintbot.eventapi.response.TournamentCreated',
   TOURNAMENT_GAME_PLAN: 'se.cygni.paintbot.eventapi.model.TournamentGamePlan',
@@ -51,10 +53,27 @@ export function useRestAPIToGetActiveTournament(setters: any, tour: Tournament) 
   );
 }
 
+export function useRestAPIToGetGamesPlayedByPlayer(player: string) {
+  return useCallback(
+    async resolve => {
+      const response = await fetch(`${Config.BackendUrl}/history/search/${player}`);
+      console.log(response);
+      if (response.ok) {
+        response.text().then(text => {
+          const { type, ...gameHistory } = JSON.parse(text);
+          resolve(gameHistory);
+        });
+      }
+    },
+    [player],
+  );
+}
+
 export function useWebSocket() {
   const setters = useContext(SettersContext);
   const tour = useContext(TournamentContext);
   const acc = useContext(AccountContext);
+  const arena = useContext(ArenaContext);
   const tournamentUpdater = useRestAPIToGetActiveTournament(setters, tour);
   const [ws, setWs] = useState(new WebSocket(Config.WebSocketApiUrl));
   const [queuedMessages, setQueuedMessages] = useState(new Array<string>());
@@ -66,26 +85,6 @@ export function useWebSocket() {
     setWs(new WebSocket(Config.WebSocketApiUrl));
   };
 
-  const sender = useCallback(
-    (message: any) => {
-      const mess = JSON.stringify(message);
-      const state = ws.readyState;
-      if (state === ws.OPEN) {
-        ws.send(mess);
-        console.log(`SENT MESSAGE OF TYPE: ${message.type}`);
-      } else if (state === ws.CONNECTING) {
-        const messages = queuedMessages.concat(mess);
-        setQueuedMessages(messages);
-      } else {
-        const messages = queuedMessages.concat(mess);
-        setQueuedMessages(messages);
-        console.log(`SOCKET IS ${state === ws.CLOSING ? 'CLOSING' : 'CLOSED'}`);
-        setWs(new WebSocket(Config.WebSocketApiUrl));
-      }
-    },
-    [queuedMessages, ws],
-  );
-
   const forceUpdate = () => {
     sender({
       type: REQUEST_TYPES.UPDATE_TOURNAMENT,
@@ -95,9 +94,8 @@ export function useWebSocket() {
   };
 
   ws.onopen = () => {
-    tournamentUpdater();
     console.log(`OPENING SOCKET: ${ws.url}`);
-    console.log('SENDING QUEUED MESSAGES');
+    console.log(`SENDING ${queuedMessages.length} QUEUED MESSAGES`);
     for (const mess of queuedMessages) {
       sender(mess);
     }
@@ -109,8 +107,16 @@ export function useWebSocket() {
     const { type, ...response } = jsonResponse;
     console.log(`MESSAGE OF TYPE: ${type} \nRECEIVED FROM ${ws.url}`);
     switch (type) {
-      case RESPONSE_TYPES.ARENA_UPDATE_EVENT:
-        setters.setArena(response);
+      case RESPONSE_TYPES.CURRENT_ARENA:
+        sender({
+          type: REQUEST_TYPES.SET_CURRENT_ARENA,
+          currentArena: response.currentArena ? response.currentArena : defaultArena.arenaName,
+        });
+        break;
+      case RESPONSE_TYPES.ARENA_UPDATE_EVENT_API_MESSAGE:
+      case RESPONSE_TYPES.ARENA_UPDATE_EVENT_GAME_MESSAGE:
+        console.log(response);
+        setters.setArena(response, arena);
         break;
       case RESPONSE_TYPES.TOURNAMENT_INFO:
       case RESPONSE_TYPES.TOURNAMENT_GAME_PLAN:
@@ -138,10 +144,58 @@ export function useWebSocket() {
     handleError(e);
   };
 
-  return sender;
+  const opener = useCallback(
+    () => {
+      const state = ws.readyState;
+      if (state === ws.CLOSING || state === ws.CLOSED) {
+        setWs(new WebSocket(Config.WebSocketApiUrl));
+      }
+    },
+    [ws],
+  );
+
+  const closer = useCallback(
+    () => {
+      const state = ws.readyState;
+      if (state === ws.CONNECTING || state === ws.OPEN) {
+        ws.close();
+      }
+    },
+    [ws],
+  );
+
+  const sender = useCallback(
+    (message: any) => {
+      const mess = JSON.stringify(message);
+      const state = ws.readyState;
+      if (state === ws.OPEN) {
+        ws.send(mess);
+        console.log(`SENT MESSAGE OF TYPE: ${message.type}`);
+      } else if (state === ws.CONNECTING) {
+        const messages = queuedMessages.concat(mess);
+        setQueuedMessages(messages);
+      } else {
+        const messages = queuedMessages.concat(mess);
+        setQueuedMessages(messages);
+        console.log(`SOCKET IS ${state === ws.CLOSING ? 'CLOSING' : 'CLOSED'}`);
+        setWs(new WebSocket(Config.WebSocketApiUrl));
+      }
+    },
+    [queuedMessages, ws],
+  );
+
+  return { open: opener, send: sender, close: closer };
 }
 
 export function WebSocketProvider(props: any) {
-  const send = useWebSocket();
+  const { send, close } = useWebSocket();
+
+  useEffect(
+    () => {
+      return close;
+    },
+    [close],
+  );
+
   return <WebSocketContext.Provider value={send}>{props.children}</WebSocketContext.Provider>;
 }

@@ -3,7 +3,7 @@ import React from 'react';
 import { Arena } from '../types';
 
 export const defaultArena: Arena = {
-  currentArena: '',
+  arenaName: 'arena',
   gameId: '',
   ranked: false,
   onlinePlayers: [],
@@ -12,8 +12,7 @@ export const defaultArena: Arena = {
 };
 
 export function extractArena(arenaMess: any) {
-  const { timestamp, receivingPlayerId, ...rest } = arenaMess;
-  const newArena = rest;
+  const { timestamp, receivingPlayerId, ...newArena } = arenaMess;
   return newArena;
 }
 

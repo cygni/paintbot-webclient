@@ -8,6 +8,7 @@ import TournamentScreen from './tournament/TournamentScreen';
 import WelcomeScreen from './welcome/WelcomeScreen';
 
 const LazyGameScreen = React.lazy(() => import(/* webpackPrefetch: true */ './game/GameScreen'));
+const LazyPlayerScreen = React.lazy(() => import(/* webpackPrefetch: true */ './player/PlayerScreen'));
 
 const Router: ComponentType<ComponentProps<typeof HashRouter> | ComponentProps<typeof BrowserRouter>> =
   process.env.REACT_APP_USE_HASH_ROUTER === 'true' ? HashRouter : BrowserRouter;
@@ -46,6 +47,9 @@ export default function Routes() {
             <TemplatePage>
               <TournamentScreen />
             </TemplatePage>
+          </Route>
+          <Route path="/player/:name?">
+            <LazyPlayerScreen />
           </Route>
           <Route path="/game/:id?">
             <LazyGameScreen />

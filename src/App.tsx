@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 
 import { WebSocketProvider } from './common/API';
 import AccountContext from './common/contexts/AccountContext';
-import ArenaContext from './common/contexts/ArenaContext';
+import ArenaContext, { extractArena } from './common/contexts/ArenaContext';
 import SettersContext from './common/contexts/SettersContext';
 import TournamentContext, { setGamePlayed, validateTour } from './common/contexts/TournamentContext';
 import { Arena, Tournament } from './common/types';
@@ -34,8 +34,11 @@ export default function App() {
           token: t,
         });
       };
-      const setArena = (arena: Arena) => {
-        setArenaContext(arena);
+      const setArena = (arena: Arena, currentArena: Arena) => {
+        const newArena = extractArena(arena);
+        if (isDifferent(newArena, currentArena)) {
+          setArenaContext(newArena);
+        }
       };
       const settersToBeUSed = {
         forceSetTournament: setTourContext,

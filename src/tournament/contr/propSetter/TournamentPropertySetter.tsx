@@ -49,6 +49,7 @@ export default function TournamentController() {
       <button onClick={toggleForm}>{showConfForm ? 'Hide' : 'Show'} form</button>
       {showConfForm && (
         <form onSubmit={handleSubmit}>
+          <input type="submit" value="Set configuration" />
           <ul id="game-settings">
             <li>
               <CheckBox k="obstaclesEnabled" v={gameSettings.obstaclesEnabled} oc={updateProperty} />
@@ -168,7 +169,6 @@ export default function TournamentController() {
               />
             </li>
           </ul>
-          <input type="submit" value="Set configuration" />
         </form>
       )}
     </>

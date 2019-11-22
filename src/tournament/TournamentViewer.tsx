@@ -6,6 +6,7 @@ import AccountContext from '../common/contexts/AccountContext';
 import TournamentContext from '../common/contexts/TournamentContext';
 import WebSocketContext from '../common/contexts/WebSocketContext';
 import { Game, TournamentLevel } from '../common/types';
+import PlayerLink from '../player/PlayerLink';
 
 export default function TournamentViewer() {
   const [showProps, setShowProps] = useState(false);
@@ -41,7 +42,7 @@ export default function TournamentViewer() {
                 .map(player => {
                   return (
                     <tr key={player.id}>
-                      <td>{player.name}</td>
+                      <td>{<PlayerLink name={player.name} />}</td>
                       <td>{player.points}</td>
                     </tr>
                   );
@@ -130,7 +131,7 @@ function TournamentGameLink(props: any) {
 
   return (
     <div>
-      {game.gamePlayed && <Link to={`/game/${game.gameId}`}>Winner: {getWinner(game)}</Link>}
+      {game.gamePlayed && <Link to={`/game/${encodeURIComponent(game.gameId)}`}>Winner: {getWinner(game)}</Link>}
       {!game.gamePlayed && <p>{players}</p>}
       {accContext.loggedIn && !game.gamePlayed && !clicked && <button onClick={hc}>Start</button>}
       {accContext.loggedIn && !game.gamePlayed && clicked && <p>Waiting on game to finish...</p>}

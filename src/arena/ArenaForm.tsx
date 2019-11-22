@@ -12,7 +12,7 @@ export default function ArenaForm() {
   const handleSubmit = (event: any) => {
     event.preventDefault();
     const mess = {
-      currentArena: currentProperties.currentArena,
+      currentArena: currentProperties.arenaName,
       type: REQUEST_TYPES.SET_CURRENT_ARENA,
     };
     send(mess);
@@ -26,21 +26,12 @@ export default function ArenaForm() {
     setCurrentProperties(copy);
   };
 
-  const inputs: any = [];
-  for (const k of Object.keys(currentProperties)) {
-    const value = currentProperties[k];
-    inputs.push(
-      <div key={k}>
-        <label htmlFor={k}>{k}</label>
-        <input type="text" onChange={updateProperty} name={k} value={value} />
-      </div>,
-    );
-  }
-
+  const k = 'arenaName';
   return (
     <form onSubmit={handleSubmit}>
-      {inputs}
-      <input type="submit" value="Set arena" />
+      <label htmlFor={k}>{k}</label>
+      <input type="text" onChange={updateProperty} name={k} value={currentProperties.arenaName} />
+      <input type="submit" value="View arena" />
     </form>
   );
 }
