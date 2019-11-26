@@ -1,11 +1,13 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+
+import { CharacterColors } from '../common/Constants';
+import { LinkButton } from '../common/ui/DefaultButton';
 
 export default function GameLink(props: any) {
   return (
-    <Link to={`/game/${encodeURIComponent(props.id)}`}>
+    <LinkButton to={`/game/${encodeURIComponent(props.id)}`} backgroundColor={CharacterColors.GreenCharacter}>
       {props.children && props.children}
       {!props.children && props.id}
-    </Link>
+    </LinkButton>
   );
 }

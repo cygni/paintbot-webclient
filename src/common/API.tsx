@@ -115,28 +115,28 @@ export function useWebSocket() {
         break;
       case RESPONSE_TYPES.ARENA_UPDATE_EVENT_API_MESSAGE:
       case RESPONSE_TYPES.ARENA_UPDATE_EVENT_GAME_MESSAGE:
-        console.log(response);
         setters.setArena(response, arena);
-        break;
-      case RESPONSE_TYPES.TOURNAMENT_INFO:
-      case RESPONSE_TYPES.TOURNAMENT_GAME_PLAN:
-        tournamentUpdater();
-        break;
-      case RESPONSE_TYPES.TOURNAMENT_CREATED:
-        forceUpdate();
         break;
       case RESPONSE_TYPES.TOURNAMENT_KILLED:
         setters.setTournament(defaultTournament, tour, type);
+      // falls through
+      case RESPONSE_TYPES.TOURNAMENT_CREATED:
         forceUpdate();
         break;
       case RESPONSE_TYPES.ACTIVE_GAMES_LIST:
         break;
       case RESPONSE_TYPES.UNAUTHORIZED:
+        setters.setAcc(false, '', '');
+      // falls through
       case RESPONSE_TYPES.API_MESSAGE_EXCEPTION:
       default:
-        tournamentUpdater();
         console.log(type);
         console.log(response);
+      // falls through
+      case RESPONSE_TYPES.TOURNAMENT_INFO:
+      case RESPONSE_TYPES.TOURNAMENT_GAME_PLAN:
+        tournamentUpdater();
+        break;
     }
   };
 

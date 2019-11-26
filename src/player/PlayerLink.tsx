@@ -1,6 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+
+import { CharacterColors } from '../common/Constants';
+import { LinkButton } from '../common/ui/DefaultButton';
 
 export default function PlayerLink(props: any) {
-  return <Link to={`/player/${encodeURIComponent(props.name)}`}>{props.name}</Link>;
+  return (
+    <LinkButton to={`/player/${encodeURIComponent(props.name)}`} backgroundColor={CharacterColors.BlueCharacter}>
+      {props.name}
+    </LinkButton>
+  );
 }

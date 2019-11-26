@@ -4,6 +4,7 @@ import { REQUEST_TYPES } from '../../common/API';
 import AccountContext from '../../common/contexts/AccountContext';
 import TournamentContext from '../../common/contexts/TournamentContext';
 import WebSocketContext from '../../common/contexts/WebSocketContext';
+import ControlsButton from '../../common/ui/ControlsButton';
 
 export default function TournamentKiller() {
   const accContext = useContext(AccountContext);
@@ -19,5 +20,5 @@ export default function TournamentKiller() {
     };
     send(killMess);
   };
-  return <button onClick={handleClick}>Kill tournament</button>;
+  return <ControlsButton onClick={handleClick}>Discard tournament</ControlsButton>;
 }

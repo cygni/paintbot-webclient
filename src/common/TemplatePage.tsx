@@ -8,6 +8,7 @@ import { REQUEST_TYPES, useRestAPIToGetActiveTournament } from './API';
 import SettersContext from './contexts/SettersContext';
 import TournamentContext from './contexts/TournamentContext';
 import WebSocketContext from './contexts/WebSocketContext';
+import { docCookies } from './util';
 
 export default function TemplatePage(props: any) {
   const tour = useContext(TournamentContext);
@@ -23,10 +24,21 @@ export default function TemplatePage(props: any) {
         send({
           type: REQUEST_TYPES.GET_CURRENT_ARENA,
         });
+
+        const token = docCookies.getItem('token');
+        const name = docCookies.getItem('name');
+        if (token && name) {
+          setters.setAcc(true, name, token);
+          send({
+            type: REQUEST_TYPES.GET_ACTIVE_TOURNAMENT,
+            token,
+          });
+        }
+
         setShouldFetch(false);
       }
     },
-    [shouldFetch, getActiveTournament, setters.settersHasBeenSet, send],
+    [shouldFetch, getActiveTournament, send, setters],
   );
 
   return (
@@ -40,12 +52,19 @@ export default function TemplatePage(props: any) {
 const Container = styled.div`
   background-image: url(${background});
   position: absolute;
-  background-repeat: no-repeat;
+  background-repeat: repeat;
   background-size: cover;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
+  & li {
+    list-style-type: none;
+  }
+  & ul,
+  ol {
+    padding-inline-start: 0px;
+  }
 `;
 
 const BodyContainer = styled.div`
@@ -53,4 +72,7 @@ const BodyContainer = styled.div`
   display: flex;
   justify-content: center;
   flex-direction: column;
+  & > * {
+    align-self: center;
+  }
 `;

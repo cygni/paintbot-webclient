@@ -26,7 +26,7 @@ export default function PlayerScreen(props: any) {
       interval = setInterval(update, 2000);
       return () => clearInterval(interval);
     },
-    [query],
+    [query, games],
   );
   query(console.log);
   return (

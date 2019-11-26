@@ -1,102 +1,60 @@
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import styled from 'styled-components/macro';
 
-import { REQUEST_TYPES } from '../common/API';
 import ArenaContext from '../common/contexts/ArenaContext';
-import WebSocketContext from '../common/contexts/WebSocketContext';
-import GameLink from '../game/GameLink';
-import PlayerLink from '../player/PlayerLink';
 
 import ArenaForm from './ArenaForm';
+import ArenaGames from './ArenaGames';
+import ArenaStarter from './ArenaStarter';
+import OnlinePlayers from './OnlinePLayers';
 
 export default function ArenaScreen() {
   const arenaContext = useContext(ArenaContext);
 
   return (
-    <>
-      <h1>{arenaContext.arenaName}</h1>
-      <ArenaForm />
-      <ArenaViewer />
-    </>
+    <GridBox>
+      <FlexColumn>
+        <h1>{arenaContext.arenaName}</h1>
+        <ArenaForm />
+        {arenaContext.onlinePlayers.length > 0 && <ArenaStarter />}
+      </FlexColumn>
+      <OnlinePlayers className="players" />
+      <ArenaGames className="games" />
+    </GridBox>
   );
 }
 
-function ArenaViewer() {
-  const arenaContext = useContext(ArenaContext);
+const GridBox = styled.div`
+  width: 100%;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-rows: 12em auto;
+  justify-items: center;
+  & > .players {
+    grid-row: 2 / span 1;
+    grid-column: 1 / span 1;
+  }
+  & > .games {
+    grid-row: 2 / span 1;
+    grid-column: 2 / span 1;
+  }
+  & > * {
+    align-self: start;
+  }
+  & li {
+    margin-bottom: 2em;
+  }
+`;
 
-  return (
-    <>
-      {arenaContext.onlinePlayers.length < 1 && <h2>No players online</h2>}
-      {arenaContext.onlinePlayers.length > 0 && (
-        <>
-          <h2>Online players</h2>
-          <ul>
-            {arenaContext.onlinePlayers.map((player, index) => {
-              return (
-                <li key={player}>
-                  <PlayerLink name={player} />
-                </li>
-              );
-            })}
-          </ul>
-        </>
-      )}
-      <CurrentArenaGame />
-      <ArenaGames />
-    </>
-  );
-}
-
-function ArenaStarter() {
-  const send = useContext(WebSocketContext);
-  const arena = useContext(ArenaContext);
-
-  const startArena = (event: any) => {
-    event.preventDefault();
-    send({
-      type: REQUEST_TYPES.START_ARENA_GAME,
-      arenaName: arena.arenaName,
-    });
-  };
-
-  return <button onClick={startArena}>Start new arena game</button>;
-}
-
-function CurrentArenaGame() {
-  const arenaContext = useContext(ArenaContext);
-
-  return (
-    <>
-      {arenaContext.gameId && (
-        <h2>
-          Latest game: {<Link to={`/game/${encodeURIComponent(arenaContext.gameId)}`}>{arenaContext.gameId}</Link>}
-        </h2>
-      )}
-      <ArenaStarter />
-    </>
-  );
-}
-
-function ArenaGames() {
-  const arenaContext = useContext(ArenaContext);
-
-  return (
-    <>
-      {arenaContext.gameHistory.length < 1 && <h2>No games played</h2>}
-      {arenaContext.gameHistory.length > 0 && (
-        <>
-          <h2>Played games</h2>
-          <ul>
-            {arenaContext.gameHistory.reverse().map((arenaHistory, index) => {
-              return (
-                <li key={arenaHistory.gameId}>
-                  <GameLink id={arenaHistory.gameId} />
-                </li>
-              );
-            })}
-          </ul>
-        </>
-      )}
-    </>
-  );
-}
+const FlexColumn = styled.div`
+  grid-row: 1 / 1;
+  grid-column: 1 / 3;
+  padding: 1em;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  & * {
+    margin-bottom: 1em;
+    align-self: center;
+  }
+`;

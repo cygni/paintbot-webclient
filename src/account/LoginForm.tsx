@@ -9,10 +9,10 @@ export default function LoginForm(props: any) {
   const authenticate = async (event: any, un: string, pw: string) => {
     event.preventDefault();
     const response = await fetch(Config.LoginUrl(un, pw));
-    response.text().then(text => {
+    response.text().then(token => {
       if (response.ok) {
         setErrMessage('');
-        setters.setAcc(true, un, text);
+        setters.setAcc(true, un, token);
       } else {
         setErrMessage(`Login attempt failed for username: ${un} and the provided password`);
       }

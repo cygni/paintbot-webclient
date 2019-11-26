@@ -6,7 +6,7 @@ import ArenaContext, { extractArena } from './common/contexts/ArenaContext';
 import SettersContext from './common/contexts/SettersContext';
 import TournamentContext, { setGamePlayed, validateTour } from './common/contexts/TournamentContext';
 import { Arena, Tournament } from './common/types';
-import { isDifferent } from './common/util';
+import { docCookies, isDifferent } from './common/util';
 import Routes from './Routes';
 
 export default function App() {
@@ -33,6 +33,18 @@ export default function App() {
           username: un,
           token: t,
         });
+
+        if (docCookies.setItem('token', t)) {
+          console.log('token cookie set');
+        } else {
+          console.log('could not set token cookie');
+        }
+
+        if (docCookies.setItem('name', un)) {
+          console.log('name cookie set');
+        } else {
+          console.log('could not set name cookie');
+        }
       };
       const setArena = (arena: Arena, currentArena: Arena) => {
         const newArena = extractArena(arena);
