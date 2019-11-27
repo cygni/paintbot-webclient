@@ -27,7 +27,7 @@ export default function Header() {
         </Spacing>
         <MenuItem to="/">Start</MenuItem>
         <MenuItem to="/about">About</MenuItem>
-        <MenuItem to="/tutorial">Getting started</MenuItem>
+        <MenuItem to="/tutorial">Guide</MenuItem>
         <MenuItem to="/arena">Arena</MenuItem>
         <MenuItem to="/tournament">
           {tourContext.tournamentName === '' ? 'Tournament' : tourContext.tournamentName}

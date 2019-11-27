@@ -7,77 +7,41 @@ import TournamentContext from '../../../common/contexts/TournamentContext';
 import WebSocketContext from '../../../common/contexts/WebSocketContext';
 import ControlsButton from '../../../common/ui/ControlsButton';
 import ScrollableViewport from '../../../common/ui/ScrollableViewport';
-import Settings from '../../viewer/Settings';
 
 import CheckBox from './CheckBox';
 import NumberInput from './NumberInput';
 
 export default function TournamentPropertySetter({ className }: { className: string }) {
-  const [showConfForm, setShowConfForm] = useState(false);
   const tourContext = useContext(TournamentContext);
   const accContext = useContext(AccountContext);
   const [currentProperties, setCurrentProperties] = useState(tourContext);
   const gameSettings = currentProperties.gameSettings;
   const send = useContext(WebSocketContext);
-  const [locked, setLocked] = useState(true);
-
-  const toggleForm = (event: any) => {
-    event.preventDefault();
-    setShowConfForm(!showConfForm);
-  };
 
   const handleSubmit = (event: any) => {
     if (event !== null) {
       event.preventDefault();
-    }
-    if (locked) {
-      setLocked(false);
-      return;
     } else {
-      const mess = {
-        gameSettings,
-        token: accContext.token,
-        type: REQUEST_TYPES.UPDATE_TOURNAMENT,
-      };
-      send(mess);
+      return;
     }
-  };
-
-  const abort = () => {
-    setCurrentProperties(tourContext);
-    setLocked(true);
+    const mess = {
+      gameSettings,
+      token: accContext.token,
+      type: REQUEST_TYPES.UPDATE_TOURNAMENT,
+    };
+    send(mess);
   };
 
   return (
     <FlexColumn className={className}>
       <h2>Game settings</h2>
-      <ControlsButton onClick={toggleForm}>{showConfForm ? 'Hide' : 'Show'} settings</ControlsButton>
-      {showConfForm && (
-        <form onSubmit={handleSubmit}>
-          <FlexRow>
-            <ControlsButton onClick={handleSubmit}>{locked ? 'Make changes' : 'Save'}</ControlsButton>
-            {!locked && <ControlsButton onClick={abort}>Abort</ControlsButton>}
-          </FlexRow>
-          {locked ? (
-            <Settings className="settings" />
-          ) : (
-            <SettingsForm setter={setCurrentProperties} curr={currentProperties} />
-          )}
-        </form>
-      )}
+      <form onSubmit={handleSubmit}>
+        <ControlsButton onClick={handleSubmit}>Save changes</ControlsButton>
+        <SettingsForm setter={setCurrentProperties} curr={currentProperties} />
+      </form>
     </FlexColumn>
   );
 }
-
-const FlexRow = styled.div`
-  display: flex;
-  justify-content: center;
-  flex-direction: row;
-  & * {
-    margin-right: 1em;
-    margin-left: 1em;
-  }
-`;
 
 const FlexColumn = styled.div`
   display: flex;

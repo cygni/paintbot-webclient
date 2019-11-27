@@ -39,7 +39,7 @@ function Level({ levelIndex }: { levelIndex: number }) {
       {level.tournamentGames.map((game: Game, gameIndex) => (
         <li className="list-item-game" key={`game${gameIndex}`}>
           {game.players.length > 0 && <TournamentGameLink game={game} />}
-          {game.players.length < 1 && <p>Expecting {game.expectedNoofPlayers} players</p>}
+          {game.players.length < 1 && <h3>Expecting {game.expectedNoofPlayers} players</h3>}
         </li>
       ))}
     </FlexColumnUL>

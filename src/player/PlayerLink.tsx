@@ -5,7 +5,11 @@ import { LinkButton } from '../common/ui/DefaultButton';
 
 export default function PlayerLink(props: any) {
   return (
-    <LinkButton to={`/player/${encodeURIComponent(props.name)}`} backgroundColor={CharacterColors.BlueCharacter}>
+    <LinkButton
+      className={props.className}
+      to={`/player/${encodeURIComponent(props.name)}`}
+      backgroundColor={CharacterColors.BlueCharacter}
+    >
       {props.name}
     </LinkButton>
   );

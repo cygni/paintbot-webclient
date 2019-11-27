@@ -36,8 +36,8 @@ export default function TournamentGameLink(props: any) {
     <FlexRow>
       {game.gamePlayed && <GameLink id={game.gameId}>Winner: {getWinner(game)}</GameLink>}
       {accContext.loggedIn && !game.gamePlayed && !clicked && <ControlsButton onClick={hc}>Start</ControlsButton>}
-      {!game.gamePlayed && <p>{players}</p>}
-      {accContext.loggedIn && !game.gamePlayed && clicked && <p>Waiting on game to finish...</p>}
+      {!game.gamePlayed && <h3>{players}</h3>}
+      {accContext.loggedIn && !game.gamePlayed && clicked && <h3>Waiting on game to finish...</h3>}
     </FlexRow>
   );
 }

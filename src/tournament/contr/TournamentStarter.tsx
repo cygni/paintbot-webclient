@@ -18,8 +18,8 @@ export default function TournamentStarter(props: any) {
       tournamentId: tourContext.tournamentId,
       type: REQUEST_TYPES.START_TOURNAMENT,
     };
-    send(mess);
     props.setStarted(true);
+    send(mess);
   };
 
   return <ControlsButton onClick={hc}>Start tournament</ControlsButton>;

@@ -12,8 +12,8 @@ export default function Levels() {
 
   return (
     <FlexColumn>
+      {Boolean(levels[0]) && levels[0].tournamentGames[0].gameId === null && <h3>Tournament is not planned yet.</h3>}
       {Boolean(levels[0]) && levels[0].tournamentGames[0].gameId !== null && <GamesList gamePlan={gamePlan} />}
-      {Boolean(levels[0]) && levels[0].tournamentGames[0].gameId === null && <p>Tournament is not planned yet.</p>}
     </FlexColumn>
   );
 }
