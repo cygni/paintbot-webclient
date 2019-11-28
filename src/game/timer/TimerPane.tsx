@@ -9,9 +9,7 @@ interface Props {
   worldTick: number;
 }
 
-const TimerContainer = styled.div`
-  display: flex;
-`;
+const TimerContainer = styled.div``;
 
 export const TimerPane = ({ durationInSeconds, timeInMsPerTick, worldTick }: Props) => (
   <TimerContainer>

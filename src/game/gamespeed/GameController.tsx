@@ -1,7 +1,6 @@
 import React, { useEffect, useReducer, useState } from 'react';
 import styled from 'styled-components/macro';
 
-import { Row } from '../../common/ui/Row';
 import Slider from '../../common/ui/Slider';
 import { Spacing } from '../../common/ui/Spacing';
 import Config from '../../Config';
@@ -46,7 +45,7 @@ export function GameController({ onGameSpeedChange, onPauseGame }: GameControlle
 
   return (
     <Spacing>
-      <Row>
+      <FlexContainer>
         <PlayControlButton playing={playing} onClick={togglePlaying} />
         <GameSpeedContainer>
           <div>Game Speed</div>
@@ -58,7 +57,21 @@ export function GameController({ onGameSpeedChange, onPauseGame }: GameControlle
             onChange={setGameSpeed}
           />
         </GameSpeedContainer>
-      </Row>
+      </FlexContainer>
     </Spacing>
   );
 }
+
+const FlexContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  & > * {
+    align-self: center;
+  }
+  @media screen and (min-width: 800px) {
+    & > * {
+      align-self: flex-start;
+      margin-left: 2em;
+    }
+  }
+`;

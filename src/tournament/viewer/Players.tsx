@@ -15,8 +15,8 @@ export default function Players({ className }: PlayersProps) {
   const GridBox = styled.div`
     display: grid;
     justify-content: center;
-    grid-template-rows: repeat(${players.length + 3}, 5em);
-    grid-template-columns: 100%;
+    grid-template-rows: repeat(${players.length + 3}, 4em);
+    grid-template-columns: 1fr;
     justify-items: center;
     align-items: center;
     & * {
@@ -66,7 +66,7 @@ const GridRow = styled.div<GridRowProps>`
   grid-row: ${props => props.no} / span 1;
   grid-column: 1 / span 1;
   display: grid;
-  grid-template-rows: 100%;
+  grid-template-rows: 1fr;
   grid-template-columns: repeat(3, 6em);
   & .first {
     grid-row: 1 / span 1;

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
+import styled from 'styled-components/macro';
 
 import { useRestAPIToGetGamesPlayedByPlayer } from '../common/API';
 import TemplatePage from '../common/TemplatePage';
@@ -12,6 +13,7 @@ export default function PlayerScreen(props: any) {
   const decodedName = decodeURIComponent(name);
   const query = useRestAPIToGetGamesPlayedByPlayer(name);
   const [games, setGames] = useState({ items: new Array<HistoricGame>() });
+
   useEffect(
     () => {
       const update = () => {
@@ -28,33 +30,32 @@ export default function PlayerScreen(props: any) {
     },
     [query, games],
   );
+
   query(console.log);
+
   return (
     <TemplatePage>
       <h1>Player: {decodedName}</h1>
+      {games.items.length > 0 && <h2>Played games</h2>}
       {games.items.length > 0 && (
-        <table>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Game</th>
-            </tr>
-          </thead>
-          <tbody>
-            {games.items
-              .sort((a, b) => b.gameDate.localeCompare(a.gameDate))
-              .map(game => (
-                <tr>
-                  <td>{game.gameDate}</td>
-                  <td>
-                    <GameLink id={game.gameId} />
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
+        <FlexColumn>
+          {games.items
+            .sort((a, b) => b.gameDate.localeCompare(a.gameDate))
+            .map(game => (
+              <GameLink id={game.gameId}>{game.gameDate}</GameLink>
+            ))}
+        </FlexColumn>
       )}
       {games.items.length < 1 && <h2>{decodedName} has not played any games yet!</h2>}
     </TemplatePage>
   );
 }
+
+const FlexColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  & > * {
+    margin-bottom: 1em;
+  }
+`;

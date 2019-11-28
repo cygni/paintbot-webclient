@@ -49,16 +49,18 @@ export default function Controls({ started, game, lvl }: ControlsProps) {
 const PanelView = styled.div`
   display: flex;
   justify-content: space-around;
-  flex-direction: row;
+  flex-direction: column;
   & > * {
     align-self: flex-start;
+  }
+  @media screen and (min-width: 800px) {
+    flex-direction: row;
   }
 `;
 
 const ControlsView = styled(PanelView)`
   justify-content: flex-start;
-  & * {
-    margin-left: 2em;
-    margin-right: 2em;
+  & > * {
+    margin: 0.5em;
   }
 `;

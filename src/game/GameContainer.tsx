@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components/macro';
 
 import { GameControllerColors } from '../common/Constants';
-import { Row } from '../common/ui/Row';
 import Config from '../Config';
 
 import GameBoardContainer from './gameboard/GameBoardContainer';
@@ -37,14 +36,14 @@ export default class GameContainer extends React.Component<GameContainerProps, G
     return (
       <div>
         <HeaderContainer>
-          <GameNameContainer>PAINTBOT</GameNameContainer>
+          <div>PAINTBOT</div>
           <TimerPane
             durationInSeconds={Config.TimerSeconds}
             timeInMsPerTick={gameSettings.timeInMsPerTick}
             worldTick={gameMap.worldTick}
           />
         </HeaderContainer>
-        <Row justifyContent={'center'} style={{ paddingTop: 20 }}>
+        <FlexContainer>
           <ScoreBoardContainer players={game.currentCharacters} worldTick={game.worldTick} />
           <div>
             <GameBoardContainer game={game} />
@@ -56,7 +55,7 @@ export default class GameContainer extends React.Component<GameContainerProps, G
               />
             </GamerControllerContainer>
           </div>
-        </Row>
+        </FlexContainer>
       </div>
     );
   }
@@ -68,15 +67,32 @@ const GamerControllerContainer = styled.div`
 `;
 
 const HeaderContainer = styled.div`
-  position: relative;
   display: flex;
   padding: 10px;
   font-size: 40px;
   justify-content: center;
-  flex-direction: row;
+  flex-direction: column;
+  align-items: center;
+  & > * {
+    margin: 5px;
+  }
+  @media screen and (min-width: 800px) {
+    position: relative;
+    flex-direction: row;
+    justify-content: flex-start;
+    & > * {
+      margin-left: 40px;
+      margin-right: 40px;
+    }
+  }
 `;
 
-const GameNameContainer = styled.div`
-  position: absolute;
-  left: 0;
+const FlexContainer = styled.div`
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: center;
+  padding-top: 20;
+  @media screen and (min-width: 800px) {
+    flex-direction: row;
+  }
 `;

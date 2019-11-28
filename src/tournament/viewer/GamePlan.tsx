@@ -14,13 +14,14 @@ interface GamePlanProps {
 export default function GamePlan({ className, lvl, game, playedGames }: GamePlanProps) {
   const tour = useContext(TournamentContext);
   const levels = tour.gamePlan.tournamentLevels;
+  const noRows = 3 + playedGames.length;
   const started = levels.length > 0 && levels[0].tournamentGames[0].gameId !== null;
 
   const GridBox = styled.div`
     display: grid;
     justify-content: center;
-    grid-template-rows: repeat(${levels.length + 3}, 5em);
-    grid-template-columns: 100%;
+    grid-template-rows: repeat(${noRows}, 5em);
+    grid-template-columns: 1fr;
     justify-items: center;
     align-items: center;
     & * {
@@ -37,7 +38,13 @@ export default function GamePlan({ className, lvl, game, playedGames }: GamePlan
       {started && (
         <Row no={2}>
           <h3>
-            {tour.winner ? `Congratulations ${tour.winner.name}!` : `Next game : Level ${lvl + 1} : Game ${game + 1}`}
+            {tour.winner
+              ? `Congratulations ${tour.winner.name}!`
+              : lvl + 1 === tour.gamePlan.noofLevels
+              ? 'Next game : Final!'
+              : `Next game : Level ${lvl + 1} / ${tour.gamePlan.noofLevels} : Game ${game + 1} / ${
+                  tour.gamePlan.tournamentLevels[lvl].tournamentGames.length
+                }`}
           </h3>
         </Row>
       )}
@@ -52,14 +59,9 @@ export default function GamePlan({ className, lvl, game, playedGames }: GamePlan
           currLvl = currLvl + 1;
           return (
             <Row no={index + 3} key={`gp-row${index}`}>
-              {currLvl === tour.gamePlan.noofLevels ? (
-                <h3>Final</h3>
-              ) : (
-                <h3>
-                  Level : {currLvl} / Game : {currGame}
-                </h3>
-              )}
-              <GameLink id={gameId} />
+              <GameLink id={gameId}>
+                {currLvl === tour.gamePlan.noofLevels ? 'Final' : `Level : ${currLvl} / Game : ${currGame}`}
+              </GameLink>
             </Row>
           );
         })}

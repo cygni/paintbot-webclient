@@ -6,7 +6,7 @@ import ArenaContext from '../common/contexts/ArenaContext';
 import ArenaForm from './ArenaForm';
 import ArenaGames from './ArenaGames';
 import ArenaStarter from './ArenaStarter';
-import OnlinePlayers from './OnlinePLayers';
+import OnlinePlayers from './OnlinePlayers';
 
 export default function ArenaScreen() {
   const arenaContext = useContext(ArenaContext);
@@ -26,29 +26,32 @@ export default function ArenaScreen() {
 
 const GridBox = styled.div`
   width: 100%;
-  display: grid;
-  grid-template-columns: 50% 50%;
-  grid-template-rows: 12em auto;
-  justify-items: center;
-  & > .players {
-    grid-row: 2 / span 1;
-    grid-column: 1 / span 1;
-  }
-  & > .games {
-    grid-row: 2 / span 1;
-    grid-column: 2 / span 1;
-  }
-  & > * {
-    align-self: start;
-  }
-  & li {
-    margin-bottom: 2em;
+  display: flex;
+  flex-direction: column;
+
+  @media screen and (min-width: 800px) {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 12em auto;
+    justify-items: center;
+    & > .players {
+      grid-row: 2 / span 1;
+      grid-column: 1 / span 1;
+    }
+    & > .games {
+      grid-row: 2 / span 1;
+      grid-column: 2 / span 1;
+    }
+    & > * {
+      align-self: start;
+    }
+    & li {
+      margin-bottom: 2em;
+    }
   }
 `;
 
 const FlexColumn = styled.div`
-  grid-row: 1 / 1;
-  grid-column: 1 / 3;
   padding: 1em;
   display: flex;
   justify-content: center;
@@ -56,5 +59,9 @@ const FlexColumn = styled.div`
   & * {
     margin-bottom: 1em;
     align-self: center;
+  }
+  @media screen and (min-width: 800px) {
+    grid-row: 1 / 1;
+    grid-column: 1 / 3;
   }
 `;

@@ -23,5 +23,10 @@ export default function ArenaForm(props: any) {
 }
 
 const Input = styled.input`
-  width: 20em;
+  margin-left: 1em;
+  margin-right: 1em;
+  width: 100%;
+  @media screen and (min-width: 800px) {
+    width: 20em;
+  }
 `;

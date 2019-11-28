@@ -38,6 +38,12 @@ export default function Routes() {
               <ArenaScreen />
             </TemplatePage>
           </Route>
+          <Route path="/about" exact>
+            <TemplatePage />
+          </Route>
+          <Route path="/readme" exact>
+            <TemplatePage />
+          </Route>
           <Route path="/tournament" exact>
             <TemplatePage>
               <TournamentScreen />

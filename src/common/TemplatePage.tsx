@@ -52,12 +52,10 @@ export default function TemplatePage(props: any) {
 const Container = styled.div`
   background-image: url(${background});
   position: absolute;
-  background-repeat: repeat;
-  background-size: cover;
-  top: 0;
   right: 0;
-  bottom: 0;
   left: 0;
+  min-height: 100%;
+  height: fit-content;
   & li {
     list-style-type: none;
   }

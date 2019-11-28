@@ -15,18 +15,18 @@ const Scrollable = styled.div`
   flex-direction: column;
   justify-content: space-evenly;
   overflow: hidden;
-  & input {
-    max-width: 7em;
-  }
 `;
 
 const Viewport = styled.div`
-  border-radius: 10px 0px 0px 10px;
+  min-width: 10em;
+  width: 100%;
   display: block;
-  height: 20em;
+  border-radius: 3px;
+  min-height: fit-content;
+  max-height: 15em;
   margin-top: 1em;
   margin-bottom: 1em;
   padding: 1em;
-  background-color: #e8e8e8;
-  overflow-y: scroll;
+  background-color: rgba(100%, 100%, 100%, 50%);
+  overflow-y: auto;
 `;

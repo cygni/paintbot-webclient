@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react';
+import styled from 'styled-components/macro';
 
 import SettersContext from '../common/contexts/SettersContext';
 import Config from '../Config';
@@ -24,12 +25,29 @@ export default function LoginForm(props: any) {
     <div id="login-form">
       {errMessage !== '' ? <h3>{errMessage}</h3> : ''}
       <form onSubmit={handleSubmit}>
-        <label htmlFor="username">Username: </label>
-        <input name="username" id="username" type="text" value={props.un} onChange={props.hc} />
-        <label htmlFor="password">Password: </label>
-        <input name="password" id="password" type="password" value={props.pw} onChange={props.hc} />
-        <input type="submit" value="Log in" />
+        <FlexColumn>
+          <FlexColumn>
+            <label htmlFor="username">Username: </label>
+            <input name="username" id="username" type="text" value={props.un} onChange={props.hc} />
+          </FlexColumn>
+
+          <FlexColumn>
+            <label htmlFor="password">Password: </label>
+            <input name="password" id="password" type="password" value={props.pw} onChange={props.hc} />
+          </FlexColumn>
+
+          <FlexColumn>
+            <input type="submit" value="Log in" />
+          </FlexColumn>
+        </FlexColumn>
       </form>
     </div>
   );
 }
+
+const FlexColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 1em;
+`;
