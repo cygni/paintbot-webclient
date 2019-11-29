@@ -1,3 +1,4 @@
+import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import tinycolor from 'tinycolor2';
@@ -11,7 +12,7 @@ interface ButtonProps {
 }
 
 export const DefaultButton = styled.button<ButtonProps>(
-  ({ backgroundColor = CharacterColors.RedCharacter, color = StandardColors.White, width }) => ({
+  ({ backgroundColor = CharacterColors.RedCharacter, color = StandardColors.White, width = 'fit-content' }) => ({
     borderRadius: 4,
     backgroundColor,
     border: 'none',
@@ -36,6 +37,15 @@ export const DefaultButton = styled.button<ButtonProps>(
   }),
 );
 
-export const LinkButton = styled(DefaultButton.withComponent(Link))({
-  textDecoration: 'none',
-});
+export function LinkButton(props: any) {
+  const L = styled(Link)`
+    font: inherit;
+    color: inherit;
+    text-decoration: inherit;
+  `;
+  return (
+    <DefaultButton backgroundColor={props.backgroundColor}>
+      <L to={props.to}>{props.children}</L>
+    </DefaultButton>
+  );
+}

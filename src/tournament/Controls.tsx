@@ -38,29 +38,46 @@ export default function Controls({ started, game, lvl }: ControlsProps) {
   };
 
   return (
-    <ControlsView>
-      {showStart && <TournamentStarter setStarted={setHasStarted} />}
-      {hasStarted && !tour.winner && <ControlsButton onClick={hc}>Start next game!</ControlsButton>}
-      <TournamentKiller />
+    <ControlsView hasEnded={tour.winner !== undefined}>
+      {showStart && <TournamentStarter className="starter" setStarted={setHasStarted} />}
+      {hasStarted && !tour.winner && (
+        <ControlsButton className="starter" onClick={hc}>
+          Start next game!
+        </ControlsButton>
+      )}
+      <TournamentKiller className="killer" />
     </ControlsView>
   );
 }
 
-const PanelView = styled.div`
+interface ControlsViewProps {
+  hasEnded: boolean;
+}
+
+const ControlsView = styled.div<ControlsViewProps>`
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   flex-direction: column;
   & > * {
-    align-self: flex-start;
+    align-self: center;
+    margin-bottom: 1em;
   }
-  @media screen and (min-width: 800px) {
-    flex-direction: row;
-  }
-`;
-
-const ControlsView = styled(PanelView)`
-  justify-content: flex-start;
-  & > * {
-    margin: 0.5em;
+  @media screen and (min-width: 1000px) {
+    display: ${({ hasEnded }) => (hasEnded ? 'flex' : 'grid')};
+    width: 100%;
+    & > * {
+      margin: 1em 4em 0em 4em;
+      max-width: 18em;
+    }
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    .starter {
+      grid-row: 1 / span 1;
+      grid-column: 1 / span 1;
+    }
+    .killer {
+      grid-row: 1 / span 1;
+      grid-column: 2 / span 1;
+    }
   }
 `;

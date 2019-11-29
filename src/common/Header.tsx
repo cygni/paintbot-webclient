@@ -94,10 +94,11 @@ const MenuContainer = styled.div<MenuContainerProps>`
     display: ${props => (props.collapsed ? 'none' : 'flex')};
     flex-direction: column;
     a {
+      width: auto;
       display: block;
     }
   }
-  @media screen and (min-width: 800px) {
+  @media screen and (min-width: 1000px) {
     flex-direction: row;
     .menu-toggler {
       display: none;

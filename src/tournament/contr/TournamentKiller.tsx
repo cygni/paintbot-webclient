@@ -6,7 +6,7 @@ import TournamentContext from '../../common/contexts/TournamentContext';
 import WebSocketContext from '../../common/contexts/WebSocketContext';
 import ControlsButton from '../../common/ui/ControlsButton';
 
-export default function TournamentKiller() {
+export default function TournamentKiller(props: any) {
   const accContext = useContext(AccountContext);
   const tourContext = useContext(TournamentContext);
   const send = useContext(WebSocketContext);

@@ -25,7 +25,7 @@ export default function PlayerScreen(props: any) {
       };
       update();
       let interval: NodeJS.Timeout;
-      interval = setInterval(update, 2000);
+      interval = setInterval(update, 4000);
       return () => clearInterval(interval);
     },
     [query, games],

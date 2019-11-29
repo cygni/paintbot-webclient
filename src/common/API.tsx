@@ -105,7 +105,7 @@ export function useWebSocket() {
   ws.onmessage = e => {
     const jsonResponse = JSON.parse(e.data);
     const { type, ...response } = jsonResponse;
-    console.log(`MESSAGE OF TYPE: ${type} \nRECEIVED FROM ${ws.url}`);
+    // console.log(`MESSAGE OF TYPE: ${type} \nRECEIVED FROM ${ws.url}`);
     switch (type) {
       case RESPONSE_TYPES.CURRENT_ARENA:
         sender({
@@ -170,7 +170,7 @@ export function useWebSocket() {
       const state = ws.readyState;
       if (state === ws.OPEN) {
         ws.send(mess);
-        console.log(`SENT MESSAGE OF TYPE: ${message.type}`);
+        // console.log(`SENT MESSAGE OF TYPE: ${message.type}`);
       } else if (state === ws.CONNECTING) {
         const messages = queuedMessages.concat(mess);
         setQueuedMessages(messages);

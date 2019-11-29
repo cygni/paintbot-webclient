@@ -1,8 +1,10 @@
 import React, { useContext, useState } from 'react';
+import styled from 'styled-components/macro';
 
 import { REQUEST_TYPES } from '../../common/API';
 import AccountContext from '../../common/contexts/AccountContext';
 import WebSocketContext from '../../common/contexts/WebSocketContext';
+import ControlsButton from '../../common/ui/ControlsButton';
 
 export default function TournamentCreator() {
   const accContext = useContext(AccountContext);
@@ -26,12 +28,27 @@ export default function TournamentCreator() {
   };
 
   return (
-    <div id="tournament-creation-form">
+    <FlexColumn>
+      <h1>Create a tournament</h1>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="tournament-name">Tournament name: </label>
         <input name="tournament-name" id="tournament-name" type="text" value={tourName} onChange={handleChange} />
-        <input type="submit" value="Create tournament" />
+        <ControlsButton onClick={handleSubmit}>Lets go!</ControlsButton>
       </form>
-    </div>
+    </FlexColumn>
   );
 }
+
+const FlexColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  form * {
+    margin-bottom: 1em;
+  }
+`;

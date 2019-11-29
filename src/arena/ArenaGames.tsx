@@ -2,31 +2,27 @@ import React, { useContext } from 'react';
 import styled from 'styled-components/macro';
 
 import ArenaContext from '../common/contexts/ArenaContext';
-import ScrollableViewport from '../common/ui/ScrollableViewport';
 import GameLink from '../game/GameLink';
 
 import CurrentArenaGame from './CurrentArenaGame';
 
 export default function ArenaGames(props: any) {
   const arenaContext = useContext(ArenaContext);
-
   return (
     <FlexColumn className={props.className}>
-      {arenaContext.gameHistory.length < 1 && <h2>No games played</h2>}
-      {arenaContext.gameHistory.length > 0 && (
+      {arenaContext.gameHistory.length < 1 && !arenaContext.gameId && <h2>No games played</h2>}
+      {(arenaContext.gameHistory.length > 0 || arenaContext.gameId) && (
         <FlexColumn>
           <h2>Played games</h2>
           <ul>
-            <ScrollableViewport>
-              <CurrentArenaGame />
-              {arenaContext.gameHistory.reverse().map((arenaHistory, index) => {
-                return (
-                  <li key={arenaHistory.gameId}>
-                    <GameLink id={arenaHistory.gameId}>Game number {arenaContext.gameHistory.length - index}</GameLink>
-                  </li>
-                );
-              })}
-            </ScrollableViewport>
+            <CurrentArenaGame />
+            {arenaContext.gameHistory.reverse().map((arenaHistory, index) => {
+              return (
+                <li key={arenaHistory.gameId}>
+                  <GameLink id={arenaHistory.gameId}>Game number {arenaContext.gameHistory.length - index}</GameLink>
+                </li>
+              );
+            })}
           </ul>
         </FlexColumn>
       )}
@@ -39,9 +35,15 @@ const FlexColumn = styled.div`
   justify-content: center;
   flex-direction: column;
   & * {
-    align-self: center;
+    align-self: stretch;
   }
   li {
-    margin: 1em;
+    margin: 2em;
+  }
+  ul {
+    margin: 0em 2em 0em 2em;
+    padding: 1em;
+    background-color: rgba(100%, 100%, 100%, 50%);
+    border-radius: 10px;
   }
 `;

@@ -26,7 +26,8 @@ const Input = styled.input`
   margin-left: 1em;
   margin-right: 1em;
   width: 100%;
-  @media screen and (min-width: 800px) {
+  max-width: 20em;
+  @media screen and (min-width: 1000px) {
     width: 20em;
   }
 `;

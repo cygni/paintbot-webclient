@@ -46,13 +46,16 @@ export default function TournamentController(props: any) {
 
   return (
     <Container started={started}>
-      <FlexColumn className="heading">
+      <FlexColumn started={started} className="heading">
         <h1>{tour.tournamentName}</h1>
         {tour.winner && <h2>{tour.winner.name} has won the tournament!!!</h2>}
         {acc.loggedIn && <Controls started={started} game={nextGame.game} lvl={nextGame.lvl} />}
       </FlexColumn>
+      {started && <h2 className="gpheader">Game plan</h2>}
       {started && <GamePlan className="gameplan" lvl={nextGame.lvl} game={nextGame.game} playedGames={playedGames} />}
+      <h2 className="pheader">Players</h2>
       <Players className="players" />
+      <h2 className="sheader">Settings</h2>
       {showSetters && <TournamentPropertySetter className="settings" />}
       {!showSetters && <Settings className="settings" />}
     </Container>
@@ -67,49 +70,63 @@ const Container = styled.div<ContainerProps>`
   width: 100%;
   display: flex;
   flex-direction: column;
-  & * {
-    align-self: center;
-  }
+  align-items: center;
   & li {
     margin-bottom: 2em;
   }
   & * {
     text-align: center;
   }
-  @media screen and (min-width: 800px) {
+  @media screen and (min-width: 1000px) {
     display: grid;
-    grid-template-columns: ${({ started }) => (started ? 'repeat(3, 18em)' : 'repeat(2, 18em)')};
-    grid-template-rows: 12em auto;
+    grid-template-columns: ${({ started }) => (started ? '18em 2em 18em 2em 18em' : '18em 2em 18em')};
+    grid-template-rows: 14em 5em auto;
     justify-items: center;
-    & > .players {
+    align-items: start;
+    & > .pheader {
       grid-row: 2 / span 1;
       grid-column: 1 / span 1;
     }
-    & > .gameplan {
+    & > .gpheader {
       ${({ started }) => !started && 'display: none;'}
       grid-row: 2 / span 1;
-      grid-column: 2 / span 1;
+      grid-column: 3 / span 1;
+    }
+    & > .sheader {
+      grid-row: 2 / span 1;
+      grid-column: ${({ started }) => (started ? '5' : '3')} / span 1;
+    }
+    & > .players {
+      grid-row: 3 / span 1;
+      grid-column: 1 / span 1;
+      width: 100%;
+      margin-left: 1em;
+      margin-right: 1em;
+    }
+    & > .gameplan {
+      ${({ started }) => !started && 'display: none;'}
+      grid-row: 3 / span 1;
+      grid-column: 3 / span 1;
     }
     & > .settings {
-      grid-row: 2 / span 1;
-      grid-column: ${({ started }) => (started ? '3' : '2')} / span 1;
-    }
-    & > * {
-      align-self: start;
-      justify-self: center;
+      grid-row: 3 / span 1;
+      grid-column: ${({ started }) => (started ? '5' : '3')} / span 1;
+      width: 100%;
+      margin-left: 1em;
+      margin-right: 1em;
+      h2 {
+        margin-top: 0px;
+      }
     }
   }
 `;
 
-const FlexColumn = styled.div`
+const FlexColumn = styled.div<ContainerProps>`
   display: flex;
   justify-content: center;
   flex-direction: column;
-  & * {
-    align-self: center;
-  }
-  @media screen and (min-width: 800px) {
+  @media screen and (min-width: 1000px) {
     grid-row: 1 / 1;
-    grid-column: 1 / span 3;
+    grid-column: 1 / span ${({ started }) => (started ? '5' : '3')};
   }
 `;

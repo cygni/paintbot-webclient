@@ -29,16 +29,18 @@ const GridBox = styled.div`
   display: flex;
   flex-direction: column;
 
-  @media screen and (min-width: 800px) {
+  @media screen and (min-width: 1000px) {
     display: grid;
     grid-template-columns: 50% 50%;
     grid-template-rows: 12em auto;
     justify-items: center;
     & > .players {
+      width: 100%;
       grid-row: 2 / span 1;
       grid-column: 1 / span 1;
     }
     & > .games {
+      width: 100%;
       grid-row: 2 / span 1;
       grid-column: 2 / span 1;
     }
@@ -60,7 +62,7 @@ const FlexColumn = styled.div`
     margin-bottom: 1em;
     align-self: center;
   }
-  @media screen and (min-width: 800px) {
+  @media screen and (min-width: 1000px) {
     grid-row: 1 / 1;
     grid-column: 1 / 3;
   }

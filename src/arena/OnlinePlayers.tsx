@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import styled from 'styled-components/macro';
 
 import ArenaContext from '../common/contexts/ArenaContext';
-import ScrollableViewport from '../common/ui/ScrollableViewport';
 import PlayerLink from '../player/PlayerLink';
 
 export default function OnlinePlayers(props: any) {
@@ -15,15 +14,13 @@ export default function OnlinePlayers(props: any) {
         <FlexColumn>
           <h2>Online players</h2>
           <ul>
-            <ScrollableViewport>
-              {arenaContext.onlinePlayers.map((player, index) => {
-                return (
-                  <li key={player}>
-                    <PlayerLink name={player} />
-                  </li>
-                );
-              })}
-            </ScrollableViewport>
+            {arenaContext.onlinePlayers.map((player, index) => {
+              return (
+                <li key={player}>
+                  <PlayerLink name={player} />
+                </li>
+              );
+            })}
           </ul>
         </FlexColumn>
       )}
@@ -36,9 +33,15 @@ const FlexColumn = styled.div`
   justify-content: center;
   flex-direction: column;
   & * {
-    align-self: center;
+    align-self: stretch;
   }
   li {
-    margin: 1em;
+    margin: 2em;
+  }
+  ul {
+    margin: 0em 2em 0em 2em;
+    padding: 1em;
+    background-color: rgba(100%, 100%, 100%, 50%);
+    border-radius: 10px;
   }
 `;
