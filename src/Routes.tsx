@@ -3,7 +3,7 @@ import { BrowserRouter, HashRouter, Route, Switch } from 'react-router-dom';
 
 import AccountScreen from './account/AccountScreen';
 import ArenaScreen from './arena/ArenaScreen';
-import TemplatePage from './common/TemplatePage';
+import TemplatePage from './common/ui/TemplatePage';
 import TournamentScreen from './tournament/TournamentScreen';
 import WelcomeScreen from './welcome/WelcomeScreen';
 

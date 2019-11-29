@@ -4,7 +4,7 @@ import AccountContext from '../common/contexts/AccountContext';
 import TournamentContext from '../common/contexts/TournamentContext';
 
 import TournamentController from './contr/TournamentController';
-import TournamentCreator from './contr/TournamentCreator';
+import TournamentCreator from './TournamentCreator';
 
 export default function TournamentScreen(props: any) {
   const accContext = useContext(AccountContext);

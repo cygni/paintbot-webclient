@@ -40,12 +40,14 @@ export const DefaultButton = styled.button<ButtonProps>(
 export function LinkButton(props: any) {
   const L = styled(Link)`
     font: inherit;
-    color: inherit;
+    color: ${props.color};
     text-decoration: inherit;
   `;
   return (
-    <DefaultButton backgroundColor={props.backgroundColor}>
-      <L to={props.to}>{props.children}</L>
-    </DefaultButton>
+    <L to={props.to}>
+      <DefaultButton backgroundColor={props.backgroundColor} width={props.width} color={props.color}>
+        {props.children}
+      </DefaultButton>
+    </L>
   );
 }

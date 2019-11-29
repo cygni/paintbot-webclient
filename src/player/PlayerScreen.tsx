@@ -3,10 +3,10 @@ import { useParams } from 'react-router';
 import styled from 'styled-components/macro';
 
 import { useRestAPIToGetGamesPlayedByPlayer } from '../common/API';
-import TemplatePage from '../common/TemplatePage';
 import { HistoricGame, PlayerHistory } from '../common/types';
+import GameLink from '../common/ui/GameLink';
+import TemplatePage from '../common/ui/TemplatePage';
 import { isDifferent } from '../common/util';
-import GameLink from '../game/GameLink';
 
 export default function PlayerScreen(props: any) {
   const { name } = useParams<{ name: string }>();

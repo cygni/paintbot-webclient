@@ -6,7 +6,7 @@ import AccountContext from '../../common/contexts/AccountContext';
 import WebSocketContext from '../../common/contexts/WebSocketContext';
 import { Game } from '../../common/types';
 import ControlsButton from '../../common/ui/ControlsButton';
-import GameLink from '../../game/GameLink';
+import GameLink from '../../common/ui/GameLink';
 
 export default function TournamentGameLink(props: any) {
   const [clicked, setClicked] = useState(false);

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 
 import ArenaContext from '../common/contexts/ArenaContext';
-import GameLink from '../game/GameLink';
+import GameLink from '../common/ui/GameLink';
 
 export default function CurrentArenaGame() {
   const arenaContext = useContext(ArenaContext);

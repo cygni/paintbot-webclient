@@ -1,16 +1,16 @@
 import React, { useContext, useState } from 'react';
 import styled from 'styled-components/macro';
 
-import { StandardColors } from '../common/Constants';
-import { LinkButton } from '../common/ui/DefaultButton';
-import { Indent } from '../common/ui/Indent';
-import { Row } from '../common/ui/Row';
-import { Spacing } from '../common/ui/Spacing';
-import yellowCharacter from '../resources/images/yellow_character.png';
+import yellowCharacter from '../../resources/images/yellow_character.png';
+import { StandardColors } from '../Constants';
+import AccountContext from '../contexts/AccountContext';
+import TournamentContext from '../contexts/TournamentContext';
 
-import AccountContext from './contexts/AccountContext';
-import TournamentContext from './contexts/TournamentContext';
-import ControlsButton from './ui/ControlsButton';
+import ControlsButton from './ControlsButton';
+import { LinkButton } from './DefaultButton';
+import { Indent } from './Indent';
+import { Row } from './Row';
+import { Spacing } from './Spacing';
 
 export default function Header() {
   const accContext = useContext(AccountContext);
@@ -64,7 +64,9 @@ function MenuItem(props: any) {
   return (
     <Spacing onClick={props.oc}>
       <Indent num={2}>
-        <LinkButton to={props.to}>{props.children}</LinkButton>
+        <LinkButton to={props.to} width="100%">
+          {props.children}
+        </LinkButton>
       </Indent>
     </Spacing>
   );

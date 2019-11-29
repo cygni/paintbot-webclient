@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import styled from 'styled-components/macro';
 
 import ArenaContext from '../common/contexts/ArenaContext';
-import GameLink from '../game/GameLink';
+import GameLink from '../common/ui/GameLink';
 
 import CurrentArenaGame from './CurrentArenaGame';
 

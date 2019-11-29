@@ -28,22 +28,19 @@ export default function App() {
         setTourContext(newTour);
       };
       const accSetter = (li: boolean, un: string, t: string) => {
-        setAccContext({
-          loggedIn: li,
-          username: un,
-          token: t,
-        });
-
-        if (docCookies.setItem('token', t)) {
-          console.log('token cookie set');
-        } else {
+        if (!docCookies.setItem('token', t)) {
           console.log('could not set token cookie');
-        }
-
-        if (docCookies.setItem('name', un)) {
-          console.log('name cookie set');
         } else {
-          console.log('could not set name cookie');
+          if (!docCookies.setItem('name', un)) {
+            console.log('could not set name cookie');
+            docCookies.removeItem('token');
+          } else {
+            setAccContext({
+              loggedIn: li,
+              username: un,
+              token: t,
+            });
+          }
         }
       };
       const setArena = (arena: Arena, currentArena: Arena) => {

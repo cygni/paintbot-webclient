@@ -3,12 +3,12 @@ import styled from 'styled-components/macro';
 
 import AccountContext from '../../common/contexts/AccountContext';
 import TournamentContext from '../../common/contexts/TournamentContext';
-import Controls from '../Controls';
-import GamePlan from '../viewer/GamePlan';
-import Players from '../viewer/Players';
-import Settings from '../viewer/Settings';
 
+import Controls from './Controls';
+import GamePlan from './GamePlan';
+import Players from './Players';
 import TournamentPropertySetter from './propSetter/TournamentPropertySetter';
+import Settings from './Settings';
 
 export default function TournamentController(props: any) {
   const tour = useContext(TournamentContext);
@@ -19,8 +19,6 @@ export default function TournamentController(props: any) {
   const showSetters = acc.loggedIn && !started;
   const [playedGames, setPlayedGames] = useState(new Array<string>());
 
-  console.log(playedGames);
-  console.log(tour);
   useEffect(
     () => {
       const result = new Array<string>();

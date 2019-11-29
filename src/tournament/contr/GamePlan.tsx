@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import styled from 'styled-components/macro';
 
 import TournamentContext from '../../common/contexts/TournamentContext';
-import GameLink from '../../game/GameLink';
+import GameLink from '../../common/ui/GameLink';
 
 interface GamePlanProps {
   className: string;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router';
 
-import TemplatePage from '../common/TemplatePage';
+import TemplatePage from '../common/ui/TemplatePage';
 
 import GameDirector from './GameDirector';
 

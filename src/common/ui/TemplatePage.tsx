@@ -1,14 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components/macro';
 
-import Header from '../common/Header';
-import background from '../resources/background.jpg';
+import background from '../../resources/background.jpg';
+import { REQUEST_TYPES, useRestAPIToGetActiveTournament } from '../API';
+import SettersContext from '../contexts/SettersContext';
+import TournamentContext from '../contexts/TournamentContext';
+import WebSocketContext from '../contexts/WebSocketContext';
+import { docCookies } from '../util';
 
-import { REQUEST_TYPES, useRestAPIToGetActiveTournament } from './API';
-import SettersContext from './contexts/SettersContext';
-import TournamentContext from './contexts/TournamentContext';
-import WebSocketContext from './contexts/WebSocketContext';
-import { docCookies } from './util';
+import Header from './Header';
 
 export default function TemplatePage(props: any) {
   const tour = useContext(TournamentContext);

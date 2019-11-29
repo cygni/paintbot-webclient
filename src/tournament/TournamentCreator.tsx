@@ -1,10 +1,10 @@
 import React, { useContext, useState } from 'react';
 import styled from 'styled-components/macro';
 
-import { REQUEST_TYPES } from '../../common/API';
-import AccountContext from '../../common/contexts/AccountContext';
-import WebSocketContext from '../../common/contexts/WebSocketContext';
-import ControlsButton from '../../common/ui/ControlsButton';
+import { REQUEST_TYPES } from '../common/API';
+import AccountContext from '../common/contexts/AccountContext';
+import WebSocketContext from '../common/contexts/WebSocketContext';
+import ControlsButton from '../common/ui/ControlsButton';
 
 export default function TournamentCreator() {
   const accContext = useContext(AccountContext);

@@ -1,7 +1,8 @@
 import React from 'react';
 
-import { CharacterColors } from '../common/Constants';
-import { LinkButton } from '../common/ui/DefaultButton';
+import { CharacterColors } from '../Constants';
+
+import { LinkButton } from './DefaultButton';
 
 export default function PlayerLink(props: any) {
   return (

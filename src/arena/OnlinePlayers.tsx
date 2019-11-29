@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import styled from 'styled-components/macro';
 
 import ArenaContext from '../common/contexts/ArenaContext';
-import PlayerLink from '../player/PlayerLink';
+import PlayerLink from '../common/ui/PlayerLink';
 
 export default function OnlinePlayers(props: any) {
   const arenaContext = useContext(ArenaContext);
