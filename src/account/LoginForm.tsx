@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import styled from 'styled-components/macro';
 
 import SettersContext from '../common/contexts/SettersContext';
+import ControlsButton from '../common/ui/ControlsButton';
 import Config from '../Config';
 
 export default function LoginForm(props: any) {
@@ -36,9 +37,7 @@ export default function LoginForm(props: any) {
             <input name="password" id="password" type="password" value={props.pw} onChange={props.hc} />
           </FlexColumn>
 
-          <FlexColumn>
-            <input type="submit" value="Log in" />
-          </FlexColumn>
+          <ControlsButton onClick={handleSubmit}>Log in</ControlsButton>
         </FlexColumn>
       </form>
     </div>
@@ -49,5 +48,6 @@ const FlexColumn = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   margin: 1em;
 `;

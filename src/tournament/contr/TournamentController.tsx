@@ -3,6 +3,7 @@ import styled from 'styled-components/macro';
 
 import AccountContext from '../../common/contexts/AccountContext';
 import TournamentContext from '../../common/contexts/TournamentContext';
+import PlayerLink from '../../common/ui/PlayerLink';
 
 import Controls from './Controls';
 import GamePlan from './GamePlan';
@@ -46,7 +47,12 @@ export default function TournamentController(props: any) {
     <Container started={started}>
       <FlexColumn started={started} className="heading">
         <h1>{tour.tournamentName}</h1>
-        {tour.winner && <h2>{tour.winner.name} has won the tournament!!!</h2>}
+        {tour.winner && (
+          <FlexRow>
+            <PlayerLink name={tour.winner.name} />
+            <h2>has won the tournament!!!</h2>
+          </FlexRow>
+        )}
         {acc.loggedIn && <Controls started={started} game={nextGame.game} lvl={nextGame.lvl} />}
       </FlexColumn>
       {started && <h2 className="gpheader">Game plan</h2>}
@@ -64,6 +70,15 @@ interface ContainerProps {
   started: boolean;
 }
 
+const FlexRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  & h2 {
+    margin-left: 0.5em;
+  }
+`;
+
 const Container = styled.div<ContainerProps>`
   width: 100%;
   display: flex;
@@ -78,7 +93,7 @@ const Container = styled.div<ContainerProps>`
   @media screen and (min-width: 1000px) {
     display: grid;
     grid-template-columns: ${({ started }) => (started ? '18em 2em 18em 2em 18em' : '18em 2em 18em')};
-    grid-template-rows: 14em 5em auto;
+    grid-template-rows: 18em 7em auto;
     justify-items: center;
     align-items: start;
     & > .pheader {

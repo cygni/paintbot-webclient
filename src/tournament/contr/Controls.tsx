@@ -40,7 +40,7 @@ export default function Controls({ started, game, lvl }: ControlsProps) {
   return (
     <ControlsView hasEnded={tour.winner !== undefined}>
       {showStart && <TournamentStarter className="starter" setStarted={setHasStarted} />}
-      {hasStarted && !tour.winner && (
+      {hasStarted && !showStart && !tour.winner && (
         <ControlsButton className="starter" onClick={hc}>
           Start next game!
         </ControlsButton>

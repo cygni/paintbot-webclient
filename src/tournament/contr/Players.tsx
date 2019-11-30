@@ -15,7 +15,7 @@ export default function Players({ className }: PlayersProps) {
   const GridBox = styled.div`
     display: grid;
     justify-content: center;
-    grid-template-rows: repeat(${players.length + 3}, 5em);
+    grid-template-rows: repeat(${players.length + 3}, 6em);
     grid-template-columns: 1fr;
     justify-items: center;
     & * {

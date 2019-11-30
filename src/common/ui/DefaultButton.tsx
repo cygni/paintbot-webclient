@@ -12,13 +12,13 @@ interface ButtonProps {
 }
 
 export const DefaultButton = styled.button<ButtonProps>(
-  ({ backgroundColor = CharacterColors.RedCharacter, color = StandardColors.White, width = 'fit-content' }) => ({
+  ({ backgroundColor = CharacterColors.PurpleCharacter, color = StandardColors.White, width = 'fit-content' }) => ({
     borderRadius: 4,
     backgroundColor,
     border: 'none',
     color,
     textAlign: 'center',
-    fontSize: 18,
+    fontSize: 25,
     padding: 10,
     width,
     cursor: 'pointer',
@@ -39,7 +39,7 @@ export const DefaultButton = styled.button<ButtonProps>(
 
 export function LinkButton(props: any) {
   const L = styled(Link)`
-    font: inherit;
+    font-family: 'Nanum Pen Script', cursive;
     color: ${props.color};
     text-decoration: inherit;
   `;

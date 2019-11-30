@@ -32,15 +32,15 @@ const GridBox = styled.div`
   @media screen and (min-width: 1000px) {
     display: grid;
     grid-template-columns: 50% 50%;
-    grid-template-rows: 12em auto;
+    grid-template-rows: 18em auto;
     justify-items: center;
     & > .players {
-      width: 100%;
+      min-width: 25em;
       grid-row: 2 / span 1;
       grid-column: 1 / span 1;
     }
     & > .games {
-      width: 100%;
+      min-width: 25em;
       grid-row: 2 / span 1;
       grid-column: 2 / span 1;
     }

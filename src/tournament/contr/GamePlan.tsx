@@ -20,7 +20,7 @@ export default function GamePlan({ className, lvl, game, playedGames }: GamePlan
   const GridBox = styled.div`
     width: 100%;
     display: grid;
-    grid-template-rows: repeat(${noRows}, 5em);
+    grid-template-rows: repeat(${noRows}, 6em);
     grid-template-columns: 1fr;
     & * {
       margin: 0px;
