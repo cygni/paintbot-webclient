@@ -59,7 +59,7 @@ const FlexColumn = styled.div`
   & * {
     align-self: center;
   }
-  @media screen and (min-width: 1000px) {
+  @media screen and (min-width: 1100px) {
     form {
       padding: 1em 0em 1em 0em;
     }

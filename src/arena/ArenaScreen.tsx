@@ -29,7 +29,7 @@ const GridBox = styled.div`
   display: flex;
   flex-direction: column;
 
-  @media screen and (min-width: 1000px) {
+  @media screen and (min-width: 1100px) {
     display: grid;
     grid-template-columns: 50% 50%;
     grid-template-rows: 18em auto;
@@ -62,7 +62,7 @@ const FlexColumn = styled.div`
     margin-bottom: 1em;
     align-self: center;
   }
-  @media screen and (min-width: 1000px) {
+  @media screen and (min-width: 1100px) {
     grid-row: 1 / 1;
     grid-column: 1 / 3;
   }

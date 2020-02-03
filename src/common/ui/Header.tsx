@@ -100,7 +100,7 @@ const MenuContainer = styled.div<MenuContainerProps>`
       display: block;
     }
   }
-  @media screen and (min-width: 1000px) {
+  @media screen and (min-width: 1100px) {
     flex-direction: row;
     .menu-toggler {
       display: none;
@@ -109,7 +109,7 @@ const MenuContainer = styled.div<MenuContainerProps>`
       display: flex;
       visibility: visible;
       flex-direction: row;
-      justify-content: space-between;
+      justify-content: flex-end;
       a {
         display: inline;
       }

@@ -13,9 +13,11 @@ export default function PlayerScreen(props: any) {
   const decodedName = decodeURIComponent(name);
   const query = useRestAPIToGetGamesPlayedByPlayer(name);
   const [games, setGames] = useState({ items: new Array<HistoricGame>() });
+  const [shouldSetUp, setShouldSetUp] = useState(true);
 
   useEffect(
     () => {
+      let interval: NodeJS.Timeout;
       const update = () => {
         query((initialResult: PlayerHistory) => {
           if (isDifferent(initialResult, games)) {
@@ -23,12 +25,14 @@ export default function PlayerScreen(props: any) {
           }
         });
       };
-      update();
-      let interval: NodeJS.Timeout;
-      interval = setInterval(update, 4000);
+      if (shouldSetUp) {
+        update();
+        setShouldSetUp(false);
+      }
+      interval = setInterval(update, 10000);
       return () => clearInterval(interval);
     },
-    [query, games],
+    [query, games, shouldSetUp],
   );
 
   query(console.log);
@@ -42,7 +46,9 @@ export default function PlayerScreen(props: any) {
           {games.items
             .sort((a, b) => b.gameDate.localeCompare(a.gameDate))
             .map(game => (
-              <GameLink id={game.gameId}>{game.gameDate}</GameLink>
+              <GameLink key={game.gameId} id={game.gameId}>
+                {game.gameDate}
+              </GameLink>
             ))}
         </FlexColumn>
       )}

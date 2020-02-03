@@ -62,7 +62,7 @@ const ControlsView = styled.div<ControlsViewProps>`
     align-self: center;
     margin-bottom: 1em;
   }
-  @media screen and (min-width: 1000px) {
+  @media screen and (min-width: 1100px) {
     display: ${({ hasEnded }) => (hasEnded ? 'flex' : 'grid')};
     width: 100%;
     & > * {

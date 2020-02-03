@@ -56,26 +56,27 @@ const Container = styled.div`
   left: 0;
   min-height: 100%;
   height: fit-content;
+  min-width: fit-content;
   & h1 {
-    font-size: 3em;
+    font-size: 1.7em;
   }
   & h2 {
-    font-size: 2em;
+    font-size: 1.3em;
   }
   & h3 {
-    font-size: 1.5em;
+    font-size: 1.1em;
   }
   & p,
   label {
-    font-size: 1.3em;
+    font-size: 0.9em;
   }
   & input {
-    font-size: 2em;
+    font-size: 1.3em;
     max-width: fit-content;
     width: 80%;
   }
   & * {
-    font-family: 'Nanum Pen Script', cursive;
+    font-family: 'Sriracha', cursive;
   }
   & li {
     list-style-type: none;

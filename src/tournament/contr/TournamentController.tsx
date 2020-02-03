@@ -90,7 +90,7 @@ const Container = styled.div<ContainerProps>`
   & * {
     text-align: center;
   }
-  @media screen and (min-width: 1000px) {
+  @media screen and (min-width: 1100px) {
     display: grid;
     grid-template-columns: ${({ started }) => (started ? '18em 2em 18em 2em 18em' : '18em 2em 18em')};
     grid-template-rows: 18em 7em auto;
@@ -138,7 +138,7 @@ const FlexColumn = styled.div<ContainerProps>`
   display: flex;
   justify-content: center;
   flex-direction: column;
-  @media screen and (min-width: 1000px) {
+  @media screen and (min-width: 1100px) {
     grid-row: 1 / 1;
     grid-column: 1 / span ${({ started }) => (started ? '5' : '3')};
   }

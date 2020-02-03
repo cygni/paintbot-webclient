@@ -38,7 +38,7 @@ const FlexColumn = styled.div`
     border-radius: 10px;
     margin-top: 0px;
   }
-  @media screen and (min-width: 1000px) {
+  @media screen and (min-width: 1100px) {
     ul {
       padding: 1em 0em 1em 0em;
     }

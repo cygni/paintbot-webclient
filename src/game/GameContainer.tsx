@@ -76,7 +76,7 @@ const HeaderContainer = styled.div`
   & > * {
     margin: 5px;
   }
-  @media screen and (min-width: 1000px) {
+  @media screen and (min-width: 1100px) {
     position: relative;
     flex-direction: row;
     justify-content: flex-start;
@@ -92,7 +92,7 @@ const FlexContainer = styled.div`
   flex-direction: column-reverse;
   justify-content: center;
   padding-top: 20;
-  @media screen and (min-width: 1000px) {
+  @media screen and (min-width: 1100px) {
     flex-direction: row;
   }
 `;

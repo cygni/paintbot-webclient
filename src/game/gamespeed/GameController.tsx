@@ -68,7 +68,7 @@ const FlexContainer = styled.div`
   & > * {
     align-self: center;
   }
-  @media screen and (min-width: 1000px) {
+  @media screen and (min-width: 1100px) {
     & > * {
       align-self: flex-start;
       margin-left: 2em;
