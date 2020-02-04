@@ -57,6 +57,7 @@ const Container = styled.div`
   min-height: 100%;
   height: fit-content;
   min-width: fit-content;
+  font-family: 'Sriracha', cursive;
   & h1 {
     font-size: 1.7em;
   }
@@ -75,7 +76,8 @@ const Container = styled.div`
     max-width: fit-content;
     width: 80%;
   }
-  & * {
+  & input,
+  & button {
     font-family: 'Sriracha', cursive;
   }
   & li {

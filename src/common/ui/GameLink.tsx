@@ -6,7 +6,7 @@ import { LinkButton } from './DefaultButton';
 
 export default function GameLink(props: any) {
   return (
-    <LinkButton to={`/game/${encodeURIComponent(props.id)}`} backgroundColor={CharacterColors.GreenCharacter}>
+    <LinkButton to={`/game/${encodeURIComponent(props.id)}`} backgroundColor={CharacterColors.Green}>
       {props.children && props.children}
       {!props.children && props.id}
     </LinkButton>

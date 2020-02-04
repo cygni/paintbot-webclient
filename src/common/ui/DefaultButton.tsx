@@ -12,7 +12,7 @@ interface ButtonProps {
 }
 
 export const DefaultButton = styled.button<ButtonProps>(
-  ({ backgroundColor = CharacterColors.PurpleCharacter, color = StandardColors.White, width = 'fit-content' }) => ({
+  ({ backgroundColor = CharacterColors.Blue, color = StandardColors.White, width = 'fit-content' }) => ({
     borderRadius: 4,
     backgroundColor,
     border: 'none',

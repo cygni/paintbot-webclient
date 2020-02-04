@@ -9,7 +9,7 @@ export default function PlayerLink(props: any) {
     <LinkButton
       className={props.className}
       to={`/player/${encodeURIComponent(props.name)}`}
-      backgroundColor={CharacterColors.BlueCharacter}
+      backgroundColor={CharacterColors.Blue}
     >
       {props.name}
     </LinkButton>
