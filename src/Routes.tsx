@@ -1,9 +1,14 @@
 import React, { ComponentProps, ComponentType } from 'react';
 import { BrowserRouter, HashRouter, Route, Switch } from 'react-router-dom';
 
+import AccountScreen from './account/AccountScreen';
+import ArenaScreen from './arena/ArenaScreen';
+import TemplatePage from './common/ui/TemplatePage';
+import TournamentScreen from './tournament/TournamentScreen';
 import WelcomeScreen from './welcome/WelcomeScreen';
 
 const LazyGameScreen = React.lazy(() => import(/* webpackPrefetch: true */ './game/GameScreen'));
+const LazyPlayerScreen = React.lazy(() => import(/* webpackPrefetch: true */ './player/PlayerScreen'));
 
 const Router: ComponentType<ComponentProps<typeof HashRouter> | ComponentProps<typeof BrowserRouter>> =
   process.env.REACT_APP_USE_HASH_ROUTER === 'true' ? HashRouter : BrowserRouter;
@@ -19,7 +24,38 @@ export default function Routes() {
       <React.Suspense fallback={null}>
         <Switch>
           <Route path="/" exact>
-            <WelcomeScreen />
+            <TemplatePage>
+              <WelcomeScreen />
+            </TemplatePage>
+          </Route>
+          <Route path="/account" exact>
+            <TemplatePage>
+              <AccountScreen />
+            </TemplatePage>
+          </Route>
+          <Route path="/arena" exact>
+            <TemplatePage>
+              <ArenaScreen />
+            </TemplatePage>
+          </Route>
+          <Route path="/about" exact>
+            <TemplatePage />
+          </Route>
+          <Route path="/readme" exact>
+            <TemplatePage />
+          </Route>
+          <Route path="/tournament" exact>
+            <TemplatePage>
+              <TournamentScreen />
+            </TemplatePage>
+          </Route>
+          <Route path="/tournament/started" exact>
+            <TemplatePage>
+              <TournamentScreen />
+            </TemplatePage>
+          </Route>
+          <Route path="/player/:name?">
+            <LazyPlayerScreen />
           </Route>
           <Route path="/game/:id?">
             <LazyGameScreen />

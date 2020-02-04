@@ -28,4 +28,19 @@ export enum CharacterColors {
   Stroke = '#001638',
   Eye = '#001638',
   RedCharacter = '#e61a25',
+  BlueCharacter = '#19388a',
+  GreenCharacter = '#009b38',
+  YellowCharacter = '#fa7921',
+  PurpleCharacter = '#a20a76',
+  TealCharacter = '#00acd1',
 }
+// gamecolors
+// red d3422c
+// blue 4286f4
+// green 88d852
+// yellow f0fc0c
+// purple c774f2
+
+// buttoncolors
+// blue 255f85
+// green 28502e
