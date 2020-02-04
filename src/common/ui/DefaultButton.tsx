@@ -13,15 +13,20 @@ interface ButtonProps {
 
 export const DefaultButton = styled.button<ButtonProps>(
   ({ backgroundColor = CharacterColors.Blue, color = StandardColors.White, width = 'fit-content' }) => ({
-    borderRadius: 4,
     backgroundColor,
     border: 'none',
+    boxShadow: '0 1px 4px 0 rgba(0,0,0,0.3)',
     color,
     textAlign: 'center',
     fontSize: 25,
-    padding: 10,
+    padding: '0.25em 1em',
     width,
     cursor: 'pointer',
+
+    borderBottom: `3px solid ${tinycolor(backgroundColor)
+      .darken(12)
+      .toRgbString()}`,
+    borderRadius: 40,
 
     ':hover': {
       backgroundColor: tinycolor(backgroundColor)
@@ -31,8 +36,15 @@ export const DefaultButton = styled.button<ButtonProps>(
 
     ':active': {
       backgroundColor: tinycolor(backgroundColor)
-        .darken(10)
+        .darken(5)
         .toRgbString(),
+    },
+
+    ':focus': {
+      backgroundColor: tinycolor(backgroundColor)
+        .darken(5)
+        .toRgbString(),
+      outline: 'none',
     },
   }),
 );
