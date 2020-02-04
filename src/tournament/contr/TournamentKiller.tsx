@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 
 import { REQUEST_TYPES } from '../../common/API';
+import { CharacterColors } from '../../common/Constants';
 import AccountContext from '../../common/contexts/AccountContext';
 import TournamentContext from '../../common/contexts/TournamentContext';
 import WebSocketContext from '../../common/contexts/WebSocketContext';
@@ -20,5 +21,9 @@ export default function TournamentKiller(props: any) {
     };
     send(killMess);
   };
-  return <ControlsButton onClick={handleClick}>Discard tournament</ControlsButton>;
+  return (
+    <ControlsButton onClick={handleClick} backgroundColor={CharacterColors.Red}>
+      Discard tournament
+    </ControlsButton>
+  );
 }
