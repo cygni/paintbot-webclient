@@ -61,9 +61,6 @@ const Container = styled.div`
   & h1 {
     font-size: 1.7em;
   }
-  & h2 {
-    font-size: 1.3em;
-  }
   & h3 {
     font-size: 1.1em;
   }

@@ -3,6 +3,7 @@ import styled from 'styled-components/macro';
 
 import TournamentContext from '../../common/contexts/TournamentContext';
 import GameLink from '../../common/ui/GameLink';
+import { Paper, PaperHeading } from '../../common/ui/Paper';
 
 interface GamePlanProps {
   className: string;
@@ -14,33 +15,23 @@ interface GamePlanProps {
 export default function GamePlan({ className, lvl, game, playedGames }: GamePlanProps) {
   const tour = useContext(TournamentContext);
   const levels = tour.gamePlan.tournamentLevels;
-  const noRows = 3 + playedGames.length;
   const started = levels.length > 0 && levels[0].tournamentGames[0].gameId !== null;
-
-  const GridBox = styled.div`
-    width: 100%;
-    display: grid;
-    grid-template-rows: repeat(${noRows}, 6em);
-    grid-template-columns: 1fr;
-    & * {
-      margin: 0px;
-    }
-  `;
 
   const gamesInCurrLvl = tour.winner ? 0 : tour.gamePlan.tournamentLevels[lvl].tournamentGames.length;
   const noLevels = tour.gamePlan.noofLevels;
   return (
-    <GridBox className={className}>
-      {!started && <h3>Tournament has not been started yet!</h3>}
+    <Paper className={className}>
+      <PaperHeading>Game plan</PaperHeading>
+      {!started && <span>Tournament has not been started yet!</span>}
       {started && (
         <Row no={1} length={playedGames.length + 1}>
-          <h3>{tour.winner ? `Congratulations ${tour.winner.name}!` : 'The next game is'}</h3>
+          <div>{tour.winner ? 'We have a winner!' : 'The next game is'}</div>
           {!tour.winner && (
-            <h3>
+            <div>
               {lvl + 1 === noLevels
                 ? 'The final!'
                 : `Game ${game + 1} / ${gamesInCurrLvl} in Level ${lvl + 1} / ${noLevels}`}
-            </h3>
+            </div>
           )}
         </Row>
       )}
@@ -61,7 +52,7 @@ export default function GamePlan({ className, lvl, game, playedGames }: GamePlan
             </Row>
           );
         })}
-    </GridBox>
+    </Paper>
   );
 }
 

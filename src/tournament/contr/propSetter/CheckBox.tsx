@@ -10,7 +10,7 @@ export default function CheckBox(props: any) {
   };
   return (
     <InputContainer>
-      <label htmlFor={k}>{k.toUpperCase()}: </label>
+      <label htmlFor={k}>{k}: </label>
       {v && <input name={k} id={k} type="checkbox" onChange={oc} checked />}
       {!v && <input name={k} id={k} type="checkbox" onChange={oc} />}
     </InputContainer>

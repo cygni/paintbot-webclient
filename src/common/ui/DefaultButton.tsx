@@ -9,19 +9,28 @@ interface ButtonProps {
   color?: string;
   width?: number;
   backgroundColor?: string;
+  fontSize?: number;
+  marginTop?: any;
 }
 
 export const DefaultButton = styled.button<ButtonProps>(
-  ({ backgroundColor = CharacterColors.Blue, color = StandardColors.White, width = 'fit-content' }) => ({
+  ({
+    backgroundColor = CharacterColors.Blue,
+    color = StandardColors.White,
+    fontSize = 25,
+    width = 'fit-content',
+    marginTop = 0,
+  }) => ({
     backgroundColor,
     border: 'none',
     boxShadow: '0 1px 4px 0 rgba(0,0,0,0.3)',
     color,
     textAlign: 'center',
-    fontSize: 25,
+    fontSize,
     padding: '0.25em 1em',
     width,
     cursor: 'pointer',
+    marginTop,
 
     borderBottom: `3px solid ${tinycolor(backgroundColor)
       .darken(12)
@@ -57,7 +66,13 @@ export function LinkButton(props: any) {
   `;
   return (
     <L to={props.to}>
-      <DefaultButton backgroundColor={props.backgroundColor} width={props.width} color={props.color}>
+      <DefaultButton
+        backgroundColor={props.backgroundColor}
+        width={props.width}
+        color={props.color}
+        fontSize={props.fontSize}
+        marginTop={props.marginTop}
+      >
         {props.children}
       </DefaultButton>
     </L>

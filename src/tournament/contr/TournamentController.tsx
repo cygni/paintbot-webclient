@@ -45,21 +45,18 @@ export default function TournamentController(props: any) {
 
   return (
     <Container started={started}>
-      <FlexColumn started={started} className="heading">
-        <h1>{tour.tournamentName}</h1>
+      <h1 className="tournament-name">{tour.tournamentName}</h1>
+      <FlexColumn started={started} className="boes">
         {tour.winner && (
           <FlexRow>
             <PlayerLink name={tour.winner.name} />
-            <h2>has won the tournament!!!</h2>
+            <span>has won the tournament!!!</span>
           </FlexRow>
         )}
         {acc.loggedIn && <Controls started={started} game={nextGame.game} lvl={nextGame.lvl} />}
       </FlexColumn>
-      {started && <h2 className="gpheader">Game plan</h2>}
       {started && <GamePlan className="gameplan" lvl={nextGame.lvl} game={nextGame.game} playedGames={playedGames} />}
-      <h2 className="pheader">Players</h2>
       <Players className="players" />
-      <h2 className="sheader">Settings</h2>
       {showSetters && <TournamentPropertySetter className="settings" />}
       {!showSetters && <Settings className="settings" />}
     </Container>
@@ -74,9 +71,7 @@ const FlexRow = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  & h2 {
-    margin-left: 0.5em;
-  }
+  justify-content: center;
 `;
 
 const Container = styled.div<ContainerProps>`
@@ -84,30 +79,33 @@ const Container = styled.div<ContainerProps>`
   display: flex;
   flex-direction: column;
   align-items: center;
-  & li {
-    margin-bottom: 2em;
-  }
   & * {
     text-align: center;
+  }
+  & > .players,
+  & > .gameplan,
+  & > .settings {
+    margin-bottom: 2rem;
   }
   @media screen and (min-width: 1100px) {
     display: grid;
     grid-template-columns: ${({ started }) => (started ? '18em 2em 18em 2em 18em' : '18em 2em 18em')};
-    grid-template-rows: 18em 7em auto;
+    grid-template-rows: 4em 13em auto;
     justify-items: center;
     align-items: start;
-    & > .pheader {
-      grid-row: 2 / span 1;
-      grid-column: 1 / span 1;
+    & > .tournament-name {
+      grid-row: 1 / span 1;
+      grid-column: 1 / span 5;
+      width: 100%;
+      margin-left: 1em;
+      margin-right: 1em;
     }
-    & > .gpheader {
-      ${({ started }) => !started && 'display: none;'}
+    & > .boes {
       grid-row: 2 / span 1;
-      grid-column: 3 / span 1;
-    }
-    & > .sheader {
-      grid-row: 2 / span 1;
-      grid-column: ${({ started }) => (started ? '5' : '3')} / span 1;
+      grid-column: 1 / span 5;
+      width: 100%;
+      margin-left: 1em;
+      margin-right: 1em;
     }
     & > .players {
       grid-row: 3 / span 1;
@@ -120,6 +118,7 @@ const Container = styled.div<ContainerProps>`
       ${({ started }) => !started && 'display: none;'}
       grid-row: 3 / span 1;
       grid-column: 3 / span 1;
+      width: 100%;
     }
     & > .settings {
       grid-row: 3 / span 1;
@@ -127,9 +126,6 @@ const Container = styled.div<ContainerProps>`
       width: 100%;
       margin-left: 1em;
       margin-right: 1em;
-      h2 {
-        margin-top: 0px;
-      }
     }
   }
 `;

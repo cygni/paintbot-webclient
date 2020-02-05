@@ -6,6 +6,7 @@ import AccountContext from '../../../common/contexts/AccountContext';
 import TournamentContext from '../../../common/contexts/TournamentContext';
 import WebSocketContext from '../../../common/contexts/WebSocketContext';
 import ControlsButton from '../../../common/ui/ControlsButton';
+import { Paper, PaperHeading } from '../../../common/ui/Paper';
 
 import CheckBox from './CheckBox';
 import NumberInput from './NumberInput';
@@ -32,36 +33,38 @@ export default function TournamentPropertySetter({ className }: { className: str
   };
 
   return (
-    <FlexColumn className={className}>
-      <form onSubmit={handleSubmit}>
+    <Paper className={className}>
+      <PaperHeading>Settings</PaperHeading>
+      <Form onSubmit={handleSubmit}>
         <ControlsButton onClick={handleSubmit}>Save changes</ControlsButton>
         <SettingsForm setter={setCurrentProperties} curr={currentProperties} />
-      </form>
-    </FlexColumn>
+      </Form>
+    </Paper>
   );
 }
 
-const FlexColumn = styled.div`
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  & button {
-    margin-bottom: 1em;
-  }
-  form {
-    width: 100%;
-    margin-top: 0px;
-    min-width: 10em;
-    padding: 1em;
-    background-color: rgba(100%, 100%, 100%, 50%);
-    border-radius: 10px;
-  }
-  & * {
+const Form = styled.form`
+  width: 100%;
+  margin-top: 0px;
+  min-width: 10em;
+  padding: 1em 0;
+  input,
+  label {
     align-self: center;
   }
-  @media screen and (min-width: 1100px) {
-    form {
-      padding: 1em 0em 1em 0em;
+  ul {
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  li {
+    list-style-type: none;
+    width: 100%;
+    border-bottom: 1px solid aliceblue;
+    padding: 0.5em 1em;
+    box-sizing: border-box;
+    * {
+      align-items: center;
     }
   }
 `;
