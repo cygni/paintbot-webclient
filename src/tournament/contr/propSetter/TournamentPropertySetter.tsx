@@ -12,6 +12,7 @@ import CheckBox from './CheckBox';
 import NumberInput from './NumberInput';
 
 export default function TournamentPropertySetter({ className }: { className: string }) {
+  const [dirty, setDirty] = useState(false);
   const tourContext = useContext(TournamentContext);
   const accContext = useContext(AccountContext);
   const [currentProperties, setCurrentProperties] = useState(tourContext);
@@ -24,20 +25,30 @@ export default function TournamentPropertySetter({ className }: { className: str
     } else {
       return;
     }
-    const mess = {
-      gameSettings,
-      token: accContext.token,
-      type: REQUEST_TYPES.UPDATE_TOURNAMENT,
-    };
-    send(mess);
+    if (dirty) {
+      setDirty(false);
+      const mess = {
+        gameSettings,
+        token: accContext.token,
+        type: REQUEST_TYPES.UPDATE_TOURNAMENT,
+      };
+      send(mess);
+    }
+  };
+
+  const handleSetCurrentProperties = (props: any) => {
+    setCurrentProperties(props);
+    setDirty(true);
   };
 
   return (
     <Paper className={className}>
       <PaperHeading>Settings</PaperHeading>
       <Form onSubmit={handleSubmit}>
-        <ControlsButton onClick={handleSubmit}>Save changes</ControlsButton>
-        <SettingsForm setter={setCurrentProperties} curr={currentProperties} />
+        <ControlsButton onClick={handleSubmit} disabled={!dirty}>
+          Save changes
+        </ControlsButton>
+        <SettingsForm setter={handleSetCurrentProperties} curr={currentProperties} />
       </Form>
     </Paper>
   );

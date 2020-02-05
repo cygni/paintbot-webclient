@@ -6,7 +6,7 @@ import { DefaultButton } from './DefaultButton';
 
 export default function ControlsButton(props: any) {
   return (
-    <DefaultButton backgroundColor={CharacterColors.Blue} {...props}>
+    <DefaultButton backgroundColor={props.disabled ? CharacterColors.Grey : CharacterColors.Blue} {...props}>
       {props.children && props.children}
       {!props.children && props.id}
     </DefaultButton>
