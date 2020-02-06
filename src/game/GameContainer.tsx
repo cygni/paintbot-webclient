@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components/macro';
 
 import { GameControllerColors } from '../common/Constants';
-import Config from '../Config';
 
 import GameBoardContainer from './gameboard/GameBoardContainer';
 import GameBoardFactory from './gameboard/GameBoardFactory';
@@ -38,7 +37,7 @@ export default class GameContainer extends React.Component<GameContainerProps, G
         <HeaderContainer>
           <div>PAINTBOT</div>
           <TimerPane
-            durationInSeconds={Config.TimerSeconds}
+            durationInSeconds={gameSettings.gameDurationInSeconds}
             timeInMsPerTick={gameSettings.timeInMsPerTick}
             worldTick={gameMap.worldTick}
           />

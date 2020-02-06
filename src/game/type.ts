@@ -18,6 +18,7 @@ export interface Coordinate {
 
 export interface GameSettings {
   timeInMsPerTick: number;
+  gameDurationInSeconds: number;
 }
 
 export interface Game {

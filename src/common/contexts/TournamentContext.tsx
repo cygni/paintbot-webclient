@@ -21,7 +21,7 @@ export const defaultTournament: Tournament = {
     startObstacles: 5,
     startPowerUps: 0,
     explosionRange: 4,
-    gameDurationInSeconds: 60,
+    gameDurationInSeconds: 180,
     noOfTicksInvulnerableAfterStun: 3,
     noOfTicksStunned: 10,
     pointsPerCausedStun: 5,
