@@ -1,6 +1,5 @@
 export enum TileColors {
   Empty = '#eff2f7',
-  Obstacle = '#041126',
   Stroke = '#000',
 }
 
@@ -17,11 +16,6 @@ export enum GameBoardConstants {
 
 export enum ScoreBoardColors {
   Background = 'rgba(88, 98, 112, 0.75)',
-}
-
-export enum GameControllerColors {
-  Background = 'rgba(88, 98, 112, 0.75)',
-  PlayButton = '#242426',
 }
 
 // Distinguishable character colors ordered by accessibility and fun

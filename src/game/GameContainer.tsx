@@ -1,8 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/macro';
 
-import { GameControllerColors } from '../common/Constants';
-
 import GameBoardContainer from './gameboard/GameBoardContainer';
 import GameBoardFactory from './gameboard/GameBoardFactory';
 import { GameController } from './gamespeed/GameController';
@@ -34,14 +32,6 @@ export default class GameContainer extends React.Component<GameContainerProps, G
     const game = this.transformGameMapToModel(gameMap);
     return (
       <div>
-        <HeaderContainer>
-          <div>PAINTBOT</div>
-          <TimerPane
-            durationInSeconds={gameSettings.gameDurationInSeconds}
-            timeInMsPerTick={gameSettings.timeInMsPerTick}
-            worldTick={gameMap.worldTick}
-          />
-        </HeaderContainer>
         <FlexContainer>
           <ScoreBoardContainer players={game.currentCharacters} worldTick={game.worldTick} />
           <div>
@@ -51,6 +41,11 @@ export default class GameContainer extends React.Component<GameContainerProps, G
                 onGameSpeedChange={onGameSpeedChange}
                 onPauseGame={onPauseGame}
                 onRestartGame={onRestartGame}
+              />
+              <TimerPane
+                durationInSeconds={gameSettings.gameDurationInSeconds}
+                timeInMsPerTick={gameSettings.timeInMsPerTick}
+                worldTick={gameMap.worldTick}
               />
             </GamerControllerContainer>
           </div>
@@ -62,28 +57,8 @@ export default class GameContainer extends React.Component<GameContainerProps, G
 
 const GamerControllerContainer = styled.div`
   padding: 5;
-  background-color: ${GameControllerColors.Background};
-`;
-
-const HeaderContainer = styled.div`
   display: flex;
-  padding: 10px;
-  font-size: 40px;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-  & > * {
-    margin: 5px;
-  }
-  @media screen and (min-width: 1100px) {
-    position: relative;
-    flex-direction: row;
-    justify-content: flex-start;
-    & > * {
-      margin-left: 40px;
-      margin-right: 40px;
-    }
-  }
+  justify-content: space-between;
 `;
 
 const FlexContainer = styled.div`

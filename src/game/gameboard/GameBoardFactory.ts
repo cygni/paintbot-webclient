@@ -1,4 +1,4 @@
-import { CharacterColors, StandardColors, TileColors } from '../../common/Constants';
+import { CharacterColors, StandardColors } from '../../common/Constants';
 import { Character, CharacterInfo, Coordinate, Game, GameMap, PowerUp, Tile, TileType } from '../type';
 
 const colours = [
@@ -108,7 +108,6 @@ export default class GameBoardFactory {
       const obstacleTile = {} as Tile;
       obstacleTile.coordinate = this.getCoordinateFromMapPosition(powerUpPosition);
       obstacleTile.type = TileType.OBSTACLE;
-      obstacleTile.colour = TileColors.Obstacle;
       tiles.set(JSON.stringify(obstacleTile.coordinate), obstacleTile);
     });
   }
