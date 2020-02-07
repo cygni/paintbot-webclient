@@ -1,5 +1,3 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import tinycolor from 'tinycolor2';
 
@@ -58,23 +56,6 @@ export const DefaultButton = styled.button<ButtonProps>(
   }),
 );
 
-export function LinkButton(props: any) {
-  const L = styled(Link)`
-    font-family: 'Nanum Pen Script', cursive;
-    color: ${props.color};
-    text-decoration: inherit;
-  `;
-  return (
-    <L to={props.to}>
-      <DefaultButton
-        backgroundColor={props.backgroundColor}
-        width={props.width}
-        color={props.color}
-        fontSize={props.fontSize}
-        marginTop={props.marginTop}
-      >
-        {props.children}
-      </DefaultButton>
-    </L>
-  );
-}
+export const SmallButton = styled(DefaultButton)`
+  font-size: 16px;
+`;

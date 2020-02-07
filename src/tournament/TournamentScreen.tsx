@@ -29,7 +29,7 @@ export default function TournamentScreen(props: any) {
     }
   }
 
-  return <div id="tournament-body">{child}</div>;
+  return child;
 }
 
 function NoTournament(props: any) {

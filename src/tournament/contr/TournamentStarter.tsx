@@ -18,7 +18,6 @@ export default function TournamentStarter(props: any) {
       tournamentId: tourContext.tournamentId,
       type: REQUEST_TYPES.START_TOURNAMENT,
     };
-    props.setStarted(true);
     send(mess);
   };
 

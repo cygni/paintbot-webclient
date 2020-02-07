@@ -65,13 +65,9 @@ const Container = styled.div`
     font-size: 1.1em;
   }
   & p,
-  label {
-    font-size: 0.9em;
-  }
   & input {
     font-size: 1.3em;
     max-width: fit-content;
-    width: 80%;
   }
   & input,
   & button {
@@ -91,9 +87,6 @@ const BodyContainer = styled.div`
   display: flex;
   justify-content: center;
   flex-direction: column;
-  & * {
-    text-align: center;
-  }
   & > * {
     align-self: center;
   }

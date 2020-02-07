@@ -2,13 +2,13 @@ import React from 'react';
 
 import { CharacterColors } from '../Constants';
 
-import { DefaultButton } from './DefaultButton';
+import { SmallButton } from './DefaultButton';
 
 export default function ControlsButton(props: any) {
   return (
-    <DefaultButton backgroundColor={props.disabled ? CharacterColors.Grey : CharacterColors.Blue} {...props}>
+    <SmallButton backgroundColor={props.disabled ? CharacterColors.Grey : CharacterColors.Blue} {...props}>
       {props.children && props.children}
       {!props.children && props.id}
-    </DefaultButton>
+    </SmallButton>
   );
 }

@@ -38,11 +38,13 @@ const GridBox = styled.div`
       min-width: 25em;
       grid-row: 2 / span 1;
       grid-column: 1 / span 1;
+      text-align: center;
     }
     & > .games {
       min-width: 25em;
       grid-row: 2 / span 1;
       grid-column: 2 / span 1;
+      text-align: center;
     }
     & > * {
       align-self: start;

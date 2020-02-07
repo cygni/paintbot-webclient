@@ -6,12 +6,12 @@ import AccountContext from '../../../common/contexts/AccountContext';
 import TournamentContext from '../../../common/contexts/TournamentContext';
 import WebSocketContext from '../../../common/contexts/WebSocketContext';
 import ControlsButton from '../../../common/ui/ControlsButton';
-import { Paper, PaperHeading } from '../../../common/ui/Paper';
+import { Paper, PaperHeading, PaperRow } from '../../../common/ui/Paper';
 
 import CheckBox from './CheckBox';
 import NumberInput from './NumberInput';
 
-export default function TournamentPropertySetter({ className }: { className: string }) {
+export default function TournamentPropertySetter() {
   const [dirty, setDirty] = useState(false);
   const tourContext = useContext(TournamentContext);
   const accContext = useContext(AccountContext);
@@ -42,12 +42,14 @@ export default function TournamentPropertySetter({ className }: { className: str
   };
 
   return (
-    <Paper className={className}>
+    <Paper>
       <PaperHeading>Settings</PaperHeading>
       <Form onSubmit={handleSubmit}>
-        <ControlsButton onClick={handleSubmit} disabled={!dirty}>
-          Save changes
-        </ControlsButton>
+        <PaperRow>
+          <ControlsButton onClick={handleSubmit} disabled={!dirty}>
+            Save changes
+          </ControlsButton>
+        </PaperRow>
         <SettingsForm setter={handleSetCurrentProperties} curr={currentProperties} />
       </Form>
     </Paper>
@@ -60,9 +62,6 @@ const Form = styled.form`
   min-width: 10em;
   padding: 1em 0;
   input,
-  label {
-    align-self: center;
-  }
   ul {
     margin-bottom: 0;
     display: flex;
@@ -74,9 +73,6 @@ const Form = styled.form`
     border-bottom: 1px solid aliceblue;
     padding: 0.5em 1em;
     box-sizing: border-box;
-    * {
-      align-items: center;
-    }
   }
 `;
 

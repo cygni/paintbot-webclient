@@ -4,12 +4,12 @@ import styled from 'styled-components/macro';
 import TournamentContext from '../../common/contexts/TournamentContext';
 import { Paper, PaperHeading } from '../../common/ui/Paper';
 
-export default function Settings({ className }: { className: string }) {
+export default function Settings() {
   const tour = useContext(TournamentContext);
   const gameSettings = tour.gameSettings;
 
   return (
-    <Paper className={className}>
+    <Paper>
       <PaperHeading>Settings</PaperHeading>
       <PaperList id="game-settings">
         {Object.keys(gameSettings).map(k => (

@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react';
+import styled from 'styled-components/macro';
 
 import AccountContext from '../common/contexts/AccountContext';
 
@@ -20,9 +21,13 @@ export default function AccountScreen() {
   };
 
   return (
-    <div id="account-body">
+    <Container>
       <h2>You are {accContext.loggedIn ? 'logged in!' : 'logged out!'}</h2>
       {accContext.loggedIn ? <LogoutForm /> : <LoginForm un={username} pw={password} hc={handleChange} />}
-    </div>
+    </Container>
   );
 }
+
+const Container = styled.div`
+  text-align: center;
+`;

@@ -1,6 +1,5 @@
 import React from 'react';
-
-import InputContainer from '../../../common/ui/InputContainer';
+import styled from 'styled-components/macro';
 
 export default function CheckBox(props: any) {
   const k: string = props.k;
@@ -8,11 +7,16 @@ export default function CheckBox(props: any) {
   const oc = (event: any) => {
     props.oc(k, !v);
   };
+
   return (
-    <InputContainer>
-      <label htmlFor={k}>{k}: </label>
-      {v && <input name={k} id={k} type="checkbox" onChange={oc} checked />}
-      {!v && <input name={k} id={k} type="checkbox" onChange={oc} />}
-    </InputContainer>
+    <Container>
+      <input name={k} id={k} type="checkbox" onChange={oc} checked={v} />
+      <label htmlFor={k}>{k}</label>
+    </Container>
   );
 }
+
+const Container = styled.div`
+  display: flex;
+  align-items: baseline;
+`;
