@@ -31,6 +31,7 @@ export interface GamePlan {
 export interface GameSettings {
   obstaclesEnabled: boolean;
   powerUpsEnabled: boolean;
+  pointsPerTick: boolean;
   trainingGame: boolean;
   addPowerUpLikelihood: number;
   removePowerUpLikelihood: number;

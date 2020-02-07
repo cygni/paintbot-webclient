@@ -100,6 +100,9 @@ function SettingsForm(props: any) {
         <CheckBox k="powerUpsEnabled" v={gameSettings.powerUpsEnabled} oc={updateProperty} />
       </li>
       <li>
+        <CheckBox k="pointsPerTick" v={gameSettings.pointsPerTick} oc={updateProperty} />
+      </li>
+      <li>
         <CheckBox k="trainingGame" v={gameSettings.trainingGame} oc={updateProperty} />
       </li>
       <li>

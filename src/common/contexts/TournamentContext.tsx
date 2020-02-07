@@ -14,6 +14,7 @@ export const defaultTournament: Tournament = {
   gameSettings: {
     obstaclesEnabled: true,
     powerUpsEnabled: true,
+    pointsPerTick: false,
     trainingGame: true,
     addPowerUpLikelihood: 15,
     removePowerUpLikelihood: 5,
