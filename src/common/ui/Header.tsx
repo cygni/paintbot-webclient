@@ -47,12 +47,12 @@ export default function Header() {
         <MenuItem oc={toggleCollapse} to="/">
           Start
         </MenuItem>
-        <MenuItem oc={toggleCollapse} to="/about">
+        {/*<MenuItem oc={toggleCollapse} to="/about">
           About
         </MenuItem>
         <MenuItem oc={toggleCollapse} to="/readme">
           ReadMe
-        </MenuItem>
+        </MenuItem>*/}
         <MenuItem oc={toggleCollapse} to="/arena">
           Arena
         </MenuItem>
@@ -125,7 +125,7 @@ const MenuContainer = styled.div<MenuContainerProps>`
       display: block;
     }
   }
-  @media screen and (min-width: 1100px) {
+  @media screen and (min-width: 800px) {
     flex-direction: row;
     .menu-toggler {
       display: none;
