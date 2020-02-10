@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 
 import TournamentContext from '../../common/contexts/TournamentContext';
-import { Paper, PaperHeading, PaperRow } from '../../common/ui/Paper';
+import { Paper, PaperRow, PaperTopic } from '../../common/ui/Paper';
 import PlayerLink from '../../common/ui/PlayerLink';
 
 export default function Players() {
@@ -10,7 +10,7 @@ export default function Players() {
 
   return (
     <Paper>
-      <PaperHeading>Players</PaperHeading>
+      <PaperTopic>Players</PaperTopic>
       {players.length < 1 && <PaperRow>No players online!</PaperRow>}
       {players.length > 0 &&
         players

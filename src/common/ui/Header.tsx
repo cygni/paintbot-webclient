@@ -47,12 +47,12 @@ export default function Header() {
         <MenuItem oc={toggleCollapse} to="/">
           Start
         </MenuItem>
-        {/*<MenuItem oc={toggleCollapse} to="/about">
+        <MenuItem oc={toggleCollapse} to="/about">
           About
         </MenuItem>
         <MenuItem oc={toggleCollapse} to="/readme">
-          ReadMe
-        </MenuItem>*/}
+          Getting started
+        </MenuItem>
         <MenuItem oc={toggleCollapse} to="/arena">
           Arena
         </MenuItem>
@@ -108,6 +108,7 @@ const MenuContainer = styled.div<MenuContainerProps>`
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   display: flex;
   flex-direction: column;
+  font-family: 'Nanum Pen Script', cursive;
   .menu-toggler {
     margin-right: 30px;
   }
@@ -125,7 +126,7 @@ const MenuContainer = styled.div<MenuContainerProps>`
       display: block;
     }
   }
-  @media screen and (min-width: 800px) {
+  @media screen and (min-width: 1100px) {
     flex-direction: row;
     .menu-toggler {
       display: none;
@@ -151,7 +152,6 @@ const HeaderText = styled.span`
 `;
 
 const HeaderLetter = styled.span`
-  font-family: 'Nanum Pen Script', cursive;
   color: ${props => props.color};
 `;
 

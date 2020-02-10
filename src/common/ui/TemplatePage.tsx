@@ -57,21 +57,18 @@ const Container = styled.div`
   min-height: 100%;
   height: fit-content;
   min-width: fit-content;
-  font-family: 'Sriracha', cursive;
-  & h1 {
-    font-size: 1.7em;
-  }
+  font-family: 'Nanum Gothic', sans-serif;
   & h3 {
     font-size: 1.1em;
   }
-  & p,
   & input {
-    font-size: 1.3em;
+    font-size: 1.3rem;
     max-width: fit-content;
   }
   & input,
   & button {
-    font-family: 'Sriracha', cursive;
+    font-family: 'Nanum Pen Script', cursive;
+    font-size: 1.3rem;
   }
   & li {
     list-style-type: none;

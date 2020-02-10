@@ -4,6 +4,7 @@ import styled from 'styled-components/macro';
 import AccountContext from '../../common/contexts/AccountContext';
 import TournamentContext from '../../common/contexts/TournamentContext';
 import { Player } from '../../common/types';
+import { Heading1 } from '../../common/ui/Heading';
 
 import Controls from './Controls';
 import GamePlan, { PlayedGame } from './GamePlan';
@@ -55,7 +56,7 @@ export default function TournamentController() {
 
   return (
     <>
-      <TournamentName>{tour.tournamentName}</TournamentName>
+      <Heading1>{tour.tournamentName}</Heading1>
       {acc.loggedIn && <Controls started={started} />}
       {started && (
         <Papers>
@@ -82,8 +83,6 @@ export default function TournamentController() {
     </>
   );
 }
-
-const TournamentName = styled.h1``;
 
 const Papers = styled.div`
   display: flex;

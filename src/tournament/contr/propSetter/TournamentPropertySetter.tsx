@@ -6,7 +6,7 @@ import AccountContext from '../../../common/contexts/AccountContext';
 import TournamentContext from '../../../common/contexts/TournamentContext';
 import WebSocketContext from '../../../common/contexts/WebSocketContext';
 import ControlsButton from '../../../common/ui/ControlsButton';
-import { Paper, PaperHeading, PaperRow } from '../../../common/ui/Paper';
+import { Paper, PaperRow, PaperTopic } from '../../../common/ui/Paper';
 
 import CheckBox from './CheckBox';
 import NumberInput from './NumberInput';
@@ -43,7 +43,7 @@ export default function TournamentPropertySetter() {
 
   return (
     <Paper>
-      <PaperHeading>Settings</PaperHeading>
+      <PaperTopic>Settings</PaperTopic>
       <Form onSubmit={handleSubmit}>
         <PaperRow>
           <ControlsButton onClick={handleSubmit} disabled={!dirty}>

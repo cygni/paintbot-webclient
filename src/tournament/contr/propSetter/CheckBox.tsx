@@ -11,7 +11,7 @@ export default function CheckBox(props: any) {
   return (
     <Container>
       <input name={k} id={k} type="checkbox" onChange={oc} checked={v} />
-      <label htmlFor={k}>{k}</label>
+      <Label htmlFor={k}>{k}</Label>
     </Container>
   );
 }
@@ -19,4 +19,8 @@ export default function CheckBox(props: any) {
 const Container = styled.div`
   display: flex;
   align-items: baseline;
+`;
+
+const Label = styled.label`
+  margin-left: 0.25em;
 `;

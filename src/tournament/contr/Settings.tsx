@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import styled from 'styled-components/macro';
 
 import TournamentContext from '../../common/contexts/TournamentContext';
-import { Paper, PaperHeading } from '../../common/ui/Paper';
+import { Paper, PaperTopic } from '../../common/ui/Paper';
 
 export default function Settings() {
   const tour = useContext(TournamentContext);
@@ -10,7 +10,7 @@ export default function Settings() {
 
   return (
     <Paper>
-      <PaperHeading>Settings</PaperHeading>
+      <PaperTopic>Settings</PaperTopic>
       <PaperList id="game-settings">
         {Object.keys(gameSettings).map(k => (
           <li key={k}>

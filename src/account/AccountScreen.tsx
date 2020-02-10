@@ -1,7 +1,8 @@
 import React, { useContext, useState } from 'react';
-import styled from 'styled-components/macro';
 
 import AccountContext from '../common/contexts/AccountContext';
+import { Heading1 } from '../common/ui/Heading';
+import { Paper, PaperRow } from '../common/ui/Paper';
 
 import LoginForm from './LoginForm';
 import LogoutForm from './LogoutForm';
@@ -21,13 +22,9 @@ export default function AccountScreen() {
   };
 
   return (
-    <Container>
-      <h2>You are {accContext.loggedIn ? 'logged in!' : 'logged out!'}</h2>
+    <Paper width="400px">
+      <PaperRow textAlign="center">{accContext.loggedIn ? 'You are logged in!' : <Heading1>Log in</Heading1>}</PaperRow>
       {accContext.loggedIn ? <LogoutForm /> : <LoginForm un={username} pw={password} hc={handleChange} />}
-    </Container>
+    </Paper>
   );
 }
-
-const Container = styled.div`
-  text-align: center;
-`;

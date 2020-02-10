@@ -7,7 +7,8 @@ import WebSocketContext from '../../common/contexts/WebSocketContext';
 import { Player } from '../../common/types';
 import ControlsButton from '../../common/ui/ControlsButton';
 import GameLink from '../../common/ui/GameLink';
-import { Paper, PaperHeading, PaperHeadingRow, PaperRow } from '../../common/ui/Paper';
+import { Heading3 } from '../../common/ui/Heading';
+import { Paper, PaperHeadingRow, PaperRow, PaperTopic } from '../../common/ui/Paper';
 import PlayerLink from '../../common/ui/PlayerLink';
 
 interface GamePlanProps {
@@ -61,7 +62,7 @@ export default function GamePlan({ lvl, game, players, playedGames }: GamePlanPr
 
   return (
     <Paper>
-      <PaperHeading>Game plan</PaperHeading>
+      <PaperTopic>Game plan</PaperTopic>
       {!started && <span>Tournament has not been started yet!</span>}
       {started && showNextGame && (
         <>
@@ -95,9 +96,11 @@ export default function GamePlan({ lvl, game, players, playedGames }: GamePlanPr
           return (
             <React.Fragment key={playedGame.gameId}>
               <PaperHeadingRow>
-                <GameLink id={playedGame.gameId}>
-                  {currLvl === noLevels ? 'Final' : `Game ${currLvl}-${currGame}`}
-                </GameLink>
+                <Heading3>
+                  <GameLink id={playedGame.gameId}>
+                    {currLvl === noLevels ? 'Final' : `Game ${currLvl}-${currGame}`}
+                  </GameLink>
+                </Heading3>
                 {index === 0 && currLvl !== noLevels && !showNextGame && (
                   <ControlsButton onClick={handleShowNextGame}>Next game</ControlsButton>
                 )}

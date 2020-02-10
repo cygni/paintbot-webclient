@@ -31,6 +31,7 @@ const ControlsView = styled.div<ControlsViewProps>`
   justify-content: space-between;
   flex-direction: column;
   align-items: center;
+  margin-top: 1em;
   & > * {
     margin-bottom: 1em;
   }
