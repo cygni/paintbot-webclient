@@ -66,6 +66,7 @@ const Form = styled.form`
     margin-bottom: 0;
     display: flex;
     flex-direction: column;
+    padding-inline-start: 0px;
   }
   li {
     list-style-type: none;

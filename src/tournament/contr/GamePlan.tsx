@@ -67,7 +67,7 @@ export default function GamePlan({ lvl, game, players, playedGames }: GamePlanPr
       {started && showNextGame && (
         <>
           <PaperHeadingRow>
-            <span>{lvl + 1 === noLevels ? 'Final' : `Game ${lvl + 1}-${game + 1}`}</span>
+            <Heading3>{lvl + 1 === noLevels ? 'Final' : `Game ${lvl + 1}-${game + 1}`}</Heading3>
             {acc.loggedIn && (
               <ControlsButton onClick={startNextGame} disabled={playing}>
                 {playing ? 'Playing...' : 'Start'}

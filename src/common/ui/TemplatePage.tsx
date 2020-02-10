@@ -70,13 +70,6 @@ const Container = styled.div`
     font-family: 'Nanum Pen Script', cursive;
     font-size: 1.3rem;
   }
-  & li {
-    list-style-type: none;
-  }
-  & ul,
-  ol {
-    padding-inline-start: 0px;
-  }
 `;
 
 const BodyContainer = styled.div`

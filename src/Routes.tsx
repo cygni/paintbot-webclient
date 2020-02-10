@@ -1,6 +1,7 @@
 import React, { ComponentProps, ComponentType } from 'react';
 import { BrowserRouter, HashRouter, Route, Switch } from 'react-router-dom';
 
+import AboutScreen from './about/AboutScreen';
 import AccountScreen from './account/AccountScreen';
 import ArenaScreen from './arena/ArenaScreen';
 import TemplatePage from './common/ui/TemplatePage';
@@ -39,7 +40,9 @@ export default function Routes() {
             </TemplatePage>
           </Route>
           <Route path="/about" exact>
-            <TemplatePage />
+            <TemplatePage>
+              <AboutScreen />
+            </TemplatePage>
           </Route>
           <Route path="/readme" exact>
             <TemplatePage />

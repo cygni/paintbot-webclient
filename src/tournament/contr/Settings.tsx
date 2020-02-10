@@ -34,6 +34,7 @@ const Setting = styled.span`
 const PaperList = styled.ul`
   width: 100%;
   margin: 0px;
+  padding-inline-start: 0px;
   li {
     margin-bottom: 0px;
     display: flex;
