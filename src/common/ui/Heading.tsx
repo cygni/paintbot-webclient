@@ -10,6 +10,11 @@ export const Heading1 = styled.h1`
   font-size: 3rem;
 `;
 
+export const Heading2 = styled.h2`
+  ${HeadingCss};
+  font-size: 2.5rem;
+`;
+
 export const Heading3 = styled.h3`
   ${HeadingCss};
   font-size: 2rem;

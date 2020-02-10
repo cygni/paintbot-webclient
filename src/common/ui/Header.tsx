@@ -45,7 +45,7 @@ export default function Header() {
       </Spacing>
       <div className="links">
         <MenuItem oc={toggleCollapse} to="/">
-          Start
+          Welcome
         </MenuItem>
         <MenuItem oc={toggleCollapse} to="/about">
           About

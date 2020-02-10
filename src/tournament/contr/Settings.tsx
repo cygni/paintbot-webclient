@@ -14,12 +14,8 @@ export default function Settings() {
       <PaperList id="game-settings">
         {Object.keys(gameSettings).map(k => (
           <li key={k}>
-            {<Setting>{k}</Setting>}
-            {
-              <Setting>
-                {`${typeof gameSettings[k] === 'boolean' ? (gameSettings[k] ? '✔' : '-') : gameSettings[k]}`}
-              </Setting>
-            }
+            {<SettingName>{k}</SettingName>}
+            {<span>{`${typeof gameSettings[k] === 'boolean' ? (gameSettings[k] ? '✔' : '-') : gameSettings[k]}`}</span>}
           </li>
         ))}
       </PaperList>
@@ -27,19 +23,19 @@ export default function Settings() {
   );
 }
 
-const Setting = styled.span`
-  margin-top: 1em;
+const SettingName = styled.span`
+  margin-right: 1rem;
 `;
 
 const PaperList = styled.ul`
   width: 100%;
-  margin: 0px;
+  margin: 1rem 0 0;
   padding-inline-start: 0px;
   li {
     margin-bottom: 0px;
     display: flex;
     justify-content: space-between;
-    padding: 0 1rem;
+    padding: 0.5rem 1.5rem;
     border-bottom: 1px solid aliceblue;
   }
 `;

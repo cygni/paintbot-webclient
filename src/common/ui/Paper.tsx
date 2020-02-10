@@ -31,14 +31,14 @@ interface PaperRowProps {
 export const PaperRow = styled.div<PaperRowProps>`
   box-sizing: border-box;
   border-bottom: 1px solid aliceblue;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 1.5rem;
   width: 100%;
   min-height: 38px;
   text-align: ${props => props.textAlign};
 `;
 
 export const PaperHeadingRow = styled(PaperRow)`
-  font-size: 2rem;
+  margin-top: 1em;
   display: flex;
   justify-content: space-between;
   align-items: center;

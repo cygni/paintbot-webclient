@@ -81,7 +81,6 @@ export default function GamePlan({ lvl, game, players, playedGames }: GamePlanPr
               </PaperRow>
             );
           })}
-          <PaperRow />
         </>
       )}
       {started &&
@@ -112,7 +111,6 @@ export default function GamePlan({ lvl, game, players, playedGames }: GamePlanPr
                   </PaperRow>
                 );
               })}
-              <PaperRow />
             </React.Fragment>
           );
         })}

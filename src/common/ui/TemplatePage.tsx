@@ -58,9 +58,6 @@ const Container = styled.div`
   height: fit-content;
   min-width: fit-content;
   font-family: 'Nanum Gothic', sans-serif;
-  & h3 {
-    font-size: 1.1em;
-  }
   & input {
     font-size: 1.3rem;
     max-width: fit-content;

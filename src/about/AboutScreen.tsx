@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components/macro';
 
-import { Heading1 } from '../common/ui/Heading';
-import { Paper, PaperRow } from '../common/ui/Paper';
+import { Heading1, Heading2 } from '../common/ui/Heading';
+import { Paper, PaperHeadingRow, PaperRow } from '../common/ui/Paper';
 
-export default function AboutScreen(props: any) {
+export default function AboutScreen() {
   return (
     <Container>
       <Paper>
@@ -19,6 +19,9 @@ export default function AboutScreen(props: any) {
           Feel free to hack your own Paint Bot and train it in the Training room. From time to time we hold tournaments
           where you will be able to face other player's Paint Bots.
         </PaperRow>
+        <PaperHeadingRow>
+          <Heading2>Game rules</Heading2>
+        </PaperHeadingRow>
         <PaperRow>
           The rules are configurable per game, upon every game start the clients will be notified of the current game
           settings.
