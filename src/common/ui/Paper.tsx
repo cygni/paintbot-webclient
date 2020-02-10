@@ -43,3 +43,18 @@ export const PaperHeadingRow = styled(PaperRow)`
   justify-content: space-between;
   align-items: center;
 `;
+
+export const PaperList = styled.ul`
+  margin-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  padding-inline-start: 0px;
+`;
+
+export const PaperListItem = styled.li`
+  list-style-type: none;
+  width: 100%;
+  border-bottom: 1px solid aliceblue;
+  padding: 0.5em 1.5em;
+  box-sizing: border-box;
+`;

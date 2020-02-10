@@ -53,18 +53,19 @@ const Name = styled.div`
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-  font-size: 16px;
+  font-size: 20px;
   text-align: left;
 `;
 
 const Score = styled.div`
   text-align: right;
   opacity: 0.5;
-  font-size: 25px;
+  font-size: 40px;
   line-height: 25px;
 `;
 
 const Card = styled.div`
   box-shadow: 0 3px 3px rgba(0, 0, 0, 0.5);
   padding: 10px;
+  font-family: 'Nanum Pen Script', sans-serif;
 `;

@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import styled from 'styled-components/macro';
 
 import ArenaContext from '../common/contexts/ArenaContext';
+import { Heading1 } from '../common/ui/Heading';
 
 import ArenaForm from './ArenaForm';
 import ArenaGames from './ArenaGames';
@@ -12,60 +13,45 @@ export default function ArenaScreen() {
   const arenaContext = useContext(ArenaContext);
 
   return (
-    <GridBox>
-      <FlexColumn>
-        <h1>{arenaContext.arenaName}</h1>
-        <ArenaForm />
-        {arenaContext.onlinePlayers.length > 0 && <ArenaStarter />}
-      </FlexColumn>
-      <OnlinePlayers className="players" />
-      <ArenaGames className="games" />
-    </GridBox>
+    <>
+      <Heading1>{arenaContext.arenaName}</Heading1>
+      {arenaContext.onlinePlayers.length > 0 && <ArenaStarter />}
+      <ArenaForm />
+      <Papers>
+        <PaperColumn>
+          <ArenaGames />
+        </PaperColumn>
+        <PaperColumn>
+          <OnlinePlayers />
+        </PaperColumn>
+      </Papers>
+    </>
   );
 }
 
-const GridBox = styled.div`
-  width: 100%;
+const Papers = styled.div`
   display: flex;
-  flex-direction: column;
-
-  @media screen and (min-width: 1100px) {
-    display: grid;
-    grid-template-columns: 50% 50%;
-    grid-template-rows: 18em auto;
-    justify-items: center;
-    & > .players {
-      min-width: 25em;
-      grid-row: 2 / span 1;
-      grid-column: 1 / span 1;
-      text-align: center;
-    }
-    & > .games {
-      min-width: 25em;
-      grid-row: 2 / span 1;
-      grid-column: 2 / span 1;
-      text-align: center;
-    }
-    & > * {
-      align-self: start;
-    }
-    & li {
-      margin-bottom: 2em;
-    }
+  width: 100%;
+  max-width: 800px;
+  margin-top: 1rem;
+  @media screen and (max-width: 800px) {
+    flex-direction: column;
   }
 `;
 
-const FlexColumn = styled.div`
-  padding: 1em;
+interface PaperColumnProps {
+  flex?: number;
+}
+
+const PaperColumn = styled.div<PaperColumnProps>`
+  flex: 1;
   display: flex;
-  justify-content: center;
   flex-direction: column;
-  & * {
-    margin-bottom: 1em;
-    align-self: center;
+  margin: 0 1rem;
+  & > div {
+    width: 100%;
   }
-  @media screen and (min-width: 1100px) {
-    grid-row: 1 / 1;
-    grid-column: 1 / 3;
+  @media screen and (max-width: 800px) {
+    flex: none;
   }
 `;

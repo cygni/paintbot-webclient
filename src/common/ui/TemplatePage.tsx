@@ -60,7 +60,6 @@ const Container = styled.div`
   font-family: 'Nanum Gothic', sans-serif;
   & input {
     font-size: 1.3rem;
-    max-width: fit-content;
   }
   & input,
   & button {

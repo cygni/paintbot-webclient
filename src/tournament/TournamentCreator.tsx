@@ -33,7 +33,7 @@ export default function TournamentCreator() {
       <Heading1>Create a tournament</Heading1>
       <Form onSubmit={handleSubmit}>
         <Input name="tournament-name" id="tournament-name" type="text" value={tourName} onChange={handleChange} />
-        <ControlsButton onClick={handleSubmit}>Lets go!</ControlsButton>
+        <ControlsButton onClick={handleSubmit}>Let's go!</ControlsButton>
       </Form>
     </>
   );

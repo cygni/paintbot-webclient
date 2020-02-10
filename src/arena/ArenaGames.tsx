@@ -1,49 +1,31 @@
 import React, { useContext } from 'react';
-import styled from 'styled-components/macro';
 
 import ArenaContext from '../common/contexts/ArenaContext';
 import GameLink from '../common/ui/GameLink';
+import { Paper, PaperHeadingRow, PaperList, PaperListItem, PaperTopic } from '../common/ui/Paper';
 
 import CurrentArenaGame from './CurrentArenaGame';
 
-export default function ArenaGames(props: any) {
+export default function ArenaGames() {
   const arenaContext = useContext(ArenaContext);
   return (
-    <FlexColumn className={props.className}>
-      {arenaContext.gameHistory.length < 1 && !arenaContext.gameId && <h2>No games played</h2>}
-      {(arenaContext.gameHistory.length > 0 || arenaContext.gameId) && (
-        <FlexColumn>
-          <h2>Played games</h2>
-          <ul>
-            <CurrentArenaGame />
-            {arenaContext.gameHistory.reverse().map((arenaHistory, index) => {
-              return (
-                <li key={arenaHistory.gameId}>
-                  <GameLink id={arenaHistory.gameId}>Game number {arenaContext.gameHistory.length - index}</GameLink>
-                </li>
-              );
-            })}
-          </ul>
-        </FlexColumn>
+    <Paper>
+      <PaperTopic>Played games</PaperTopic>
+      {arenaContext.gameHistory.length < 1 && !arenaContext.gameId && (
+        <PaperHeadingRow>No games played</PaperHeadingRow>
       )}
-    </FlexColumn>
+      {(arenaContext.gameHistory.length > 0 || arenaContext.gameId) && (
+        <PaperList>
+          <CurrentArenaGame />
+          {arenaContext.gameHistory.reverse().map((arenaHistory, index) => {
+            return (
+              <PaperListItem key={arenaHistory.gameId}>
+                <GameLink id={arenaHistory.gameId}>Game {arenaContext.gameHistory.length - index}</GameLink>
+              </PaperListItem>
+            );
+          })}
+        </PaperList>
+      )}
+    </Paper>
   );
 }
-
-const FlexColumn = styled.div`
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  & * {
-    align-self: stretch;
-  }
-  li {
-    margin: 2em;
-  }
-  ul {
-    margin: 0em 2em 0em 2em;
-    padding: 1em;
-    background-color: rgba(100%, 100%, 100%, 50%);
-    border-radius: 10px;
-  }
-`;

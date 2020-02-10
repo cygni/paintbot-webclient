@@ -6,7 +6,7 @@ import AccountContext from '../../../common/contexts/AccountContext';
 import TournamentContext from '../../../common/contexts/TournamentContext';
 import WebSocketContext from '../../../common/contexts/WebSocketContext';
 import ControlsButton from '../../../common/ui/ControlsButton';
-import { Paper, PaperRow, PaperTopic } from '../../../common/ui/Paper';
+import { Paper, PaperList, PaperListItem, PaperRow, PaperTopic } from '../../../common/ui/Paper';
 
 import CheckBox from './CheckBox';
 import NumberInput from './NumberInput';
@@ -61,19 +61,11 @@ const Form = styled.form`
   margin-top: 0px;
   min-width: 10em;
   padding: 1em 0;
-  input,
-  ul {
+  input {
     margin-bottom: 0;
     display: flex;
     flex-direction: column;
     padding-inline-start: 0px;
-  }
-  li {
-    list-style-type: none;
-    width: 100%;
-    border-bottom: 1px solid aliceblue;
-    padding: 0.5em 1em;
-    box-sizing: border-box;
   }
 `;
 
@@ -93,20 +85,20 @@ function SettingsForm(props: any) {
   };
 
   return (
-    <ul id="game-settings">
-      <li>
+    <PaperList>
+      <PaperListItem>
         <CheckBox k="obstaclesEnabled" v={gameSettings.obstaclesEnabled} oc={updateProperty} />
-      </li>
-      <li>
+      </PaperListItem>
+      <PaperListItem>
         <CheckBox k="powerUpsEnabled" v={gameSettings.powerUpsEnabled} oc={updateProperty} />
-      </li>
-      <li>
+      </PaperListItem>
+      <PaperListItem>
         <CheckBox k="pointsPerTick" v={gameSettings.pointsPerTick} oc={updateProperty} />
-      </li>
-      <li>
+      </PaperListItem>
+      <PaperListItem>
         <CheckBox k="trainingGame" v={gameSettings.trainingGame} oc={updateProperty} />
-      </li>
-      <li>
+      </PaperListItem>
+      <PaperListItem>
         <NumberInput
           k="addPowerUpLikelihood"
           range={{ min: 0, max: 100 }}
@@ -114,8 +106,8 @@ function SettingsForm(props: any) {
           oc={updateProperty}
           v={gameSettings.addPowerUpLikelihood}
         />
-      </li>
-      <li>
+      </PaperListItem>
+      <PaperListItem>
         <NumberInput
           k="removePowerUpLikelihood"
           range={{ min: 0, max: 100 }}
@@ -123,8 +115,8 @@ function SettingsForm(props: any) {
           oc={updateProperty}
           v={gameSettings.removePowerUpLikelihood}
         />
-      </li>
-      <li>
+      </PaperListItem>
+      <PaperListItem>
         <NumberInput
           k="maxNoofPlayers"
           range={{ min: 2, max: 20 }}
@@ -132,8 +124,8 @@ function SettingsForm(props: any) {
           oc={updateProperty}
           v={gameSettings.maxNoofPlayers}
         />
-      </li>
-      <li>
+      </PaperListItem>
+      <PaperListItem>
         <NumberInput
           k="startObstacles"
           range={{ min: 0, max: null }}
@@ -141,8 +133,8 @@ function SettingsForm(props: any) {
           oc={updateProperty}
           v={gameSettings.startObstacles}
         />
-      </li>
-      <li>
+      </PaperListItem>
+      <PaperListItem>
         <NumberInput
           k="startPowerUps"
           range={{ min: 0, max: null }}
@@ -150,8 +142,8 @@ function SettingsForm(props: any) {
           oc={updateProperty}
           v={gameSettings.startPowerUps}
         />
-      </li>
-      <li>
+      </PaperListItem>
+      <PaperListItem>
         <NumberInput
           k="explosionRange"
           range={{ min: 0, max: null }}
@@ -159,8 +151,8 @@ function SettingsForm(props: any) {
           oc={updateProperty}
           v={gameSettings.explosionRange}
         />
-      </li>
-      <li>
+      </PaperListItem>
+      <PaperListItem>
         <NumberInput
           k="gameDurationInSeconds"
           range={{ min: 0, max: null }}
@@ -168,8 +160,8 @@ function SettingsForm(props: any) {
           oc={updateProperty}
           v={gameSettings.gameDurationInSeconds}
         />
-      </li>
-      <li>
+      </PaperListItem>
+      <PaperListItem>
         <NumberInput
           k="noOfTicksInvulnerableAfterStun"
           range={{ min: 0, max: null }}
@@ -177,8 +169,8 @@ function SettingsForm(props: any) {
           oc={updateProperty}
           v={gameSettings.noOfTicksInvulnerableAfterStun}
         />
-      </li>
-      <li>
+      </PaperListItem>
+      <PaperListItem>
         <NumberInput
           k="noOfTicksStunned"
           range={{ min: 0, max: null }}
@@ -186,8 +178,8 @@ function SettingsForm(props: any) {
           oc={updateProperty}
           v={gameSettings.noOfTicksStunned}
         />
-      </li>
-      <li>
+      </PaperListItem>
+      <PaperListItem>
         <NumberInput
           k="pointsPerCausedStun"
           range={{ min: 0, max: null }}
@@ -195,8 +187,8 @@ function SettingsForm(props: any) {
           oc={updateProperty}
           v={gameSettings.pointsPerCausedStun}
         />
-      </li>
-      <li>
+      </PaperListItem>
+      <PaperListItem>
         <NumberInput
           k="pointsPerTileOwned"
           range={{ min: 0, max: null }}
@@ -204,8 +196,8 @@ function SettingsForm(props: any) {
           oc={updateProperty}
           v={gameSettings.pointsPerTileOwned}
         />
-      </li>
-      <li>
+      </PaperListItem>
+      <PaperListItem>
         <NumberInput
           k="timeInMsPerTick"
           range={{ min: 0, max: null }}
@@ -213,7 +205,7 @@ function SettingsForm(props: any) {
           oc={updateProperty}
           v={gameSettings.timeInMsPerTick}
         />
-      </li>
-    </ul>
+      </PaperListItem>
+    </PaperList>
   );
 }
