@@ -25,6 +25,17 @@ export default function WelcomeScreen(props: any) {
           <DefaultLink to={'readme'}>Getting started is really easy.</DefaultLink> Clone an example Paint bot and get
           going!
         </PaperRow>
+        <PaperRow>Here's a video of what gameplay looks like:</PaperRow>
+        <PaperRow>
+          <iframe
+            width="560"
+            height="315"
+            src="https://www.youtube.com/embed/G6M7RpQaInQ"
+            frameBorder={0}
+            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        </PaperRow>
       </Paper>
       <ComicImages>
         <ComicImage src={introImage1} alt="Blue, green, red, yellow..." />
