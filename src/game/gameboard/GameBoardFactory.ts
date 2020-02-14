@@ -1,7 +1,28 @@
-import { StandardColors, TileColors } from '../../common/Constants';
+import { CharacterColors, StandardColors } from '../../common/Constants';
 import { Character, CharacterInfo, Coordinate, Game, GameMap, PowerUp, Tile, TileType } from '../type';
 
-const colours = ['#4286f4', '#d3422c', '#88d852', '#f0fc0c', '#c774f2'];
+const colours = [
+  CharacterColors.Blue,
+  CharacterColors.Yellow,
+  CharacterColors.Green,
+  CharacterColors.Red,
+  CharacterColors.Orange,
+  CharacterColors.Cyan,
+  CharacterColors.Magenta,
+  CharacterColors.Grey,
+  CharacterColors.Lavender,
+  CharacterColors.Navy,
+  CharacterColors.Maroon,
+  CharacterColors.Pink,
+  CharacterColors.Teal,
+  CharacterColors.Brown,
+  CharacterColors.Beige,
+  CharacterColors.Mint,
+  CharacterColors.Purple,
+  CharacterColors.Lime,
+  CharacterColors.Apricot,
+  CharacterColors.Olive,
+];
 
 export default class GameBoardFactory {
   private gameMap = {} as GameMap;
@@ -87,7 +108,6 @@ export default class GameBoardFactory {
       const obstacleTile = {} as Tile;
       obstacleTile.coordinate = this.getCoordinateFromMapPosition(powerUpPosition);
       obstacleTile.type = TileType.OBSTACLE;
-      obstacleTile.colour = TileColors.Obstacle;
       tiles.set(JSON.stringify(obstacleTile.coordinate), obstacleTile);
     });
   }

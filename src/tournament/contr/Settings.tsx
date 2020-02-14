@@ -2,45 +2,32 @@ import React, { useContext } from 'react';
 import styled from 'styled-components/macro';
 
 import TournamentContext from '../../common/contexts/TournamentContext';
+import { Paper, PaperList, PaperListItem, PaperTopic } from '../../common/ui/Paper';
 
-export default function Settings({ className }: { className: string }) {
+export default function Settings() {
   const tour = useContext(TournamentContext);
   const gameSettings = tour.gameSettings;
 
   return (
-    <FlexColumn className={className}>
-      <ul id="game-settings">
+    <Paper>
+      <PaperTopic>Settings</PaperTopic>
+      <PaperList>
         {Object.keys(gameSettings).map(k => (
-          <li key={k}>
-            {<p>{k.toUpperCase()}</p>}
-            {<p>{`${gameSettings[k]}`}</p>}
-          </li>
+          <FlexedPaperListItem key={k}>
+            {<SettingName>{k}</SettingName>}
+            {<span>{`${typeof gameSettings[k] === 'boolean' ? (gameSettings[k] ? '✔' : '-') : gameSettings[k]}`}</span>}
+          </FlexedPaperListItem>
         ))}
-      </ul>
-    </FlexColumn>
+      </PaperList>
+    </Paper>
   );
 }
 
-const FlexColumn = styled.div`
+const SettingName = styled.span`
+  margin-right: 1rem;
+`;
+
+const FlexedPaperListItem = styled(PaperListItem)`
   display: flex;
-  justify-content: center;
-  flex-direction: column;
-  & ul li {
-    margin-bottom: 0px;
-  }
-  & * {
-    align-self: center;
-  }
-  ul {
-    width: 100%;
-    padding: 1em;
-    background-color: rgba(100%, 100%, 100%, 50%);
-    border-radius: 10px;
-    margin-top: 0px;
-  }
-  @media screen and (min-width: 1100px) {
-    ul {
-      padding: 1em 0em 1em 0em;
-    }
-  }
+  justify-content: space-between;
 `;

@@ -1,51 +1,90 @@
-import React, { useContext } from 'react';
-import styled from 'styled-components/macro';
+import React, { useContext, useEffect, useState } from 'react';
 
+import { REQUEST_TYPES } from '../../common/API';
+import AccountContext from '../../common/contexts/AccountContext';
 import TournamentContext from '../../common/contexts/TournamentContext';
+import WebSocketContext from '../../common/contexts/WebSocketContext';
+import { Player } from '../../common/types';
+import ControlsButton from '../../common/ui/ControlsButton';
 import GameLink from '../../common/ui/GameLink';
+import { Heading3 } from '../../common/ui/Heading';
+import { Paper, PaperHeadingRow, PaperRow, PaperTopic } from '../../common/ui/Paper';
+import PlayerLink from '../../common/ui/PlayerLink';
 
 interface GamePlanProps {
-  className: string;
   lvl: number;
   game: number;
-  playedGames: string[];
+  players: Player[];
+  playedGames: PlayedGame[];
 }
 
-export default function GamePlan({ className, lvl, game, playedGames }: GamePlanProps) {
+export interface PlayedGame {
+  gameId: string;
+  players: Player[];
+}
+
+export default function GamePlan({ lvl, game, players, playedGames }: GamePlanProps) {
   const tour = useContext(TournamentContext);
   const levels = tour.gamePlan.tournamentLevels;
-  const noRows = 3 + playedGames.length;
   const started = levels.length > 0 && levels[0].tournamentGames[0].gameId !== null;
-
-  const GridBox = styled.div`
-    width: 100%;
-    display: grid;
-    grid-template-rows: repeat(${noRows}, 6em);
-    grid-template-columns: 1fr;
-    & * {
-      margin: 0px;
-    }
-  `;
-
-  const gamesInCurrLvl = tour.winner ? 0 : tour.gamePlan.tournamentLevels[lvl].tournamentGames.length;
+  const send = useContext(WebSocketContext);
+  const acc = useContext(AccountContext);
   const noLevels = tour.gamePlan.noofLevels;
+  const [showNextGame, setShowNextGame] = useState(lvl === 0 && game === 0 && !tour.winner);
+  const [playing, setPlaying] = useState(false);
+
+  const startNextGame = (event: any) => {
+    event.preventDefault();
+    setPlaying(true);
+    const l = lvl;
+    const g = game;
+    const currLvl = tour.gamePlan.tournamentLevels[l];
+    const currGame = currLvl.tournamentGames[g];
+    const gameMess = {
+      token: acc.token,
+      gameId: currGame.gameId,
+      type: REQUEST_TYPES.START_TOURNAMENT_GAME,
+    };
+    send(gameMess);
+  };
+
+  useEffect(
+    () => {
+      setShowNextGame(lvl === 0 && game === 0);
+      setPlaying(false);
+    },
+    [lvl, game],
+  );
+
+  function handleShowNextGame() {
+    setShowNextGame(true);
+  }
+
   return (
-    <GridBox className={className}>
-      {!started && <h3>Tournament has not been started yet!</h3>}
-      {started && (
-        <Row no={1} length={playedGames.length + 1}>
-          <h3>{tour.winner ? `Congratulations ${tour.winner.name}!` : 'The next game is'}</h3>
-          {!tour.winner && (
-            <h3>
-              {lvl + 1 === noLevels
-                ? 'The final!'
-                : `Game ${game + 1} / ${gamesInCurrLvl} in Level ${lvl + 1} / ${noLevels}`}
-            </h3>
-          )}
-        </Row>
+    <Paper>
+      <PaperTopic>Game plan</PaperTopic>
+      {!started && <span>Tournament has not been started yet!</span>}
+      {started && showNextGame && (
+        <>
+          <PaperHeadingRow>
+            <Heading3>{lvl + 1 === noLevels ? 'Final' : `Game ${lvl + 1}-${game + 1}`}</Heading3>
+            {acc.loggedIn && (
+              <ControlsButton onClick={startNextGame} disabled={playing}>
+                {playing ? 'Playing...' : 'Start'}
+              </ControlsButton>
+            )}
+          </PaperHeadingRow>
+          {players.map(player => {
+            return (
+              <PaperRow key={player.name}>
+                <PlayerLink name={player.name} />
+              </PaperRow>
+            );
+          })}
+        </>
       )}
       {started &&
-        playedGames.map((gameId, index) => {
+        playedGames.map((playedGame, index) => {
           let currLvl = 0;
           let currGame = playedGames.length - index;
           while (currGame > levels[currLvl].tournamentGames.length) {
@@ -54,35 +93,27 @@ export default function GamePlan({ className, lvl, game, playedGames }: GamePlan
           }
           currLvl = currLvl + 1;
           return (
-            <Row no={index + 2} length={playedGames.length + 1} key={`gp-row${index}`}>
-              <GameLink id={gameId}>
-                {currLvl === noLevels ? 'Final' : `Game : ${currGame} / Level : ${currLvl}`}
-              </GameLink>
-            </Row>
+            <React.Fragment key={playedGame.gameId}>
+              <PaperHeadingRow>
+                <Heading3>
+                  <GameLink id={playedGame.gameId}>
+                    {currLvl === noLevels ? 'Final' : `Game ${currLvl}-${currGame}`}
+                  </GameLink>
+                </Heading3>
+                {index === 0 && currLvl !== noLevels && !showNextGame && (
+                  <ControlsButton onClick={handleShowNextGame}>Next game</ControlsButton>
+                )}
+              </PaperHeadingRow>
+              {playedGame.players.map(player => {
+                return (
+                  <PaperRow key={player.name}>
+                    <PlayerLink name={player.name} />
+                  </PaperRow>
+                );
+              })}
+            </React.Fragment>
           );
         })}
-    </GridBox>
+    </Paper>
   );
 }
-
-interface RowProps {
-  no: number;
-  length: number;
-}
-
-const Row = styled.div<RowProps>`
-  grid-column: 1 / span 1;
-  grid-row: ${props => props.no} / span 1;
-  margin-left: 1em;
-  margin-right: 1em;
-  align-self: stretch;
-  justify-self: stretch;
-  padding-left: 1em;
-  padding-right: 1em;
-  background-color: rgba(100%, 100%, 100%, 50%);
-  ${props => props.no === 1 && 'padding-top: 1em;'}
-  ${props => props.no === props.length && 'padding-bottom: 1em;'}
-  ${props => props.no === 1 && 'border-radius: 10px 10px 0px 0px;'}
-  ${props => props.no === props.length && 'border-radius: 0px 0px 10px 10px;'}
-  ${props => props.no === props.length && props.no === 1 && 'border-radius: 10px;'}
-`;

@@ -5,7 +5,7 @@ import { REQUEST_TYPES } from '../common/API';
 import ArenaContext from '../common/contexts/ArenaContext';
 import WebSocketContext from '../common/contexts/WebSocketContext';
 
-export default function ArenaForm(props: any) {
+export default function ArenaForm() {
   const arenaContext = useContext(ArenaContext);
   const send = useContext(WebSocketContext);
 
@@ -19,15 +19,20 @@ export default function ArenaForm(props: any) {
   };
 
   const k = 'arenaName';
-  return <Input type="text" onChange={handleSubmit} name={k} value={arenaContext.arenaName} />;
+  return (
+    <Container>
+      <label htmlFor={k}>Switch arena</label>
+      <Input type="text" onChange={handleSubmit} name={k} value={arenaContext.arenaName} />
+    </Container>
+  );
 }
 
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+`;
+
 const Input = styled.input`
-  margin-left: 1em;
-  margin-right: 1em;
   width: 100%;
-  max-width: 20em;
-  @media screen and (min-width: 1100px) {
-    width: 20em;
-  }
 `;

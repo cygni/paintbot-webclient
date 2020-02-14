@@ -9,7 +9,10 @@ interface Props {
   worldTick: number;
 }
 
-const TimerContainer = styled.div``;
+const TimerContainer = styled.div`
+  font-size: 40px;
+  font-family: 'Nanum Pen Script', sans-serif;
+`;
 
 export const TimerPane = ({ durationInSeconds, timeInMsPerTick, worldTick }: Props) => (
   <TimerContainer>

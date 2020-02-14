@@ -2,8 +2,6 @@ import React from 'react';
 import styled from 'styled-components/macro';
 import tinycolor from 'tinycolor2';
 
-import { DefaultText } from '../../common/ui/DefaultText';
-import { Row } from '../../common/ui/Row';
 import { Spacing } from '../../common/ui/Spacing';
 import { Character } from '../type';
 
@@ -40,37 +38,34 @@ export default class ScoreBoardEntry extends React.Component<Props> {
     return (
       <Spacing>
         <ScoreLabelContainer playerColour={player.colour}>
-          <Row justifyContent={'space-between'} style={styles.row}>
-            <DefaultText style={styles.name}>{playerName}</DefaultText>
-            <DefaultText style={styles.points}>{playerScore}</DefaultText>
-          </Row>
+          <Card>
+            <Name>{playerName}</Name>
+            <Score>{playerScore}</Score>
+          </Card>
         </ScoreLabelContainer>
       </Spacing>
     );
   }
 }
 
-const styles = {
-  name: {
-    fontWeight: 'bold',
-    padding: '10px',
-    textOverflow: 'ellipsis',
-    overflow: 'hidden',
-    maxWidth: '300px',
-    whiteSpace: 'nowrap',
-    fontSize: '20px',
-    height: '30px',
-    lineHeight: '30px',
-    textAlign: 'left',
-  },
-  points: {
-    fontWeight: 'bold',
-    padding: '10px',
-    height: '30px',
-    lineHeight: '30px',
-  },
-  row: {
-    display: 'flex',
-    boxShadow: '0 3px 3px rgba(0,0,0,0.5)',
-  },
-};
+const Name = styled.div`
+  font-weight: bold;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 20px;
+  text-align: left;
+`;
+
+const Score = styled.div`
+  text-align: right;
+  opacity: 0.5;
+  font-size: 40px;
+  line-height: 25px;
+`;
+
+const Card = styled.div`
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.5);
+  padding: 10px;
+  font-family: 'Nanum Pen Script', sans-serif;
+`;

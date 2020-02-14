@@ -1,9 +1,11 @@
 import React, { ComponentProps, ComponentType } from 'react';
 import { BrowserRouter, HashRouter, Route, Switch } from 'react-router-dom';
 
+import AboutScreen from './about/AboutScreen';
 import AccountScreen from './account/AccountScreen';
 import ArenaScreen from './arena/ArenaScreen';
 import TemplatePage from './common/ui/TemplatePage';
+import ReadMeScreen from './readme/ReadMeScreen';
 import TournamentScreen from './tournament/TournamentScreen';
 import WelcomeScreen from './welcome/WelcomeScreen';
 
@@ -39,10 +41,14 @@ export default function Routes() {
             </TemplatePage>
           </Route>
           <Route path="/about" exact>
-            <TemplatePage />
+            <TemplatePage>
+              <AboutScreen />
+            </TemplatePage>
           </Route>
           <Route path="/readme" exact>
-            <TemplatePage />
+            <TemplatePage>
+              <ReadMeScreen />
+            </TemplatePage>
           </Route>
           <Route path="/tournament" exact>
             <TemplatePage>

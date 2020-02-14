@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 
 import AccountContext from '../common/contexts/AccountContext';
 import TournamentContext from '../common/contexts/TournamentContext';
+import { Paper, PaperRow } from '../common/ui/Paper';
 
 import TournamentController from './contr/TournamentController';
 import TournamentCreator from './TournamentCreator';
@@ -29,13 +30,13 @@ export default function TournamentScreen(props: any) {
     }
   }
 
-  return <div id="tournament-body">{child}</div>;
+  return child;
 }
 
 function NoTournament(props: any) {
   return (
-    <>
-      <h1>Log in to create a tournament!</h1>
-    </>
+    <Paper>
+      <PaperRow>Log in to create a tournament!</PaperRow>
+    </Paper>
   );
 }

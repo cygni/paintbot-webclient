@@ -64,14 +64,5 @@ export function GameController({ onGameSpeedChange, onPauseGame }: GameControlle
 
 const FlexContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  & > * {
-    align-self: center;
-  }
-  @media screen and (min-width: 1100px) {
-    & > * {
-      align-self: flex-start;
-      margin-left: 2em;
-    }
-  }
+  flex-direction: row;
 `;

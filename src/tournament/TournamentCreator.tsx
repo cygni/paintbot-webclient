@@ -5,6 +5,7 @@ import { REQUEST_TYPES } from '../common/API';
 import AccountContext from '../common/contexts/AccountContext';
 import WebSocketContext from '../common/contexts/WebSocketContext';
 import ControlsButton from '../common/ui/ControlsButton';
+import { Heading1 } from '../common/ui/Heading';
 
 export default function TournamentCreator() {
   const accContext = useContext(AccountContext);
@@ -28,27 +29,24 @@ export default function TournamentCreator() {
   };
 
   return (
-    <FlexColumn>
-      <h1>Create a tournament</h1>
-      <form onSubmit={handleSubmit}>
-        <input name="tournament-name" id="tournament-name" type="text" value={tourName} onChange={handleChange} />
-        <ControlsButton onClick={handleSubmit}>Lets go!</ControlsButton>
-      </form>
-    </FlexColumn>
+    <>
+      <Heading1>Create a tournament</Heading1>
+      <Form onSubmit={handleSubmit}>
+        <Input name="tournament-name" id="tournament-name" type="text" value={tourName} onChange={handleChange} />
+        <ControlsButton onClick={handleSubmit}>Let's go!</ControlsButton>
+      </Form>
+    </>
   );
 }
 
-const FlexColumn = styled.div`
+const Form = styled.form`
+  margin-top: 1rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  form {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-  form * {
-    margin-bottom: 1em;
-  }
+  align-items: center;
+`;
+
+const Input = styled.input`
+  margin-bottom: 1em;
 `;

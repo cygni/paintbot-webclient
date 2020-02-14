@@ -2,16 +2,16 @@ import React from 'react';
 
 import { CharacterColors } from '../Constants';
 
-import { LinkButton } from './DefaultButton';
+import { DefaultLink } from './DefaultLink';
 
 export default function PlayerLink(props: any) {
   return (
-    <LinkButton
+    <DefaultLink
       className={props.className}
       to={`/player/${encodeURIComponent(props.name)}`}
-      backgroundColor={CharacterColors.BlueCharacter}
+      color={CharacterColors.Navy}
     >
       {props.name}
-    </LinkButton>
+    </DefaultLink>
   );
 }

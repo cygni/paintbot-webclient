@@ -152,16 +152,17 @@ export default class PlayerCharacter extends React.Component<Props> {
     const ultiBlobs = [];
 
     for (let i = 0; i < 6; i++) {
-      const ultiBlob = this.renderUltiBlob();
+      const ultiBlob = this.renderUltiBlob(`ultiblob${i}`);
       ultiBlobs.push(ultiBlob);
     }
 
     return ultiBlobs;
   }
 
-  renderUltiBlob() {
+  renderUltiBlob(key: string) {
     return (
       <Circle
+        key={key}
         perfectDrawEnabled={false}
         x={this.props.width / 2}
         y={this.props.height / 2}
@@ -260,19 +261,20 @@ export default class PlayerCharacter extends React.Component<Props> {
     const stars = [];
 
     for (let i = 0; i < 2; i++) {
-      const star = this.renderStar();
+      const star = this.renderStar(`star${i}`);
       stars.push(star);
     }
 
     return stars;
   }
 
-  renderStar() {
+  renderStar(key: string) {
     const outerRadius = this.props.width / (4 + Math.random() * 8);
     const innerRadius = outerRadius / 2;
 
     return (
       <Star
+        key={key}
         perfectDrawEnabled={false}
         numPoints={5}
         x={this.props.width / 2}

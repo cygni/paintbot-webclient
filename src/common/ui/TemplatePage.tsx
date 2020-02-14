@@ -57,33 +57,14 @@ const Container = styled.div`
   min-height: 100%;
   height: fit-content;
   min-width: fit-content;
-  & h1 {
-    font-size: 1.7em;
-  }
-  & h2 {
-    font-size: 1.3em;
-  }
-  & h3 {
-    font-size: 1.1em;
-  }
-  & p,
-  label {
-    font-size: 0.9em;
-  }
+  font-family: 'Nanum Gothic', sans-serif;
   & input {
-    font-size: 1.3em;
-    max-width: fit-content;
-    width: 80%;
+    font-size: 1.3rem;
   }
-  & * {
-    font-family: 'Sriracha', cursive;
-  }
-  & li {
-    list-style-type: none;
-  }
-  & ul,
-  ol {
-    padding-inline-start: 0px;
+  & input,
+  & button {
+    font-family: 'Nanum Pen Script', cursive;
+    font-size: 1.3rem;
   }
 `;
 
@@ -92,9 +73,6 @@ const BodyContainer = styled.div`
   display: flex;
   justify-content: center;
   flex-direction: column;
-  & * {
-    text-align: center;
-  }
   & > * {
     align-self: center;
   }

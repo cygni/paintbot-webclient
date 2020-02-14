@@ -3,9 +3,10 @@ import React, { useContext } from 'react';
 import AccountContext from '../common/contexts/AccountContext';
 import SettersContext from '../common/contexts/SettersContext';
 import ControlsButton from '../common/ui/ControlsButton';
+import { PaperRow } from '../common/ui/Paper';
 import { docCookies } from '../common/util';
 
-export default function LogoutForm(props: any) {
+export default function LogoutForm() {
   const setters = useContext(SettersContext);
   const acc = useContext(AccountContext);
   const logOut = () => {
@@ -16,5 +17,9 @@ export default function LogoutForm(props: any) {
       docCookies.setItem('name', acc.username);
     }
   };
-  return <ControlsButton onClick={logOut}>Log out</ControlsButton>;
+  return (
+    <PaperRow textAlign="center">
+      <ControlsButton onClick={logOut}>Log out</ControlsButton>
+    </PaperRow>
+  );
 }
