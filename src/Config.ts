@@ -1,4 +1,4 @@
-const domain = 'http://ecs-load-balancer-178447630.eu-north-1.elb.amazonaws.com'; // 'localhost';
+const domain = 'ecs-load-balancer-178447630.eu-north-1.elb.amazonaws.com'; // 'localhost';
 const port = 80; // '8080';
 
 const Config = {
