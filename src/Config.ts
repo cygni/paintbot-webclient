@@ -1,5 +1,5 @@
-const domain = 'localhost';
-const port = '8080';
+const domain = 'http://ecs-load-balancer-178447630.eu-north-1.elb.amazonaws.com'; //'localhost';
+const port = 80; //'8080';
 
 const Config = {
   BackendUrl: `http://${domain}:${port}`,
