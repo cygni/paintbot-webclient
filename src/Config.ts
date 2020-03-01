@@ -1,4 +1,4 @@
-const domain = 'ecs-load-balancer-178447630.eu-north-1.elb.amazonaws.com'; // 'localhost';
+const domain = 'ecs-load-balancer-168404476.eu-west-1.elb.amazonaws.com/health'; // 'localhost';
 const port = 80; // '8080';
 
 const Config = {
