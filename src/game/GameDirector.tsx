@@ -1,9 +1,10 @@
 import React from 'react';
 
+import { CharacterColors } from '../common/Constants';
 import Config from '../Config';
 
 import GameContainer from './GameContainer';
-import { EventType, GameSettings, GameState } from './type';
+import { Character, CharacterInfo, EventType, GameBoardState, GameMap, GameSettings, GameState, TileMap } from './type';
 
 interface Props {
   id?: string;
@@ -12,7 +13,31 @@ interface Props {
 interface State {
   gameSettings: GameSettings | undefined;
   gameState: GameState | undefined;
+  gameBoardState: GameBoardState | undefined;
 }
+
+const colours = [
+  CharacterColors.Blue,
+  CharacterColors.Yellow,
+  CharacterColors.Green,
+  CharacterColors.Red,
+  CharacterColors.Orange,
+  CharacterColors.Cyan,
+  CharacterColors.Magenta,
+  CharacterColors.Grey,
+  CharacterColors.Lavender,
+  CharacterColors.Navy,
+  CharacterColors.Maroon,
+  CharacterColors.Pink,
+  CharacterColors.Teal,
+  CharacterColors.Brown,
+  CharacterColors.Beige,
+  CharacterColors.Mint,
+  CharacterColors.Purple,
+  CharacterColors.Lime,
+  CharacterColors.Apricot,
+  CharacterColors.Olive,
+];
 
 // TODO Handle receiving game settings when EventType === GAME_STARTING_EVENT
 // TODO Handle receiving results when EventType === GAME_RESULT_EVENT
@@ -26,6 +51,7 @@ export default class GameDirector extends React.Component<Props, State> {
   readonly state: State = {
     gameSettings: undefined,
     gameState: undefined,
+    gameBoardState: undefined,
   };
 
   private onUpdateFromServer(evt: MessageEvent) {
@@ -48,10 +74,74 @@ export default class GameDirector extends React.Component<Props, State> {
         this.setState({ gameSettings: data.gameSettings as GameSettings });
       } else if (data.type === EventType.GAME_UPDATE_EVENT) {
         this.setState({ gameState: data as GameState });
+        const prevData = eventIndex > 0 ? this.events[eventIndex] : undefined;
+        const prevState = prevData && prevData.type === EventType.GAME_UPDATE_EVENT ? prevData : undefined;
+        this.setState({ gameBoardState: this.createGameBoardState(prevState.map, data.map) });
       }
     }
 
     this.currentEventIndex++;
+  }
+
+  private createGameBoardState(prevGameMap: GameMap, gameMap: GameMap): GameBoardState {
+    return {
+      width: gameMap.width,
+      height: gameMap.height,
+      powerUpPositions: gameMap.powerUpPositions,
+      obstaclePositions: gameMap.obstaclePositions,
+      tiles: this.getTiles(gameMap),
+      newTiles: this.getNewTiles(prevGameMap, gameMap),
+      characters: this.getCharacters(gameMap),
+      prevCharacters: this.getCharacters(prevGameMap),
+    };
+  }
+
+  private getTiles(gameMap: GameMap): TileMap[] {
+    return gameMap.characterInfos.map((characterInfo: CharacterInfo, index: number) => {
+      return {
+        colour: colours[index],
+        coordinates: characterInfo.colouredPositions.map(position => {
+          return {
+            x: position % gameMap.width,
+            y: Math.floor(position / gameMap.width),
+          };
+        }),
+      };
+    });
+  }
+
+  private getNewTiles(prevGameMap: GameMap, gameMap: GameMap): TileMap[] {
+    return gameMap.characterInfos.map((characterInfo: CharacterInfo, index: number) => {
+      const positions = characterInfo.colouredPositions.filter(
+        position => !prevGameMap.characterInfos[index].colouredPositions.includes(position),
+      );
+      return {
+        colour: colours[index],
+        coordinates: positions.map(position => {
+          return {
+            x: position % gameMap.width,
+            y: Math.floor(position / gameMap.width),
+          };
+        }),
+      };
+    });
+  }
+
+  private getCharacters(gameMap: GameMap): Character[] {
+    return gameMap.characterInfos.map((characterInfo: CharacterInfo, index: number) => {
+      return {
+        id: characterInfo.id,
+        name: characterInfo.name,
+        points: characterInfo.points,
+        coordinate: {
+          x: characterInfo.position % gameMap.width,
+          y: Math.floor(characterInfo.position / gameMap.width),
+        },
+        colour: colours[index],
+        carryingPowerUp: characterInfo.carryingPowerUp,
+        stunned: characterInfo.stunnedForGameTicks > 0,
+      };
+    });
   }
 
   private endGame() {

@@ -27,6 +27,10 @@ export default class GameBoardContainer extends React.Component<Props> {
     this.boardHeight = height * this.tileSize;
   }
 
+  private clearCanvas(ctx: CanvasRenderingContext2D) {
+    ctx.clearRect(0, 0, this.boardWidth, this.boardHeight);
+  }
+
   private renderPaper(ctx: CanvasRenderingContext2D) {
     const paperTiles = this.getPaperTiles();
     paperTiles.forEach(tile => {
@@ -87,22 +91,19 @@ export default class GameBoardContainer extends React.Component<Props> {
   private sameCoordinates(c1: Coordinate, c2: Coordinate): boolean {
     return c1.x === c2.x && c1.y === c2.y;
   }
-  /*
-    private renderPowerUpsComponents() {
-      const { powerUps, width } = this.props.game;
-      return powerUps.map((powerUp, index) => {
-        powerUp.coordinate = this.getTileBoardCoordinate(powerUp.coordinate);
-        return (
-          <PowerUpObject
-            key={index}
-            powerUp={powerUp}
-            width={this.calculateTileSize(width)}
-            height={this.calculateTileSize(width)}
-          />
-        );
-      });
-    }
-  */
+
+  private renderPowerUpsComponents(ctx: CanvasRenderingContext2D) {
+    const { powerUps } = this.props.game;
+    powerUps.forEach((powerUp, index) => {
+      const boardCoordinate = this.getCharacterBoardCoordinate(powerUp.coordinate);
+      ctx.fillStyle = 'white';
+      ctx.strokeStyle = 'black';
+      ctx.beginPath();
+      ctx.arc(boardCoordinate.x, boardCoordinate.y, this.tileSize / 2 - 2, 0, Math.PI * 2, true);
+      ctx.fill();
+      ctx.stroke();
+    });
+  }
 
   private getCharacterBoardCoordinate(coordinate: Coordinate): Coordinate {
     return {
@@ -164,6 +165,7 @@ export default class GameBoardContainer extends React.Component<Props> {
     if (ctx) {
       this.renderPaper(ctx);
       this.renderCharacters(ctx);
+      this.renderPowerUpsComponents(ctx);
     }
   }
 
@@ -171,8 +173,11 @@ export default class GameBoardContainer extends React.Component<Props> {
     const canvas = this.canvasRef.current as HTMLCanvasElement;
     const ctx = canvas.getContext('2d');
     if (ctx) {
+      this.clearCanvas(ctx);
+      this.renderPaper(ctx);
       this.renderTiles(ctx);
       this.renderCharacters(ctx);
+      this.renderPowerUpsComponents(ctx);
     }
   }
 
