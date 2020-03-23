@@ -84,15 +84,15 @@ jobs:
           command: |
             curl -O https://releases.hashicorp.com/terraform/0.11.10/terraform_0.11.10_linux_amd64.zip
             unzip terraform_0.11.10_linux_amd64.zip
-      - run:
-          name: Initialize Terraform
-          command: ./terraform init
-      - run:
-          name: Create Terraform plan
-          command: ./terraform plan --out terraform.plan
-      - run:
-          name: Apply Terraform plan
-          command: ./terraform apply --auto-approve terraform.plan
+      #- run:
+      #    name: Initialize Terraform
+      #    command: ./terraform init
+      #- run:
+      #    name: Create Terraform plan
+      #    command: ./terraform plan --out terraform.plan
+      #- run:
+      #    name: Apply Terraform plan
+      #    command: ./terraform apply --auto-approve terraform.plan
       - run:
           name: Install AWS CLI
           command: sudo pip install awscli
