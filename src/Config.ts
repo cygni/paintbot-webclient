@@ -1,10 +1,10 @@
-const domain = 'ecs-load-balancer-168404476.eu-west-1.elb.amazonaws.com'; // 'localhost';
-const port = 80; // '8080';
+const domain = 'server.paintbot.cygni.se'; // 'localhost';
+// const port = 80; // '8080';
 
 const Config = {
-  BackendUrl: `http://${domain}:${port}`,
-  LoginUrl: (acc: string, pass: string) => `http://${domain}:${port}/login?login=${acc}&password=${pass}`,
-  WebSocketApiUrl: `ws://${domain}:${port}/events-native`,
+  BackendUrl: `https://${domain}`,
+  LoginUrl: (acc: string, pass: string) => `https://${domain}/login?login=${acc}&password=${pass}`,
+  WebSocketApiUrl: `wss://${domain}/events-native`,
   TimerSeconds: 20,
   GameSpeedMin: 50,
   GameSpeedMax: 600,
