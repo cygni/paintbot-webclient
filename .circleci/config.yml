@@ -79,11 +79,11 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/project
-      - run:
-          name: Install Terraform
-          command: |
-            curl -O https://releases.hashicorp.com/terraform/0.11.10/terraform_0.11.10_linux_amd64.zip
-            unzip terraform_0.11.10_linux_amd64.zip
+      #- run:
+      #    name: Install Terraform
+      #    command: |
+      #      curl -O https://releases.hashicorp.com/terraform/0.11.10/terraform_0.11.10_linux_amd64.zip
+      #      unzip terraform_0.11.10_linux_amd64.zip
       #- run:
       #    name: Initialize Terraform
       #    command: ./terraform init
@@ -99,11 +99,11 @@ jobs:
       - run:
           name: Sync S3 bucket
           command:
-            aws s3 sync ../build s3://$(./terraform output bucket_name) --delete --metadata-directive REPLACE
+            aws s3 sync ../build s3://paintbot-webapp-20181108155439999600000001 --delete --metadata-directive REPLACE
             --cache-control no-cache,no-store,max-age=0
-      - run:
-          name: Output website endpoint
-          command: ./terraform output website_endpoint
+      #- run:
+      #    name: Output website endpoint
+      #    command: ./terraform output website_endpoint
 
 workflows:
   version: 2
