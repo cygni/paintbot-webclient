@@ -3,7 +3,6 @@ import { BrowserRouter, HashRouter, Route, Switch } from 'react-router-dom';
 
 import AboutScreen from './about/AboutScreen';
 import AccountScreen from './account/AccountScreen';
-import ArenaScreen from './arena/ArenaScreen';
 import TemplatePage from './common/ui/TemplatePage';
 import ReadMeScreen from './readme/ReadMeScreen';
 import TournamentScreen from './tournament/TournamentScreen';
@@ -11,6 +10,7 @@ import WelcomeScreen from './welcome/WelcomeScreen';
 
 const LazyGameScreen = React.lazy(() => import(/* webpackPrefetch: true */ './game/GameScreen'));
 const LazyPlayerScreen = React.lazy(() => import(/* webpackPrefetch: true */ './player/PlayerScreen'));
+const LazySearchScreen = React.lazy(() => import(/* webpackPrefetch: true */ './search/SearchScreen'));
 
 const Router: ComponentType<ComponentProps<typeof HashRouter> | ComponentProps<typeof BrowserRouter>> =
   process.env.REACT_APP_USE_HASH_ROUTER === 'true' ? HashRouter : BrowserRouter;
@@ -33,11 +33,6 @@ export default function Routes() {
           <Route path="/account" exact>
             <TemplatePage>
               <AccountScreen />
-            </TemplatePage>
-          </Route>
-          <Route path="/arena" exact>
-            <TemplatePage>
-              <ArenaScreen />
             </TemplatePage>
           </Route>
           <Route path="/about" exact>
@@ -65,6 +60,11 @@ export default function Routes() {
           </Route>
           <Route path="/game/:id?">
             <LazyGameScreen />
+          </Route>
+          <Route path="/search">
+            <TemplatePage>
+              <LazySearchScreen />
+            </TemplatePage>
           </Route>
         </Switch>
       </React.Suspense>
