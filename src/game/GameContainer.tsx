@@ -2,14 +2,14 @@ import React from 'react';
 import styled from 'styled-components/macro';
 
 import GameBoardContainer from './gameboard/GameBoardContainer';
-import GameBoardFactory from './gameboard/GameBoardFactory';
+// import GameBoardFactory from './gameboard/GameBoardFactory';
 import { GameController } from './gamespeed/GameController';
 import ScoreBoardContainer from './scoreboard/ScoreBoardContainer';
 import { TimerPane } from './timer/TimerPane';
-import { Game, GameMap, GameSettings } from './type';
+import { Game, GameBoardState, GameSettings } from './type';
 
 interface GameContainerProps {
-  gameMap: GameMap;
+  gameBoardState: GameBoardState;
   gameSettings: GameSettings;
   onPauseGame(): void;
   onRestartGame(): void;
@@ -21,21 +21,21 @@ interface GameContainerState {
 }
 
 export default class GameContainer extends React.Component<GameContainerProps, GameContainerState> {
+  /*
   private readonly gameBoardFactory = new GameBoardFactory();
-
-  private transformGameMapToModel(gameMap: GameMap): Game {
-    return this.gameBoardFactory.getGameBoard(gameMap);
+  private transformGameMapToModel(gameMap: GameBoardState): Game {
+    return this.gameBoardFactory.getGameBoard(gameBoardState);
   }
-
+*/
   render() {
-    const { gameSettings, gameMap, onGameSpeedChange, onPauseGame, onRestartGame } = this.props;
-    const game = this.transformGameMapToModel(gameMap);
+    const { gameSettings, gameBoardState, onGameSpeedChange, onPauseGame, onRestartGame } = this.props;
+    // const game = this.transformGameMapToModel(gameMap);
     return (
       <div>
         <FlexContainer>
-          <ScoreBoardContainer players={game.currentCharacters} worldTick={game.worldTick} />
+          <ScoreBoardContainer players={gameBoardState.characters} worldTick={gameBoardState.worldTick} />
           <div>
-            <GameBoardContainer game={game} />
+            <GameBoardContainer gameBoardState={gameBoardState} />
             <GamerControllerContainer>
               <GameController
                 onGameSpeedChange={onGameSpeedChange}
@@ -45,7 +45,7 @@ export default class GameContainer extends React.Component<GameContainerProps, G
               <TimerPane
                 durationInSeconds={gameSettings.gameDurationInSeconds}
                 timeInMsPerTick={gameSettings.timeInMsPerTick}
-                worldTick={gameMap.worldTick}
+                worldTick={gameBoardState.worldTick}
               />
             </GamerControllerContainer>
           </div>

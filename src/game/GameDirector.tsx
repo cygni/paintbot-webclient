@@ -4,7 +4,17 @@ import { CharacterColors } from '../common/Constants';
 import Config from '../Config';
 
 import GameContainer from './GameContainer';
-import { Character, CharacterInfo, EventType, GameBoardState, GameMap, GameSettings, GameState, TileMap } from './type';
+import {
+  Character,
+  CharacterInfo,
+  Coordinate,
+  EventType,
+  GameBoardState,
+  GameMap,
+  GameSettings,
+  GameState,
+  TileMap,
+} from './type';
 
 interface Props {
   id?: string;
@@ -46,6 +56,7 @@ export default class GameDirector extends React.Component<Props, State> {
   private ws?: WebSocket;
   private readonly events: any[] = [];
   private currentEventIndex = 0;
+  private timeInMsPerTick: number = Config.DefaultGameSpeed;
   private updateInterval?: NodeJS.Timer;
 
   readonly state: State = {
@@ -59,6 +70,7 @@ export default class GameDirector extends React.Component<Props, State> {
   }
 
   private readonly updateGameSpeedInterval = (milliseconds: number) => {
+    this.timeInMsPerTick = milliseconds;
     if (this.updateInterval !== undefined) {
       clearInterval(this.updateInterval);
     }
@@ -74,8 +86,8 @@ export default class GameDirector extends React.Component<Props, State> {
         this.setState({ gameSettings: data.gameSettings as GameSettings });
       } else if (data.type === EventType.GAME_UPDATE_EVENT) {
         this.setState({ gameState: data as GameState });
-        const prevData = eventIndex > 0 ? this.events[eventIndex] : undefined;
-        const prevState = prevData && prevData.type === EventType.GAME_UPDATE_EVENT ? prevData : undefined;
+        const prevData = eventIndex > 0 ? this.events[eventIndex - 1] : undefined;
+        const prevState = prevData && prevData.type === EventType.GAME_UPDATE_EVENT ? prevData : data;
         this.setState({ gameBoardState: this.createGameBoardState(prevState.map, data.map) });
       }
     }
@@ -87,27 +99,45 @@ export default class GameDirector extends React.Component<Props, State> {
     return {
       width: gameMap.width,
       height: gameMap.height,
-      powerUpPositions: gameMap.powerUpPositions,
-      obstaclePositions: gameMap.obstaclePositions,
-      tiles: this.getTiles(gameMap),
+      powerUpCoordinates: gameMap.powerUpPositions.map(position => this.getCoordinate(position, gameMap.width)),
+      tiles: this.getTiles(prevGameMap),
       newTiles: this.getNewTiles(prevGameMap, gameMap),
       characters: this.getCharacters(gameMap),
       prevCharacters: this.getCharacters(prevGameMap),
+      timeInMsPerTick: this.timeInMsPerTick,
+      worldTick: gameMap.worldTick,
+    };
+  }
+
+  private getCoordinate(position: number, gameMapWidth: number): Coordinate {
+    return {
+      x: position % gameMapWidth,
+      y: Math.floor(position / gameMapWidth),
     };
   }
 
   private getTiles(gameMap: GameMap): TileMap[] {
-    return gameMap.characterInfos.map((characterInfo: CharacterInfo, index: number) => {
+    const allPositions = Array.from(Array(gameMap.width * gameMap.height).keys());
+    const colouredPositions = gameMap.characterInfos.reduce(
+      (acc: number[], info) => acc.concat(info.colouredPositions),
+      [],
+    );
+    const paperPositions = allPositions.filter(
+      position =>
+        !gameMap.obstaclePositions.find(obstaclePosition => obstaclePosition === position) &&
+        !colouredPositions.find(colouredPosition => colouredPosition === position),
+    );
+    const paperTiles = {
+      colour: 'white',
+      coordinates: paperPositions.map(position => this.getCoordinate(position, gameMap.width)),
+    };
+    const colourTiles = gameMap.characterInfos.map((characterInfo: CharacterInfo, index: number) => {
       return {
         colour: colours[index],
-        coordinates: characterInfo.colouredPositions.map(position => {
-          return {
-            x: position % gameMap.width,
-            y: Math.floor(position / gameMap.width),
-          };
-        }),
+        coordinates: characterInfo.colouredPositions.map(position => this.getCoordinate(position, gameMap.width)),
       };
     });
+    return [paperTiles, ...colourTiles];
   }
 
   private getNewTiles(prevGameMap: GameMap, gameMap: GameMap): TileMap[] {
@@ -117,12 +147,7 @@ export default class GameDirector extends React.Component<Props, State> {
       );
       return {
         colour: colours[index],
-        coordinates: positions.map(position => {
-          return {
-            x: position % gameMap.width,
-            y: Math.floor(position / gameMap.width),
-          };
-        }),
+        coordinates: positions.map(position => this.getCoordinate(position, gameMap.width)),
       };
     });
   }
@@ -181,16 +206,16 @@ export default class GameDirector extends React.Component<Props, State> {
   getComponentToRender() {
     if (this.state.gameSettings && this.state.gameState) {
       const gameStatus = this.state.gameState.type;
-      const { gameState, gameSettings } = this.state;
+      const { gameBoardState, gameSettings } = this.state;
 
       if (!gameStatus) {
         return <h1>Waiting for game</h1>;
       } else if (gameStatus === EventType.GAME_STARTING_EVENT) {
         return <h1>Game is starting</h1>;
-      } else if (gameStatus === EventType.GAME_UPDATE_EVENT) {
+      } else if (gameStatus === EventType.GAME_UPDATE_EVENT && gameBoardState) {
         return (
           <GameContainer
-            gameMap={gameState.map}
+            gameBoardState={gameBoardState}
             gameSettings={gameSettings}
             onGameSpeedChange={this.updateGameSpeedInterval}
             onPauseGame={this.pauseGame}

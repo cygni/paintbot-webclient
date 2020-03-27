@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { Character, Coordinate, Game } from '../type';
+import { Character, Coordinate, GameBoardState } from '../type';
 
 interface Props {
-  game: Game;
+  gameBoardState: GameBoardState;
 }
 
 enum Direction {
@@ -18,10 +18,12 @@ export default class GameBoardContainer extends React.Component<Props> {
   private readonly boardHeight: number;
   private readonly tileSize: number;
   private readonly canvasRef = React.createRef<HTMLCanvasElement>();
+  private updateInterval?: NodeJS.Timer;
+  private fractionOfTick = 0;
 
   constructor(props: Props) {
     super(props);
-    const { width, height } = this.props.game;
+    const { width, height } = this.props.gameBoardState;
     this.tileSize = this.calculateTileSize(width);
     this.boardWidth = width * this.tileSize;
     this.boardHeight = height * this.tileSize;
@@ -31,107 +33,230 @@ export default class GameBoardContainer extends React.Component<Props> {
     ctx.clearRect(0, 0, this.boardWidth, this.boardHeight);
   }
 
-  private renderPaper(ctx: CanvasRenderingContext2D) {
-    const paperTiles = this.getPaperTiles();
-    paperTiles.forEach(tile => {
-      ctx.fillStyle = 'white';
-      ctx.fillRect(tile.x * this.tileSize, tile.y * this.tileSize, this.tileSize, this.tileSize);
-    });
-  }
-
   private renderTiles(ctx: CanvasRenderingContext2D) {
-    const tiles = Array.from(this.props.game.tiles.values());
-    const { currentCharacters } = this.props.game;
+    const { tiles } = this.props.gameBoardState;
     tiles.forEach(tile => {
-      if (tile.colour && !currentCharacters.find(char => this.sameCoordinates(char.coordinate, tile.coordinate))) {
-        const coordinate = this.getTileBoardCoordinate(tile.coordinate);
+      tile.coordinates.forEach(coordinate => {
+        const boardCoordinate = this.getTileBoardCoordinate(coordinate);
         ctx.fillStyle = tile.colour;
-        ctx.fillRect(coordinate.x, coordinate.y, this.tileSize, this.tileSize);
-      }
+        ctx.fillRect(boardCoordinate.x, boardCoordinate.y, this.tileSize, this.tileSize);
+      });
     });
   }
 
-  private renderCharacters(ctx: CanvasRenderingContext2D) {
-    const { currentCharacters, previousCharacters } = this.props.game;
-    currentCharacters.forEach(character => {
-      const prevCharacter = previousCharacters.find(previousCharacter => previousCharacter.id === character.id);
-      this.renderCharacter(ctx, character, prevCharacter);
+  private renderNewTiles(ctx: CanvasRenderingContext2D, fractionOfTick: number) {
+    const { newTiles, characters } = this.props.gameBoardState;
+    newTiles.forEach(tiles => {
+      tiles.coordinates.forEach(coordinate => {
+        if (!characters.find(character => this.sameCoordinates(coordinate, character.coordinate))) {
+          this.renderNewTile(ctx, fractionOfTick, tiles.colour, coordinate);
+        }
+      });
     });
   }
 
-  private renderCharacter(ctx: CanvasRenderingContext2D, character: Character, prevCharacter?: Character) {
-    let direction = Direction.UP;
-    if (prevCharacter && !this.sameCoordinates(character.coordinate, prevCharacter.coordinate)) {
-      direction = this.getDirection(character.coordinate, prevCharacter.coordinate);
-      console.log(
-        `${character.name} moves ${this.getDirectionName(direction)} (${prevCharacter.coordinate.x}, ${
-          prevCharacter.coordinate.y
-        }) -> (${character.coordinate.x}, ${character.coordinate.y})`,
-      );
-      this.renderCharacterPaint(ctx, character, direction);
-    }
-    const boardCoordinate = this.getCharacterBoardCoordinate(character.coordinate);
+  private renderNewTile(ctx: CanvasRenderingContext2D, fractionOfTick: number, colour: string, coordinate: Coordinate) {
+    const boardCoordinate = this.getCircleBoardCoordinate(coordinate);
+    ctx.fillStyle = colour;
+    ctx.beginPath();
+    ctx.arc(boardCoordinate.x, boardCoordinate.y, (this.tileSize / 2) * fractionOfTick, 0, Math.PI * 2, true);
+    ctx.fill();
+  }
+
+  private renderCharacters(ctx: CanvasRenderingContext2D, fractionOfTick: number) {
+    const { characters, prevCharacters } = this.props.gameBoardState;
+    characters.forEach(character => {
+      const prevCharacter = prevCharacters.find(prevChar => prevChar.id === character.id);
+      this.renderCharacter(ctx, fractionOfTick, character, prevCharacter || character);
+    });
+  }
+
+  private renderCharacter(
+    ctx: CanvasRenderingContext2D,
+    fractionOfTick: number,
+    character: Character,
+    prevCharacter: Character,
+  ) {
+    const direction = this.getDirection(character.coordinate, prevCharacter.coordinate);
+    console.log(
+      `${character.name} moves ${this.getDirectionName(direction)} (${prevCharacter.coordinate.x}, ${
+        prevCharacter.coordinate.y
+      }) -> (${character.coordinate.x}, ${character.coordinate.y})`,
+    );
+    const boardCoordinate = this.getCharacterBoardCoordinate(
+      character.coordinate,
+      prevCharacter.coordinate,
+      fractionOfTick,
+    );
     ctx.fillStyle = character.colour;
     ctx.strokeStyle = 'black';
     ctx.beginPath();
-    ctx.arc(boardCoordinate.x, boardCoordinate.y, this.tileSize / 2 - 2, 0, Math.PI * 2, true);
+    if (character.carryingPowerUp) {
+      ctx.arc(
+        boardCoordinate.x,
+        boardCoordinate.y,
+        this.tileSize * 0.4 + this.tileSize * 0.2 * (1 - Math.abs(fractionOfTick - 0.5)),
+        0,
+        Math.PI * 2,
+        true,
+      );
+    } else if (prevCharacter.carryingPowerUp) {
+      ctx.arc(boardCoordinate.x, boardCoordinate.y, (this.tileSize / 2) * (1 - fractionOfTick), 0, Math.PI * 2, true);
+    } else {
+      ctx.arc(boardCoordinate.x, boardCoordinate.y, this.tileSize / 2, 0, Math.PI * 2, true);
+    }
     ctx.fill();
     ctx.stroke();
-  }
 
-  private renderCharacterPaint(ctx: CanvasRenderingContext2D, character: Character, direction: Direction) {
-    const boardCoordinate = this.getCharacterPaintBoardCoordinate(character.coordinate, direction);
-    const startAngle = this.getPaintRotation(direction);
-    ctx.fillStyle = character.colour;
-    ctx.beginPath();
-    ctx.arc(boardCoordinate.x, boardCoordinate.y, this.tileSize / 2, startAngle, startAngle + Math.PI, true);
-    ctx.fill();
+    // render eyes
+    if (!(prevCharacter.carryingPowerUp && !character.carryingPowerUp)) {
+      ctx.fillStyle = 'black';
+      ctx.beginPath();
+      switch (direction) {
+        case Direction.DOWN:
+          ctx.arc(
+            boardCoordinate.x - this.tileSize / 4,
+            boardCoordinate.y + this.tileSize / 4,
+            this.tileSize / 12,
+            0,
+            Math.PI * 2,
+            true,
+          );
+          ctx.fill();
+          ctx.beginPath();
+          ctx.arc(
+            boardCoordinate.x + this.tileSize / 4,
+            boardCoordinate.y + this.tileSize / 4,
+            this.tileSize / 12,
+            0,
+            Math.PI * 2,
+            true,
+          );
+          ctx.fill();
+          ctx.fillStyle = 'white';
+          ctx.beginPath();
+          ctx.arc(boardCoordinate.x, boardCoordinate.y - this.tileSize / 3, this.tileSize / 10, 0, Math.PI * 2, true);
+          ctx.fill();
+          break;
+        case Direction.UP:
+          ctx.arc(
+            boardCoordinate.x - this.tileSize / 4,
+            boardCoordinate.y - this.tileSize / 4,
+            this.tileSize / 12,
+            0,
+            Math.PI * 2,
+            true,
+          );
+          ctx.fill();
+          ctx.beginPath();
+          ctx.arc(
+            boardCoordinate.x + this.tileSize / 4,
+            boardCoordinate.y - this.tileSize / 4,
+            this.tileSize / 12,
+            0,
+            Math.PI * 2,
+            true,
+          );
+          ctx.fill();
+          ctx.fillStyle = 'white';
+          ctx.beginPath();
+          ctx.arc(boardCoordinate.x, boardCoordinate.y + this.tileSize / 3, this.tileSize / 10, 0, Math.PI * 2, true);
+          ctx.fill();
+          break;
+        case Direction.LEFT:
+          ctx.arc(
+            boardCoordinate.x - this.tileSize / 4,
+            boardCoordinate.y - this.tileSize / 4,
+            this.tileSize / 12,
+            0,
+            Math.PI * 2,
+            true,
+          );
+          ctx.fill();
+          ctx.beginPath();
+          ctx.arc(
+            boardCoordinate.x - this.tileSize / 4,
+            boardCoordinate.y + this.tileSize / 4,
+            this.tileSize / 12,
+            0,
+            Math.PI * 2,
+            true,
+          );
+          ctx.fill();
+          ctx.fillStyle = 'white';
+          ctx.beginPath();
+          ctx.arc(boardCoordinate.x + this.tileSize / 3, boardCoordinate.y, this.tileSize / 10, 0, Math.PI * 2, true);
+          ctx.fill();
+          break;
+        case Direction.RIGHT:
+          ctx.arc(
+            boardCoordinate.x + this.tileSize / 4,
+            boardCoordinate.y - this.tileSize / 4,
+            this.tileSize / 12,
+            0,
+            Math.PI * 2,
+            true,
+          );
+          ctx.fill();
+          ctx.beginPath();
+          ctx.arc(
+            boardCoordinate.x + this.tileSize / 4,
+            boardCoordinate.y + this.tileSize / 4,
+            this.tileSize / 12,
+            0,
+            Math.PI * 2,
+            true,
+          );
+          ctx.fill();
+          ctx.fillStyle = 'white';
+          ctx.beginPath();
+          ctx.arc(boardCoordinate.x - this.tileSize / 3, boardCoordinate.y, this.tileSize / 10, 0, Math.PI * 2, true);
+          ctx.fill();
+          break;
+      }
+    }
   }
 
   private sameCoordinates(c1: Coordinate, c2: Coordinate): boolean {
     return c1.x === c2.x && c1.y === c2.y;
   }
 
-  private renderPowerUpsComponents(ctx: CanvasRenderingContext2D) {
-    const { powerUps } = this.props.game;
-    powerUps.forEach((powerUp, index) => {
-      const boardCoordinate = this.getCharacterBoardCoordinate(powerUp.coordinate);
+  private renderPowerUps(ctx: CanvasRenderingContext2D, fractionOfTick: number) {
+    const { powerUpCoordinates } = this.props.gameBoardState;
+    powerUpCoordinates.forEach(powerUpCoordinate => {
+      const boardCoordinate = this.getCircleBoardCoordinate(powerUpCoordinate);
       ctx.fillStyle = 'white';
       ctx.strokeStyle = 'black';
       ctx.beginPath();
-      ctx.arc(boardCoordinate.x, boardCoordinate.y, this.tileSize / 2 - 2, 0, Math.PI * 2, true);
+      ctx.arc(
+        boardCoordinate.x,
+        boardCoordinate.y,
+        (this.tileSize / 2) * (1 - Math.abs(fractionOfTick - 0.5)),
+        0,
+        Math.PI * 2,
+        true,
+      );
       ctx.fill();
       ctx.stroke();
     });
   }
 
-  private getCharacterBoardCoordinate(coordinate: Coordinate): Coordinate {
+  private getCharacterBoardCoordinate(
+    coordinate: Coordinate,
+    prevCoordinate: Coordinate,
+    fractionOfTick: number,
+  ): Coordinate {
+    return {
+      x: (prevCoordinate.x + (coordinate.x - prevCoordinate.x) * fractionOfTick) * this.tileSize + this.tileSize / 2,
+      y: (prevCoordinate.y + (coordinate.y - prevCoordinate.y) * fractionOfTick) * this.tileSize + this.tileSize / 2,
+    };
+  }
+
+  private getCircleBoardCoordinate(coordinate: Coordinate): Coordinate {
     return {
       x: coordinate.x * this.tileSize + this.tileSize / 2,
       y: coordinate.y * this.tileSize + this.tileSize / 2,
     };
-  }
-
-  private getCharacterPaintBoardCoordinate(coordinate: Coordinate, direction: Direction): Coordinate {
-    let x = coordinate.x * this.tileSize;
-    let y = coordinate.y * this.tileSize;
-    switch (direction) {
-      case Direction.DOWN:
-        x += this.tileSize / 2;
-        break;
-      case Direction.UP:
-        x += this.tileSize / 2;
-        y += this.tileSize;
-        break;
-      case Direction.LEFT:
-        y += this.tileSize / 2;
-        x += this.tileSize;
-        break;
-      case Direction.RIGHT:
-        y += this.tileSize / 2;
-        break;
-    }
-    return { x, y };
   }
 
   private getTileBoardCoordinate(coordinate: Coordinate): Coordinate {
@@ -141,44 +266,45 @@ export default class GameBoardContainer extends React.Component<Props> {
     };
   }
 
-  private getPaperTiles() {
-    const { width, height } = this.props.game;
-    const allTiles = [];
-    for (let x = 0; x < width; x++) {
-      for (let y = 0; y < height; y++) {
-        allTiles.push({ x, y });
-      }
-    }
-    const colourTiles = Array.from(this.props.game.tiles.values());
-    return allTiles.filter(
-      tile => !colourTiles.find(colourTile => tile.x === colourTile.coordinate.x && tile.y === colourTile.coordinate.y),
-    );
-  }
-
   private calculateTileSize(width: number) {
     return Math.round(window.innerWidth / width / 1.7);
+  }
+
+  private draw(fractionOfTick: number) {
+    this.fractionOfTick += fractionOfTick;
+    const canvas = this.canvasRef.current as HTMLCanvasElement;
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      this.clearCanvas(ctx);
+      this.renderTiles(ctx);
+      this.renderNewTiles(ctx, this.fractionOfTick);
+      this.renderCharacters(ctx, this.fractionOfTick);
+      this.renderPowerUps(ctx, this.fractionOfTick);
+    }
   }
 
   componentDidMount() {
     const canvas = this.canvasRef.current as HTMLCanvasElement;
     const ctx = canvas.getContext('2d');
     if (ctx) {
-      this.renderPaper(ctx);
-      this.renderCharacters(ctx);
-      this.renderPowerUpsComponents(ctx);
+      this.renderTiles(ctx);
+      this.renderCharacters(ctx, 1);
+      this.renderPowerUps(ctx, 1);
     }
   }
 
   componentDidUpdate() {
-    const canvas = this.canvasRef.current as HTMLCanvasElement;
-    const ctx = canvas.getContext('2d');
-    if (ctx) {
-      this.clearCanvas(ctx);
-      this.renderPaper(ctx);
-      this.renderTiles(ctx);
-      this.renderCharacters(ctx);
-      this.renderPowerUpsComponents(ctx);
+    const fps = 30;
+    const timeInMsPerFrame = 1000 / fps;
+    const { timeInMsPerTick } = this.props.gameBoardState;
+    const fractionOfTick = timeInMsPerFrame / timeInMsPerTick;
+    if (this.updateInterval !== undefined) {
+      this.fractionOfTick = 0;
+      clearInterval(this.updateInterval);
     }
+    this.updateInterval = setInterval(() => {
+      this.draw(fractionOfTick);
+    }, timeInMsPerFrame);
   }
 
   getDirectionName(direction: Direction) {
@@ -199,10 +325,10 @@ export default class GameBoardContainer extends React.Component<Props> {
       return Direction.RIGHT;
     } else if (coordinate.x < prevCoordinate.x) {
       return Direction.LEFT;
-    } else if (coordinate.y > prevCoordinate.y) {
-      return Direction.DOWN;
-    } else {
+    } else if (coordinate.y < prevCoordinate.y) {
       return Direction.UP;
+    } else {
+      return Direction.DOWN;
     }
   }
 

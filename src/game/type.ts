@@ -57,12 +57,13 @@ export interface GameMap {
 export interface GameBoardState {
   width: number;
   height: number;
-  powerUpPositions: number[];
-  obstaclePositions: number[];
+  powerUpCoordinates: Coordinate[];
   tiles: TileMap[];
   newTiles: TileMap[];
   characters: Character[];
   prevCharacters: Character[];
+  timeInMsPerTick: number;
+  worldTick: number;
 }
 
 export interface CharacterInfo {
