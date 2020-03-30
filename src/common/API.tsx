@@ -53,19 +53,20 @@ export function useRestAPIToGetActiveTournament(setters: any, tour: Tournament) 
   );
 }
 
-export function useRestAPIToGetGamesPlayedByPlayer(player: string) {
+export function useApiToSearchGamesPlayed(query: string) {
   return useCallback(
-    async resolve => {
-      const response = await fetch(`${Config.BackendUrl}/history/search/${player}`);
-      console.log(response);
+    async () => {
+      const response = await fetch(`${Config.BackendUrl}/history/search/${query}`);
       if (response.ok) {
-        response.text().then(text => {
-          const { type, ...gameHistory } = JSON.parse(text);
-          resolve(gameHistory);
-        });
+        return response.json();
+      } else {
+        if (response.status === 404) {
+          return { items: [] };
+        }
+        throw response;
       }
     },
-    [player],
+    [query],
   );
 }
 
