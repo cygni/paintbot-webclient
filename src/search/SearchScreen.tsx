@@ -78,7 +78,7 @@ export default function SearchScreen() {
     if (query) {
       doSearch();
     }
-  }, []);
+  });
 
   const handleSearchUpdate = (event: any) => {
     setSearchTerm(event.target.value);
