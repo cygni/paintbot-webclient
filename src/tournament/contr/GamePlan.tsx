@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import styled from 'styled-components/macro';
 
 import { REQUEST_TYPES } from '../../common/API';
 import AccountContext from '../../common/contexts/AccountContext';
@@ -92,6 +93,7 @@ export default function GamePlan({ lvl, game, players, playedGames }: GamePlanPr
             currLvl = currLvl + 1;
           }
           currLvl = currLvl + 1;
+          const shouldShowGamePlayerInfo = index !== 0 || showNextGame;
           return (
             <React.Fragment key={playedGame.gameId}>
               <PaperHeadingRow>
@@ -107,7 +109,15 @@ export default function GamePlan({ lvl, game, players, playedGames }: GamePlanPr
               {playedGame.players.map(player => {
                 return (
                   <PaperRow key={player.name}>
-                    <PlayerLink name={player.name} />
+                    <PlayerRow>
+                      <PlayerLink name={player.name} />
+                      {shouldShowGamePlayerInfo && (
+                        <GamePlayerInfo>
+                          <Score>{player.points}</Score>{' '}
+                          <MovingUpIndicator>{player.isMovedUpInTournament ? '^' : ''}</MovingUpIndicator>
+                        </GamePlayerInfo>
+                      )}
+                    </PlayerRow>
                   </PaperRow>
                 );
               })}
@@ -117,3 +127,23 @@ export default function GamePlan({ lvl, game, players, playedGames }: GamePlanPr
     </Paper>
   );
 }
+
+const PlayerRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const GamePlayerInfo = styled.div`
+  display: flex;
+  justify-content: space-around;
+  width: 6em;
+`;
+
+const Score = styled.div`
+  width: 3em;
+  text-align: end;
+`;
+
+const MovingUpIndicator = styled.div`
+  width: 0.5em;
+`;
