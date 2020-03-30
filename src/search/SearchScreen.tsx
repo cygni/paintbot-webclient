@@ -1,45 +1,23 @@
-import React, { useState } from 'react';
-import { Link, LinkProps } from 'react-router-dom';
+import React, { ChangeEvent, useEffect, useState } from 'react';
+import { Link, LinkProps, useHistory, useLocation } from 'react-router-dom';
 import styled from 'styled-components/macro';
 
+import { useApiToSearchGamesPlayed } from '../common/API';
 import { CharacterColors } from '../common/Constants';
 import ControlsButton from '../common/ui/ControlsButton';
 import { Heading1 } from '../common/ui/Heading';
+import Loading from '../common/ui/Loading';
 import { Paper, PaperRow } from '../common/ui/Paper';
-import Config from '../Config';
 
-interface BasicGameInfo {
-  gameId: string;
-  players: string[];
-  gameDate: string;
-}
+import GamesList from './GameList';
 
-function GamesList(props: { games: BasicGameInfo[] }) {
-  return (
-    <PaperRow>
-      <GamesListContainer>
-        {props.games.map(game => {
-          return (
-            <GameRow key={`${game.gameId}`}>
-              <GameLink to={`/game/${encodeURIComponent(game.gameId)}`}>
-                <div>
-                  <GameDate>{game.gameDate}</GameDate>
-                  <GameId>{game.gameId}</GameId>
-                </div>
-                <PlayersContainer>
-                  <Players>{game.players.join(', ')}</Players>
-                </PlayersContainer>
-              </GameLink>
-            </GameRow>
-          );
-        })}
-        {props.games.length === 0 && <div>No games :(</div>}
-      </GamesListContainer>
-    </PaperRow>
-  );
-}
-
-function SearchForm(props: any) {
+function SearchForm(props: {
+  disabled: boolean;
+  searchTerm: string;
+  handleSubmit: (event: any) => any;
+  handleChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  errorMessage?: string;
+}) {
   return (
     <div id="search-form">
       <form onSubmit={props.handleSubmit}>
@@ -52,7 +30,9 @@ function SearchForm(props: any) {
           </Center>
         </PaperRow>
         <PaperRow textAlign="center">
-          <ControlsButton onClick={props.handleSubmit}>Search</ControlsButton>
+          <ControlsButton disabled={props.disabled} onClick={props.handleSubmit}>
+            Search
+          </ControlsButton>
         </PaperRow>
         {props.errorMessage && (
           <PaperRow>
@@ -64,20 +44,48 @@ function SearchForm(props: any) {
   );
 }
 
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
+
 export default function SearchScreen() {
-  const [searchTerm, setSearchTerm] = useState('');
+  const query = useQuery().get('q') || '';
+  const history = useHistory();
+  const [searchTerm, setSearchTerm] = useState(query);
+  const [loading, setLoading] = useState(false);
+  const searchGames = useApiToSearchGamesPlayed(searchTerm);
   const [gamesList, setGamesList] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
+  const doSearch = async () => {
+    setLoading(true);
+    let games = [];
+    try {
+      games = await searchGames().then(resp => resp.items);
+    } catch (e) {
+      console.log(e);
+      setErrorMessage('Failed to search');
+    }
+
+    history.push({
+      pathname: '/search',
+      search: new URLSearchParams(`?q=${searchTerm}`).toString(),
+    });
+    setGamesList(games);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    if (query) {
+      doSearch();
+    }
+  }, []);
+
   const handleSearchUpdate = (event: any) => {
     setSearchTerm(event.target.value);
   };
   const handleSearchSubmit = async (event: any) => {
     event.preventDefault();
-    const response = await fetch(`${Config.BackendUrl}/history/search/${searchTerm}`)
-      .then(resp => resp.json())
-      .then(resp => resp.items)
-      .catch(error => setErrorMessage('Failed to search'));
-    setGamesList(response);
+    doSearch();
   };
   return (
     <Container>
@@ -86,12 +94,14 @@ export default function SearchScreen() {
           <Heading1>Search</Heading1>
         </PaperRow>
         <SearchForm
+          disabled={loading}
           searchTerm={searchTerm}
           handleChange={handleSearchUpdate}
           handleSubmit={handleSearchSubmit}
           errorMessage={errorMessage}
         />
-        <GamesList games={gamesList} />
+        {loading && <Loading />}
+        {!loading && <GamesList games={gamesList} />}
       </Paper>
     </Container>
   );
@@ -115,32 +125,6 @@ export const GameLink = styled(Link)<LinkProps>(() => ({
     outline: 'none',
   },
 }));
-
-const GamesListContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-`;
-
-const GameRow = styled.div`
-  padding-bottom: 1em;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const GameId = styled.span``;
-
-const GameDate = styled.span`
-  padding-right: 1em;
-`;
-
-const PlayersContainer = styled.div`
-  display: flex;
-  justify-content: center;
-`;
-
-const Players = styled.span``;
 
 const InputContainer = styled.div`
   display: flex;
