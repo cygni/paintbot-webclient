@@ -68,20 +68,21 @@ export default function SearchScreen() {
 
   useEffect(
     () => {
-      if (query) {
-        const doSearch = async () => {
-          setLoading(true);
-          let games = [];
-          try {
-            games = await searchGames().then(resp => resp.items);
-          } catch (e) {
-            console.log(e);
-            setErrorMessage('Failed to search');
-          }
+      const doSearch = async () => {
+        setLoading(true);
+        let games = [];
+        try {
+          games = await searchGames().then(resp => resp.items);
+        } catch (e) {
+          console.log(e);
+          setErrorMessage('Failed to search');
+        }
 
-          setGamesList(games);
-          setLoading(false);
-        };
+        setGamesList(games);
+        setLoading(false);
+      };
+
+      if (query) {
         doSearch();
       }
     },
