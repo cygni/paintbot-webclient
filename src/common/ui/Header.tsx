@@ -53,8 +53,8 @@ export default function Header() {
         <MenuItem oc={toggleCollapse} to="/readme">
           Getting started
         </MenuItem>
-        <MenuItem oc={toggleCollapse} to="/arena">
-          Arena
+        <MenuItem oc={toggleCollapse} to="/search">
+          Search for old games
         </MenuItem>
         <MenuItem oc={toggleCollapse} to="/tournament">
           Tournament

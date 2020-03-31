@@ -36,7 +36,9 @@ export default function ReadMeScreen() {
           Below are listed the currently implemented (and up to date) language bindings. Each project has a Readme file
           that explains how to get going.
           <ul>
-            <li>Java</li>
+            <li>
+              <a href="https://github.com/cygni/paintbot-client-java">Java</a>
+            </li>
           </ul>
         </PaperRow>
       </Paper>
