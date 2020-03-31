@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, LinkProps, useHistory, useLocation } from 'react-router-dom';
 import styled from 'styled-components/macro';
 
@@ -12,20 +12,24 @@ import { Paper, PaperRow } from '../common/ui/Paper';
 import GamesList from './GameList';
 
 function SearchForm(props: {
+  defaultValue: string;
   disabled: boolean;
-  searchTerm: string;
-  handleSubmit: (event: any) => any;
-  handleChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  handleSubmit: (searchTerm: string) => any;
   errorMessage?: string;
 }) {
+  const submit = (e: any) => {
+    e.preventDefault();
+    props.handleSubmit(e.currentTarget.search.value);
+  };
+
   return (
     <div id="search-form">
-      <form onSubmit={props.handleSubmit}>
+      <form onSubmit={submit}>
         <PaperRow>
           <Center>
             <InputContainer>
               <label htmlFor="search">Search</label>
-              <input name="search" id="search" type="text" value={props.searchTerm} onChange={props.handleChange} />
+              <input defaultValue={props.defaultValue} name="search" id="search" type="text" />
             </InputContainer>
           </Center>
         </PaperRow>
@@ -51,41 +55,41 @@ function useQuery() {
 export default function SearchScreen() {
   const query = useQuery().get('q') || '';
   const history = useHistory();
-  const [searchTerm, setSearchTerm] = useState(query);
-  const [loading, setLoading] = useState(false);
-  const searchGames = useApiToSearchGamesPlayed(searchTerm);
-  const [gamesList, setGamesList] = useState([]);
-  const [errorMessage, setErrorMessage] = useState('');
-  const doSearch = async () => {
-    setLoading(true);
-    let games = [];
-    try {
-      games = await searchGames().then(resp => resp.items);
-    } catch (e) {
-      console.log(e);
-      setErrorMessage('Failed to search');
-    }
-
+  const setSearchTerm = (term: string) => {
     history.push({
       pathname: '/search',
-      search: new URLSearchParams(`?q=${searchTerm}`).toString(),
+      search: new URLSearchParams(`?q=${term}`).toString(),
     });
-    setGamesList(games);
-    setLoading(false);
   };
+  const [loading, setLoading] = useState(false);
+  const searchGames = useApiToSearchGamesPlayed(query);
+  const [gamesList, setGamesList] = useState([]);
+  const [errorMessage, setErrorMessage] = useState('');
 
-  useEffect(() => {
-    if (query) {
-      doSearch();
-    }
-  }, []);
+  useEffect(
+    () => {
+      if (query) {
+        const doSearch = async () => {
+          setLoading(true);
+          let games = [];
+          try {
+            games = await searchGames().then(resp => resp.items);
+          } catch (e) {
+            console.log(e);
+            setErrorMessage('Failed to search');
+          }
 
-  const handleSearchUpdate = (event: any) => {
-    setSearchTerm(event.target.value);
-  };
-  const handleSearchSubmit = async (event: any) => {
-    event.preventDefault();
-    doSearch();
+          setGamesList(games);
+          setLoading(false);
+        };
+        doSearch();
+      }
+    },
+    [query, searchGames],
+  );
+
+  const handleSearchSubmit = async (searchTerm: string) => {
+    setSearchTerm(searchTerm);
   };
   return (
     <Container>
@@ -94,9 +98,8 @@ export default function SearchScreen() {
           <Heading1>Search</Heading1>
         </PaperRow>
         <SearchForm
+          defaultValue={query}
           disabled={loading}
-          searchTerm={searchTerm}
-          handleChange={handleSearchUpdate}
           handleSubmit={handleSearchSubmit}
           errorMessage={errorMessage}
         />
