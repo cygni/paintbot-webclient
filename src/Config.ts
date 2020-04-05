@@ -1,10 +1,13 @@
-const domain = 'server.paintbot.cygni.se'; // 'localhost';
-// const port = 80; // '8080';
+const runLocally = false;
+
+const domain = runLocally ? 'localhost:8080' : 'server.paintbot.cygni.se';
+const httpProtocol = runLocally ? 'http' : 'https';
+const websocketProtocol  = runLocally ? 'ws' : 'wss';
 
 const Config = {
-  BackendUrl: `https://${domain}`,
-  LoginUrl: (acc: string, pass: string) => `https://${domain}/login?login=${acc}&password=${pass}`,
-  WebSocketApiUrl: `wss://${domain}/events-native`,
+  BackendUrl: `${httpProtocol}://${domain}`,
+  LoginUrl: (acc: string, pass: string) => `${httpProtocol}://${domain}/login?login=${acc}&password=${pass}`,
+  WebSocketApiUrl: `${websocketProtocol}://${domain}/events-native`,
   TimerSeconds: 20,
   GameSpeedMin: 50,
   GameSpeedMax: 600,
