@@ -2,7 +2,7 @@ const runLocally = false;
 
 const domain = runLocally ? 'localhost:8080' : 'server.paintbot.cygni.se';
 const httpProtocol = runLocally ? 'http' : 'https';
-const websocketProtocol  = runLocally ? 'ws' : 'wss';
+const websocketProtocol = runLocally ? 'ws' : 'wss';
 
 const Config = {
   BackendUrl: `${httpProtocol}://${domain}`,
