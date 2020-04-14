@@ -42,6 +42,9 @@ export default function ReadMeScreen() {
             <li>
               <a href="https://github.com/cygni/paintbot-client-go">Go</a>
             </li>
+            <li>
+              <a href="https://github.com/cygni/paintbot-client-csharp">C#</a>
+            </li>
           </ul>
         </PaperRow>
       </Paper>
