@@ -12,9 +12,9 @@ export default function ReadMeScreen() {
           <Heading1>Getting started</Heading1>
         </PaperRow>
         <PaperRow>
-          Your mission is to write the best Paint Bot and survive within the game world. We have prepared a Java binding
-          for you to make it really easy to get started. All the boring stuff concerning server-client communication,
-          message parsing and event handling is already implemented.
+          Your mission is to write the best Paint Bot and survive within the game world. We have prepared bindings in
+          multiple languages for you to make it really easy to get started. All the boring stuff concerning
+          server-client communication, message parsing and event handling is already implemented.
         </PaperRow>
         <PaperHeadingRow>
           <Heading2>General principles</Heading2>
@@ -44,6 +44,9 @@ export default function ReadMeScreen() {
             </li>
             <li>
               <a href="https://github.com/cygni/paintbot-client-csharp">C#</a>
+            </li>
+            <li>
+              <a href="https://github.com/cygni/paintbot-client-js">JavaScript</a>
             </li>
           </ul>
         </PaperRow>
