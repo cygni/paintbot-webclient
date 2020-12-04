@@ -37,7 +37,7 @@ export default class ScoreBoardEntry extends React.Component<Props> {
     const playerScore = `${player.points}`;
     return (
       <Spacing>
-        <ScoreLabelContainer playerColour={player.colour}>
+        <ScoreLabelContainer playerColour={player.colour} data-testid="score-board-entry">
           <Card>
             <Name>{playerName}</Name>
             <Score>{playerScore}</Score>

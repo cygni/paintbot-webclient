@@ -21,7 +21,7 @@ export default class GameDirector extends React.Component<Props, State> {
   private ws?: WebSocket;
   private readonly events: any[] = [];
   private currentEventIndex = 0;
-  private updateInterval?: NodeJS.Timer;
+  private updateInterval?: number;
 
   readonly state: State = {
     gameSettings: undefined,
