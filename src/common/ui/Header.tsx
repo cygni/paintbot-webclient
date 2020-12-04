@@ -45,7 +45,7 @@ export default function Header() {
       </Spacing>
       <div className="links">
         <MenuItem oc={toggleCollapse} to="/">
-          Welcome
+          Home
         </MenuItem>
         <MenuItem oc={toggleCollapse} to="/about">
           About
@@ -53,11 +53,11 @@ export default function Header() {
         <MenuItem oc={toggleCollapse} to="/readme">
           Getting started
         </MenuItem>
-        <MenuItem oc={toggleCollapse} to="/search">
-          Search for old games
-        </MenuItem>
         <MenuItem oc={toggleCollapse} to="/tournament">
           Tournament
+        </MenuItem>
+        <MenuItem oc={toggleCollapse} to="/search">
+          Old games
         </MenuItem>
         <MenuItem oc={toggleCollapse} to="/account">
           {loggedIn ? user : 'Log in'}
@@ -127,7 +127,7 @@ const MenuContainer = styled.div<MenuContainerProps>`
       display: block;
     }
   }
-  @media screen and (min-width: 1100px) {
+  @media screen and (min-width: 1000px) {
     flex-direction: row;
     .menu-toggler {
       display: none;

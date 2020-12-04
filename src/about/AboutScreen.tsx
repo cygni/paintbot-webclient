@@ -51,7 +51,7 @@ export default function AboutScreen() {
 const Container = styled.div`
   width: 100%;
 
-  @media screen and (min-width: 1100px) {
+  @media screen and (min-width: 1000px) {
     width: 70%;
   }
   @media screen and (min-width: 1600px) {
