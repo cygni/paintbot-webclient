@@ -1,8 +1,6 @@
-const runLocally = false;
-
-const domain = runLocally ? 'localhost:8080' : 'server.paintbot.cygni.se';
-const httpProtocol = runLocally ? 'http' : 'https';
-const websocketProtocol = runLocally ? 'ws' : 'wss';
+const domain = process.env.REACT_APP_DOMAIN;
+const httpProtocol = process.env.REACT_APP_HTTP_PROTOCOL;
+const websocketProtocol = process.env.REACT_APP_WEBSOCKET_PROTOCOL;
 
 const Config = {
   BackendUrl: `${httpProtocol}://${domain}`,
