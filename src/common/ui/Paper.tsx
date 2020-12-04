@@ -17,10 +17,9 @@ export const Paper = styled.div<PaperProps>`
 
 export const PaperTopic = styled.h2`
   margin: 0px;
-  font-family: 'Nanum Gothic', sans-serif;
   text-transform: uppercase;
-  font-size: 14px;
-  color: #e7beff;
+  font-size: 0.875rem;
+  color: #8496ad;
   text-align: center;
 `;
 

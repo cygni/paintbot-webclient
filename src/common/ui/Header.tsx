@@ -83,7 +83,7 @@ function MenuButton(props: any) {
   const StyledLink = styled(Link)`
     text-decoration: inherit;
     color: black;
-    font-size: 25px;
+    font-size: 1rem;
     cursor: pointer;
     :hover,
     :active,
@@ -108,19 +108,20 @@ const MenuContainer = styled.div<MenuContainerProps>`
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   display: flex;
   flex-direction: column;
-  font-family: 'Nanum Pen Script', cursive;
   .menu-toggler {
     margin-right: 30px;
   }
   .logo {
     display: flex;
     flex-direction: row;
+    font-family: 'Nanum Pen Script', cursive;
   }
   .links {
     visibility: ${props => (props.collapsed ? 'hidden' : 'visible')};
     width: 100%;
     display: ${props => (props.collapsed ? 'none' : 'flex')};
     flex-direction: column;
+    font-family: 'Short Stack', cursive;
     a {
       width: auto;
       display: block;
@@ -144,7 +145,7 @@ const MenuContainer = styled.div<MenuContainerProps>`
 `;
 
 const HeaderText = styled.span`
-  font-size: 44px;
+  font-size: 3rem;
   font-weight: bold;
   height: 100%;
   padding-left: 20px;

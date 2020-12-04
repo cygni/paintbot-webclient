@@ -22,7 +22,7 @@ const ScoreLabelContainer = styled.div<ScoreLabelContainerProps>`
   opacity: 1;
   background-color: ${props => props.playerColour};
   color: ${props => (isDarkColor(props.playerColour) ? 'white' : 'black')};
-  font-size: 32px;
+  font-size: 2rem;
   transition: position 0.5s linear;
 `;
 
@@ -53,19 +53,19 @@ const Name = styled.div`
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-  font-size: 20px;
+  font-size: 1rem;
   text-align: left;
 `;
 
 const Score = styled.div`
   text-align: right;
   opacity: 0.5;
-  font-size: 40px;
+  font-size: 1.5rem;
   line-height: 25px;
 `;
 
 const Card = styled.div`
   box-shadow: 0 3px 3px rgba(0, 0, 0, 0.5);
   padding: 10px;
-  font-family: 'Nanum Pen Script', sans-serif;
+  font-family: 'Short Stack', sans-serif;
 `;

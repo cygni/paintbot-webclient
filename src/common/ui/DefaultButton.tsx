@@ -15,7 +15,7 @@ export const DefaultButton = styled.button<ButtonProps>(
   ({
     backgroundColor = CharacterColors.Blue,
     color = StandardColors.White,
-    fontSize = 25,
+    fontSize = '1rem',
     width = 'fit-content',
     marginTop = 0,
   }) => ({
@@ -25,7 +25,9 @@ export const DefaultButton = styled.button<ButtonProps>(
     color,
     textAlign: 'center',
     fontSize,
-    padding: '0.25em 1em',
+    fontWeight: 700,
+    fontFamily: '"Short Stack", cursive',
+    padding: '0.75rem 1.25em',
     width,
     cursor: 'pointer',
     marginTop,
@@ -57,5 +59,5 @@ export const DefaultButton = styled.button<ButtonProps>(
 );
 
 export const SmallButton = styled(DefaultButton)`
-  font-size: 16px;
+  font-size: 1rem;
 `;

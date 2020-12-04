@@ -57,14 +57,8 @@ const Container = styled.div`
   min-height: 100%;
   height: fit-content;
   min-width: fit-content;
-  font-family: 'Nanum Gothic', sans-serif;
   & input {
-    font-size: 1.3rem;
-  }
-  & input,
-  & button {
-    font-family: 'Nanum Pen Script', cursive;
-    font-size: 1.3rem;
+    font-family: 'Short Stack', cursive;
   }
 `;
 
