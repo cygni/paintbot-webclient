@@ -16,3 +16,7 @@ select,
 button {
   font-size: 1rem;
 }
+
+*:focus:not(:focus-visible) {
+  outline: none;
+}
