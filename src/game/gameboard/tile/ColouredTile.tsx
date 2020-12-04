@@ -1,6 +1,5 @@
-import { Vector2d } from 'konva';
-import * as Konva from 'konva';
-import * as React from 'react';
+import Konva, { Vector2d } from 'konva';
+import React from 'react';
 import { Path } from 'react-konva';
 
 import background from '../../../resources/background.jpg';

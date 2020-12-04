@@ -1,17 +1,16 @@
-import { shallow } from 'enzyme';
 import React from 'react';
+import { render, screen } from '@testing-library/react';
 
 import { Character } from '../../type';
 import { createMockedPlayers } from '../__mocks__/PlayersMock';
 import ScoreBoardContainer from '../ScoreBoardContainer';
-import ScoreBoardEntry from '../ScoreBoardEntry';
 import { SortOrder, sortPlayers } from '../Util';
 
 describe('Verify ScoreBoardContainer', () => {
   it('should not create players if characters is empty', () => {
     const characters: Character[] = [];
-    const wrapper = shallow(<ScoreBoardContainer players={characters} />);
-    expect(wrapper.find(ScoreBoardEntry)).toHaveLength(0);
+    render(<ScoreBoardContainer players={characters} />);
+    expect(screen.queryByTestId('score-board-entry')).toBeNull();
   });
 });
 
