@@ -2,19 +2,15 @@ import Konva, { Vector2d } from 'konva';
 import React from 'react';
 import { Path } from 'react-konva';
 
-import background from '../../../resources/background.jpg';
 import { Coordinate } from '../../type';
 
 interface Props {
   key: number;
-  colour: string;
+  colour?: string;
   coordinate: Coordinate;
   width: number;
   height: number;
 }
-
-const backgroundImage = new Image();
-backgroundImage.src = background;
 
 export default class ColouredTile extends React.Component<Props> {
   private readonly pathRef = React.createRef<Konva.Path>();
@@ -73,8 +69,7 @@ export default class ColouredTile extends React.Component<Props> {
     return (
       <Path
         data={this.svgData}
-        fill={colour}
-        fillPatternImage={colour ? undefined : backgroundImage}
+        fill={colour || 'lightslategrey'}
         x={x}
         y={y}
         scale={scale}

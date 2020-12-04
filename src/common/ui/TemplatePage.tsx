@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components/macro';
 
-import background from '../../resources/background.jpg';
 import { REQUEST_TYPES, useRestAPIToGetActiveTournament } from '../API';
 import SettersContext from '../contexts/SettersContext';
 import TournamentContext from '../contexts/TournamentContext';
@@ -50,7 +49,7 @@ export default function TemplatePage(props: any) {
 }
 
 const Container = styled.div`
-  background-image: url(${background});
+  background-color: lightslategrey;
   position: absolute;
   right: 0;
   left: 0;
