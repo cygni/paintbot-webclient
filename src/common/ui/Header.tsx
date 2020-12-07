@@ -1,12 +1,27 @@
 import React, { useContext, useState } from 'react';
 import FocusLock from 'react-focus-lock';
 import { NavLink } from 'react-router-dom';
+import { HashLink } from 'react-router-hash-link';
 import styled from 'styled-components/macro';
 import { AnimatePresence, motion } from 'framer-motion';
 
 import yellowCharacter from '../../resources/images/yellow_character.png';
 import { CharacterColors } from '../Constants';
 import AccountContext from '../contexts/AccountContext';
+
+const SkipNavigation = styled(HashLink)`
+  position: fixed;
+  top: 70px;
+  left: -10rem;
+  z-index: 1001;
+  padding: 1rem;
+  background-color: white;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  transition: left 0.2s ease;
+  &:focus {
+    left: 10px;
+  }
+`;
 
 const LogoLetter = styled.span`
   color: ${props => props.color};
@@ -177,6 +192,12 @@ const StyledHeader = styled.header`
   align-items: center;
 `;
 
+const scrollWithOffset = (element: HTMLElement) => {
+  const yCoordinate = element.getBoundingClientRect().top + window.pageYOffset;
+  const yOffset = -60;
+  window.scrollTo({ top: yCoordinate + yOffset, behavior: 'smooth' });
+};
+
 export default function Header() {
   const [open, setOpen] = useState(false);
   const { loggedIn, username } = useContext(AccountContext);
@@ -198,6 +219,9 @@ export default function Header() {
 
   return (
     <>
+      <SkipNavigation to="#content" scroll={element => scrollWithOffset(element)}>
+        Skip to content
+      </SkipNavigation>
       <StyledHeader>
         <Logo>
           <div>

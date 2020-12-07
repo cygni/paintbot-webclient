@@ -43,7 +43,7 @@ export default function TemplatePage(props: any) {
   return (
     <Container>
       <Header />
-      <BodyContainer>{props.children}</BodyContainer>
+      <Content id="content">{props.children}</Content>
     </Container>
   );
 }
@@ -61,7 +61,7 @@ const Container = styled.div`
   }
 `;
 
-const BodyContainer = styled.div`
+const Content = styled.main`
   margin: 20px 40px;
   display: flex;
   justify-content: center;
