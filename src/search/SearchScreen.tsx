@@ -93,21 +93,19 @@ export default function SearchScreen() {
     setSearchTerm(searchTerm);
   };
   return (
-    <Container>
-      <Paper>
-        <PaperRow>
-          <Heading1>Search</Heading1>
-        </PaperRow>
-        <SearchForm
-          defaultValue={query}
-          disabled={loading}
-          handleSubmit={handleSearchSubmit}
-          errorMessage={errorMessage}
-        />
-        {loading && <Loading />}
-        {!loading && <GamesList games={gamesList} />}
-      </Paper>
-    </Container>
+    <Paper style={{ width: '100%' }}>
+      <PaperRow>
+        <Heading1>Search</Heading1>
+      </PaperRow>
+      <SearchForm
+        defaultValue={query}
+        disabled={loading}
+        handleSubmit={handleSearchSubmit}
+        errorMessage={errorMessage}
+      />
+      {loading && <Loading />}
+      {!loading && <GamesList games={gamesList} />}
+    </Paper>
   );
 }
 
@@ -143,15 +141,4 @@ const Center = styled.div`
 const Error = styled.span`
   color: ${CharacterColors.Red};
   font-size: 1rem;
-`;
-
-const Container = styled.div`
-  width: 100%;
-
-  @media screen and (min-width: 1000px) {
-    width: 70%;
-  }
-  @media screen and (min-width: 1600px) {
-    width: 60%;
-  }
 `;

@@ -30,7 +30,7 @@ export default function Routes() {
             </TemplatePage>
           </Route>
           <Route path="/account" exact>
-            <TemplatePage>
+            <TemplatePage center>
               <AccountScreen />
             </TemplatePage>
           </Route>

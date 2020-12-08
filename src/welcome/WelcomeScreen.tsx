@@ -7,9 +7,9 @@ import { Paper, PaperRow } from '../common/ui/Paper';
 import introImage1 from '../resources/images/welcome1.png';
 import introImage2 from '../resources/images/welcome2.png';
 
-export default function WelcomeScreen(props: any) {
+export default function WelcomeScreen() {
   return (
-    <Container>
+    <>
       <Paper>
         <PaperRow>
           <Heading1>Welcome!</Heading1>
@@ -45,20 +45,9 @@ export default function WelcomeScreen(props: any) {
           alt="Long ago, all the colors lived together in harmony. Then, everything changed when the red nuance attacked."
         />
       </ComicImages>
-    </Container>
+    </>
   );
 }
-
-const Container = styled.div`
-  width: 100%;
-
-  @media screen and (min-width: 1000px) {
-    width: 70%;
-  }
-  @media screen and (min-width: 1600px) {
-    width: 60%;
-  }
-`;
 
 const ComicImages = styled.div`
   display: grid;

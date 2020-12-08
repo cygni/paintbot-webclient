@@ -9,7 +9,38 @@ import { docCookies } from '../util';
 
 import Header from './Header';
 
-export default function TemplatePage(props: any) {
+interface ContentProps {
+  center?: boolean;
+}
+
+const Content = styled.main<ContentProps>`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 1000px;
+  ${props => (props.center ? 'flex: 1;' : '')}
+
+  @media screen and (min-width: 420px) {
+    padding: 1rem;
+  }
+`;
+
+const Container = styled.div`
+  background-color: lightslategrey;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+interface TemplatePageProps {
+  center?: boolean;
+  children: React.ReactNode;
+}
+
+export default function TemplatePage({ center, children }: TemplatePageProps) {
   const tour = useContext(TournamentContext);
   const setters = useContext(SettersContext);
   const getActiveTournament = useRestAPIToGetActiveTournament(setters, tour);
@@ -43,30 +74,9 @@ export default function TemplatePage(props: any) {
   return (
     <Container>
       <Header />
-      <Content id="content">{props.children}</Content>
+      <Content id="content" center={center}>
+        {children}
+      </Content>
     </Container>
   );
 }
-
-const Container = styled.div`
-  background-color: lightslategrey;
-  position: absolute;
-  right: 0;
-  left: 0;
-  min-height: 100%;
-  height: fit-content;
-  min-width: fit-content;
-  & input {
-    font-family: 'Short Stack', cursive;
-  }
-`;
-
-const Content = styled.main`
-  margin: 20px 40px;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  & > * {
-    align-self: center;
-  }
-`;
