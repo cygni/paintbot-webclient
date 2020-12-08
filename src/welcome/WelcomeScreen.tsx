@@ -61,37 +61,18 @@ const Container = styled.div`
 `;
 
 const ComicImages = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 1rem;
 
   @media screen and (min-width: 800px) {
-    flex-direction: row;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
   }
 `;
 
-function ComicImage({ src, alt }: { src: string; alt: string }) {
-  return (
-    <ImageContainer>
-      <img src={src} alt={alt} />
-    </ImageContainer>
-  );
-}
-
-const ImageContainer = styled.div`
-  flex: 1;
-
-  :first-child {
-    margin: 0 0 1rem;
-  }
-
-  img {
-    width: 100%;
-  }
-
-  @media screen and (min-width: 800px) {
-    :first-child {
-      margin: 0 1rem 0 0;
-    }
-  }
+const ComicImage = styled.img`
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+  width: 100%;
 `;
