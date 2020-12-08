@@ -5,7 +5,7 @@ import { HashLink } from 'react-router-hash-link';
 import styled from 'styled-components/macro';
 import { AnimatePresence, motion } from 'framer-motion';
 
-import yellowCharacter from '../../resources/images/yellow_character.png';
+import logo from '../../resources/images/logo.svg';
 import { CharacterColors } from '../Constants';
 import AccountContext from '../contexts/AccountContext';
 
@@ -23,22 +23,9 @@ const SkipNavigation = styled(HashLink)`
   }
 `;
 
-const LogoLetter = styled.span`
-  color: ${props => props.color};
-`;
-
-const LogoImage = styled.img`
-  width: 30px;
-  height: 30px;
-`;
-
-const Logo = styled.div`
-  display: flex;
-  flex-direction: row;
+const Logo = styled.img`
   margin-left: 20px;
-  font-family: 'Nanum Pen Script', cursive;
-  font-size: 2.5rem;
-  font-weight: bold;
+  height: 60px;
 `;
 
 const StyledLink = styled(NavLink)`
@@ -223,19 +210,7 @@ export default function Header() {
         Skip to content
       </SkipNavigation>
       <StyledHeader>
-        <Logo>
-          <div>
-            <LogoLetter color={CharacterColors.Magenta}>P</LogoLetter>
-            <LogoLetter color={CharacterColors.Lavender}>A</LogoLetter>
-            <LogoLetter color={CharacterColors.Cyan}>I</LogoLetter>
-            <LogoLetter color={CharacterColors.Orange}>N</LogoLetter>
-            <LogoLetter color={CharacterColors.Red}>T</LogoLetter>
-            <LogoLetter color={CharacterColors.Green}>B</LogoLetter>
-            <LogoLetter color={CharacterColors.Blue}>O</LogoLetter>
-            <LogoLetter color={CharacterColors.Yellow}>T</LogoLetter>
-          </div>
-          <LogoImage src={yellowCharacter} />
-        </Logo>
+        <Logo src={logo} alt="Paintbot" />
         <DesktopNav>
           <Nav accountText={accountText} />
         </DesktopNav>
