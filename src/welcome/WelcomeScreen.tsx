@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import styled from 'styled-components/macro';
 
 import { DefaultLink } from '../common/ui/DefaultLink';
@@ -7,7 +7,35 @@ import { Paper, PaperRow } from '../common/ui/Paper';
 import introImage1 from '../resources/images/welcome1.png';
 import introImage2 from '../resources/images/welcome2.png';
 
+interface YouTubeVideoProps {
+  cssHeight: string;
+}
+
+const YouTubeVideo = styled.iframe<YouTubeVideoProps>`
+  width: calc(100% + 3rem);
+  height: ${props => props.cssHeight};
+  margin: 0 -1.5rem;
+
+  @media screen and (min-width: 420px) {
+    width: 100%;
+    margin: 0;
+  }
+`;
+
 export default function WelcomeScreen() {
+  const [videoHeight, setVideoHeight] = useState('0');
+  const video = useRef<HTMLIFrameElement>(null);
+
+  useLayoutEffect(() => {
+    function updateVideoHeight() {
+      const width = video.current?.clientWidth ?? 0;
+      setVideoHeight(`${width * 315/560}px`);
+    }
+    window.addEventListener('resize', updateVideoHeight);
+    updateVideoHeight();
+    return () => window.removeEventListener('resize', updateVideoHeight);
+  }, []);
+
   return (
     <>
       <Paper>
@@ -27,9 +55,9 @@ export default function WelcomeScreen() {
         </PaperRow>
         <PaperRow>Here's a video of what gameplay looks like:</PaperRow>
         <PaperRow>
-          <iframe
-            width="560"
-            height="315"
+          <YouTubeVideo
+            ref={video}
+            cssHeight={videoHeight}
             src="https://www.youtube.com/embed/G6M7RpQaInQ"
             title="Paintbot gameplay"
             frameBorder={0}
