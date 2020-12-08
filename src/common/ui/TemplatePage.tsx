@@ -8,6 +8,7 @@ import WebSocketContext from '../contexts/WebSocketContext';
 import { docCookies } from '../util';
 
 import Header from './Header';
+import Footer from './Footer';
 
 interface ContentProps {
   center?: boolean;
@@ -77,6 +78,7 @@ export default function TemplatePage({ center, children }: TemplatePageProps) {
       <Content id="content" center={center}>
         {children}
       </Content>
+      <Footer />
     </Container>
   );
 }
