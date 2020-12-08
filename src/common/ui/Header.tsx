@@ -5,7 +5,7 @@ import { HashLink } from 'react-router-hash-link';
 import styled from 'styled-components/macro';
 import { AnimatePresence, motion } from 'framer-motion';
 
-import logo from '../../resources/images/logo.svg';
+import { ReactComponent as LogoSvg } from '../../resources/images/logo.svg';
 import { CharacterColors } from '../Constants';
 import AccountContext from '../contexts/AccountContext';
 
@@ -23,7 +23,7 @@ const SkipNavigation = styled(HashLink)`
   }
 `;
 
-const Logo = styled.img`
+const Logo = styled(LogoSvg)`
   margin-left: 20px;
   height: 60px;
 `;
@@ -210,7 +210,7 @@ export default function Header() {
         Skip to content
       </SkipNavigation>
       <StyledHeader>
-        <Logo src={logo} alt="Paintbot" />
+        <Logo role="img" aria-label="Paintbot" />
         <DesktopNav>
           <Nav accountText={accountText} />
         </DesktopNav>
