@@ -17,11 +17,11 @@ interface ContentProps {
 const Content = styled.main<ContentProps>`
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   width: 100%;
   max-width: 1000px;
-  ${props => (props.center ? 'flex: 1;' : '')}
+  flex: 1;
+  ${props => (props.center ? 'justify-content: center;' : '')}
 
   @media screen and (min-width: 420px) {
     padding: 1rem;
