@@ -6,18 +6,22 @@ import AccountContext from '../common/contexts/AccountContext';
 import WebSocketContext from '../common/contexts/WebSocketContext';
 import ControlsButton from '../common/ui/ControlsButton';
 import { Heading1 } from '../common/ui/Heading';
+import Input from '../common/ui/Input';
+import { Paper, PaperRow } from '../common/ui/Paper';
+
+const Form = styled.form`
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+`;
 
 export default function TournamentCreator() {
   const accContext = useContext(AccountContext);
   const [tourName, setTourName] = useState('');
   const send = useContext(WebSocketContext);
 
-  const handleChange = (event: any) => {
-    event.preventDefault();
-    setTourName(event.target.value);
-  };
-
-  const handleSubmit = (event: any) => {
+  function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
 
     const creationMess = {
@@ -26,27 +30,17 @@ export default function TournamentCreator() {
       type: REQUEST_TYPES.CREATE_TOURNAMENT,
     };
     send(creationMess);
-  };
+  }
 
   return (
-    <>
-      <Heading1>Create a tournament</Heading1>
-      <Form onSubmit={handleSubmit}>
-        <Input name="tournament-name" id="tournament-name" type="text" value={tourName} onChange={handleChange} />
-        <ControlsButton onClick={handleSubmit}>Let's go!</ControlsButton>
-      </Form>
-    </>
+    <Paper style={{ width: '100%' }}>
+      <PaperRow>
+        <Heading1>Create a tournament</Heading1>
+        <Form onSubmit={handleSubmit}>
+          <Input label="Name" type="text" value={tourName} onChange={e => setTourName(e.target.value)} />
+          <ControlsButton>Create tournament</ControlsButton>
+        </Form>
+      </PaperRow>
+    </Paper>
   );
 }
-
-const Form = styled.form`
-  margin-top: 1rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
-const Input = styled.input`
-  margin-bottom: 1em;
-`;
