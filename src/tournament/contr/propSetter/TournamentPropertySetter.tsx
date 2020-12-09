@@ -5,7 +5,7 @@ import { REQUEST_TYPES } from '../../../common/API';
 import AccountContext from '../../../common/contexts/AccountContext';
 import TournamentContext from '../../../common/contexts/TournamentContext';
 import WebSocketContext from '../../../common/contexts/WebSocketContext';
-import ControlsButton from '../../../common/ui/ControlsButton';
+import DefaultButton from '../../../common/ui/DefaultButton';
 import { Paper, PaperList, PaperListItem, PaperRow, PaperTopic } from '../../../common/ui/Paper';
 
 import CheckBox from './CheckBox';
@@ -46,9 +46,9 @@ export default function TournamentPropertySetter() {
       <PaperTopic>Settings</PaperTopic>
       <Form onSubmit={handleSubmit}>
         <PaperRow>
-          <ControlsButton onClick={handleSubmit} disabled={!dirty}>
+          <DefaultButton onClick={handleSubmit} disabled={!dirty}>
             Save changes
-          </ControlsButton>
+          </DefaultButton>
         </PaperRow>
         <SettingsForm setter={handleSetCurrentProperties} curr={currentProperties} />
       </Form>

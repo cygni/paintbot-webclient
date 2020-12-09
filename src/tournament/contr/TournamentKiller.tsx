@@ -5,7 +5,7 @@ import { CharacterColors } from '../../common/Constants';
 import AccountContext from '../../common/contexts/AccountContext';
 import TournamentContext from '../../common/contexts/TournamentContext';
 import WebSocketContext from '../../common/contexts/WebSocketContext';
-import ControlsButton from '../../common/ui/ControlsButton';
+import DefaultButton from '../../common/ui/DefaultButton';
 
 export default function TournamentKiller(props: any) {
   const accContext = useContext(AccountContext);
@@ -22,8 +22,8 @@ export default function TournamentKiller(props: any) {
     send(killMess);
   };
   return (
-    <ControlsButton onClick={handleClick} backgroundColor={CharacterColors.Red}>
+    <DefaultButton onClick={handleClick} backgroundColor={CharacterColors.Red}>
       Discard tournament
-    </ControlsButton>
+    </DefaultButton>
   );
 }

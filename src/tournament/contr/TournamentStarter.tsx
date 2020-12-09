@@ -4,7 +4,7 @@ import { REQUEST_TYPES } from '../../common/API';
 import AccountContext from '../../common/contexts/AccountContext';
 import TournamentContext from '../../common/contexts/TournamentContext';
 import WebSocketContext from '../../common/contexts/WebSocketContext';
-import ControlsButton from '../../common/ui/ControlsButton';
+import DefaultButton from '../../common/ui/DefaultButton';
 
 export default function TournamentStarter(props: any) {
   const accContext = useContext(AccountContext);
@@ -21,5 +21,5 @@ export default function TournamentStarter(props: any) {
     send(mess);
   };
 
-  return <ControlsButton onClick={hc}>Start tournament</ControlsButton>;
+  return <DefaultButton onClick={hc}>Start tournament</DefaultButton>;
 }

@@ -4,7 +4,7 @@ import styled from 'styled-components/macro';
 import { REQUEST_TYPES } from '../common/API';
 import AccountContext from '../common/contexts/AccountContext';
 import WebSocketContext from '../common/contexts/WebSocketContext';
-import ControlsButton from '../common/ui/ControlsButton';
+import DefaultButton from '../common/ui/DefaultButton';
 import { Heading1 } from '../common/ui/Heading';
 import Input from '../common/ui/Input';
 import { Paper, PaperRow } from '../common/ui/Paper';
@@ -38,7 +38,7 @@ export default function TournamentCreator() {
         <Heading1>Create a tournament</Heading1>
         <Form onSubmit={handleSubmit}>
           <Input label="Name" type="text" value={tourName} onChange={e => setTourName(e.target.value)} />
-          <ControlsButton>Create tournament</ControlsButton>
+          <DefaultButton>Create tournament</DefaultButton>
         </Form>
       </PaperRow>
     </Paper>

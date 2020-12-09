@@ -4,7 +4,7 @@ import styled from 'styled-components/macro';
 
 import { useApiToSearchGamesPlayed } from '../common/API';
 import { CharacterColors } from '../common/Constants';
-import ControlsButton from '../common/ui/ControlsButton';
+import DefaultButton from '../common/ui/DefaultButton';
 import { Heading1 } from '../common/ui/Heading';
 import Loading from '../common/ui/Loading';
 import { Paper, PaperRow } from '../common/ui/Paper';
@@ -31,7 +31,7 @@ const Input = styled.input`
   }
 `;
 
-const SearchButton = styled(ControlsButton)`
+const SearchButton = styled(DefaultButton)`
   width: 100%;
   margin-top: 1rem;
 
@@ -60,9 +60,7 @@ function SearchForm({ defaultValue, disabled, handleSubmit, errorMessage }: Sear
       <PaperRow>
         <SearchContainer>
           <Input id="search" type="text" defaultValue={defaultValue} placeholder="Search" aria-label="Search" />
-          <SearchButton disabled={disabled} onClick={handleSubmit}>
-            Search
-          </SearchButton>
+          <SearchButton disabled={disabled}>Search</SearchButton>
         </SearchContainer>
       </PaperRow>
       {errorMessage && (
