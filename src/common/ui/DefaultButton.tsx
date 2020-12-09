@@ -5,13 +5,13 @@ import { CharacterColors, StandardColors } from '../Constants';
 
 interface ButtonProps {
   color?: string;
-  width?: number;
+  width?: string | number;
   backgroundColor?: string;
-  fontSize?: number;
-  marginTop?: any;
+  fontSize?: string | number;
+  marginTop?: string | number;
 }
 
-export const DefaultButton = styled.button<ButtonProps>(
+const DefaultButton = styled.button<ButtonProps>(
   ({
     backgroundColor = CharacterColors.Blue,
     color = StandardColors.White,
@@ -58,6 +58,4 @@ export const DefaultButton = styled.button<ButtonProps>(
   }),
 );
 
-export const SmallButton = styled(DefaultButton)`
-  font-size: 1rem;
-`;
+export default DefaultButton;
