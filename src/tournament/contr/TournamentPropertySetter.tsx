@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react';
+import styled from 'styled-components/macro';
 
 import { REQUEST_TYPES } from '../../common/API';
 import AccountContext from '../../common/contexts/AccountContext';
@@ -8,6 +9,13 @@ import DefaultButton from '../../common/ui/DefaultButton';
 import { Heading2 } from '../../common/ui/Heading';
 import { Checkbox, NumberInput, RangeInput } from '../../common/ui/Input';
 import { Paper, PaperList, PaperListItem, PaperRow } from '../../common/ui/Paper';
+
+const StickyPaperRow = styled(PaperRow)`
+  position: sticky;
+  bottom: 0;
+  background-color: white;
+  padding-bottom: 1rem;
+`;
 
 export default function TournamentPropertySetter() {
   const [dirty, setDirty] = useState(false);
@@ -46,11 +54,11 @@ export default function TournamentPropertySetter() {
       </PaperRow>
       <form onSubmit={handleSubmit}>
         <SettingsForm setter={handleSetCurrentProperties} curr={currentProperties} />
-        <PaperRow style={{ position: 'sticky', bottom: '0', backgroundColor: 'white', paddingBottom: '1rem' }}>
+        <StickyPaperRow>
           <DefaultButton onClick={handleSubmit} disabled={!dirty} width="100%">
             Save changes
           </DefaultButton>
-        </PaperRow>
+        </StickyPaperRow>
       </form>
     </Paper>
   );
