@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import FocusLock from 'react-focus-lock';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import styled from 'styled-components/macro';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -24,6 +24,7 @@ const SkipNavigation = styled(HashLink)`
 `;
 
 const Logo = styled(LogoSvg)`
+  display: block;
   margin-left: 20px;
   height: 60px;
 `;
@@ -211,7 +212,9 @@ export default function Header() {
         Skip to content
       </SkipNavigation>
       <StyledHeader>
-        <Logo role="img" aria-label="Paintbot" />
+        <Link to="/">
+          <Logo role="img" aria-label="Paintbot" />
+        </Link>
         <DesktopNav>
           <Nav accountText={accountText} />
         </DesktopNav>
