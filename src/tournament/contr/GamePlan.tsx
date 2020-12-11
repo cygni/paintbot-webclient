@@ -8,8 +8,8 @@ import WebSocketContext from '../../common/contexts/WebSocketContext';
 import { Player } from '../../common/types';
 import DefaultButton from '../../common/ui/DefaultButton';
 import GameLink from '../../common/ui/GameLink';
-import { Heading3 } from '../../common/ui/Heading';
-import { Paper, PaperHeadingRow, PaperRow, PaperTopic } from '../../common/ui/Paper';
+import { Heading2, Heading3 } from '../../common/ui/Heading';
+import { Paper, PaperHeadingRow, PaperRow } from '../../common/ui/Paper';
 import PlayerLink from '../../common/ui/PlayerLink';
 
 interface GamePlanProps {
@@ -63,7 +63,9 @@ export default function GamePlan({ lvl, game, players, playedGames }: GamePlanPr
 
   return (
     <Paper>
-      <PaperTopic>Game plan</PaperTopic>
+      <PaperRow>
+        <Heading2>Game plan</Heading2>
+      </PaperRow>
       {!started && <span>Tournament has not been started yet!</span>}
       {started && showNextGame && (
         <>
@@ -71,7 +73,7 @@ export default function GamePlan({ lvl, game, players, playedGames }: GamePlanPr
             <Heading3>{lvl + 1 === noLevels ? 'Final' : `Game ${lvl + 1}-${game + 1}`}</Heading3>
             {acc.loggedIn && (
               <DefaultButton onClick={startNextGame} disabled={playing}>
-                {playing ? 'Playing...' : 'Start'}
+                {playing ? 'Playing...' : 'Play'}
               </DefaultButton>
             )}
           </PaperHeadingRow>

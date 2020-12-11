@@ -44,10 +44,11 @@ export const PaperHeadingRow = styled(PaperRow)`
 `;
 
 export const PaperList = styled.ul`
-  margin-bottom: 0;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
   display: flex;
   flex-direction: column;
-  padding-inline-start: 0px;
 `;
 
 export const PaperListItem = styled.li`
