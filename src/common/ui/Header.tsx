@@ -13,7 +13,7 @@ const SkipNavigation = styled(HashLink)`
   position: fixed;
   top: 70px;
   left: -10rem;
-  z-index: 1001;
+  z-index: 1002;
   padding: 1rem;
   background-color: white;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
@@ -133,7 +133,7 @@ const HamburgerOverlay = styled(motion.div)`
   left: 0;
   right: 0;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
+  z-index: 1001;
   @media screen and (min-width: 900px) {
     display: none;
   }
@@ -147,7 +147,7 @@ const HamburgerMenu = styled(motion.div)`
   width: 200px;
   background-color: white;
   box-shadow: -2px 0 4px 0 rgba(0, 0, 0, 0.2);
-  z-index: 1001;
+  z-index: 1002;
   transition: right 0.5s ease;
   @media screen and (min-width: 900px) {
     display: none;
@@ -170,6 +170,7 @@ const HamburgerNav = ({ open, children }: HamburgerNavProps) => <AnimatePresence
 const StyledHeader = styled.header`
   position: sticky;
   top: 0;
+  z-index: 1000;
   width: 100%;
   height: 60px;
   background-color: white;
