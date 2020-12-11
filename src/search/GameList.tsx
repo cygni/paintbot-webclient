@@ -16,7 +16,7 @@ const GameLink = styled(Link)`
   display: block;
   padding: 1rem;
   text-decoration: none;
-  color: black;
+  color: #25313e;
   border-radius: 8px;
   background-color: #e8edff;
   &:hover {

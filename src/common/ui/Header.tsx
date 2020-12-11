@@ -33,6 +33,7 @@ const Logo = styled(LogoSvg)`
 
 const iconStyle = css`
   height: 1.25rem;
+  fill: #25313e;
 `;
 
 const HamburgerIcon = styled(BarsIcon)`
@@ -49,7 +50,7 @@ const StyledLink = styled(NavLink)`
   display: flex;
   align-items: center;
   text-decoration: none;
-  color: black;
+  color: #25313e;
   font-size: 1rem;
   cursor: pointer;
   &:hover,
