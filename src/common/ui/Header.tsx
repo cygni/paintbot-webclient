@@ -2,10 +2,12 @@ import React, { useContext, useState } from 'react';
 import FocusLock from 'react-focus-lock';
 import { Link, NavLink } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 import { AnimatePresence, motion } from 'framer-motion';
 
 import { ReactComponent as LogoSvg } from '../../resources/images/logo.svg';
+import { ReactComponent as BarsIcon } from '../../resources/icons/bars.svg';
+import { ReactComponent as TimesIcon } from '../../resources/icons/times.svg';
 import { CharacterColors } from '../Constants';
 import AccountContext from '../contexts/AccountContext';
 
@@ -27,6 +29,18 @@ const Logo = styled(LogoSvg)`
   display: block;
   margin-left: 20px;
   height: 60px;
+`;
+
+const iconStyle = css`
+  height: 1.25rem;
+`;
+
+const HamburgerIcon = styled(BarsIcon)`
+  ${iconStyle};
+`;
+
+const CloseIcon = styled(TimesIcon)`
+  ${iconStyle};
 `;
 
 const StyledLink = styled(NavLink)`
@@ -219,9 +233,7 @@ export default function Header() {
           <Nav accountText={accountText} />
         </DesktopNav>
         <HamburgerMenuButton onClick={toggleMenu}>
-          <span role="img" aria-label="Open menu">
-            🍔
-          </span>
+          <HamburgerIcon role="img" aria-label="Open menu" />
         </HamburgerMenuButton>
       </StyledHeader>
       <HamburgerNav open={open}>
@@ -243,9 +255,7 @@ export default function Header() {
           <FocusLock returnFocus>
             <JustifyRight>
               <HamburgerMenuButton onClick={closeMenu}>
-                <span role="img" aria-label="Close menu">
-                  ✖️
-                </span>
+                <CloseIcon role="img" aria-label="Close menu" />
               </HamburgerMenuButton>
             </JustifyRight>
             <Nav onClickItem={closeMenu} accountText={accountText} />
