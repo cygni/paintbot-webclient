@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import styled from 'styled-components/macro';
 
 import { DefaultLink } from '../common/ui/DefaultLink';
@@ -7,9 +7,37 @@ import { Paper, PaperRow } from '../common/ui/Paper';
 import introImage1 from '../resources/images/welcome1.png';
 import introImage2 from '../resources/images/welcome2.png';
 
-export default function WelcomeScreen(props: any) {
+interface YouTubeVideoProps {
+  cssHeight: string;
+}
+
+const YouTubeVideo = styled.iframe<YouTubeVideoProps>`
+  width: calc(100% + 3rem);
+  height: ${props => props.cssHeight};
+  margin: 0 -1.5rem;
+
+  @media screen and (min-width: 420px) {
+    width: 100%;
+    margin: 0;
+  }
+`;
+
+export default function WelcomeScreen() {
+  const [videoHeight, setVideoHeight] = useState('0');
+  const video = useRef<HTMLIFrameElement>(null);
+
+  useLayoutEffect(() => {
+    function updateVideoHeight() {
+      const width = video.current?.clientWidth ?? 0;
+      setVideoHeight(`${width * 315/560}px`);
+    }
+    window.addEventListener('resize', updateVideoHeight);
+    updateVideoHeight();
+    return () => window.removeEventListener('resize', updateVideoHeight);
+  }, []);
+
   return (
-    <Container>
+    <>
       <Paper>
         <PaperRow>
           <Heading1>Welcome!</Heading1>
@@ -27,9 +55,9 @@ export default function WelcomeScreen(props: any) {
         </PaperRow>
         <PaperRow>Here's a video of what gameplay looks like:</PaperRow>
         <PaperRow>
-          <iframe
-            width="560"
-            height="315"
+          <YouTubeVideo
+            ref={video}
+            cssHeight={videoHeight}
             src="https://www.youtube.com/embed/G6M7RpQaInQ"
             title="Paintbot gameplay"
             frameBorder={0}
@@ -45,53 +73,23 @@ export default function WelcomeScreen(props: any) {
           alt="Long ago, all the colors lived together in harmony. Then, everything changed when the red nuance attacked."
         />
       </ComicImages>
-    </Container>
+    </>
   );
 }
-
-const Container = styled.div`
-  width: 100%;
-
-  @media screen and (min-width: 1100px) {
-    width: 70%;
-  }
-  @media screen and (min-width: 1600px) {
-    width: 60%;
-  }
-`;
 
 const ComicImages = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 1rem;
 
   @media screen and (min-width: 800px) {
-    flex-direction: row;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
   }
 `;
 
-function ComicImage({ src, alt }: { src: string; alt: string }) {
-  return (
-    <ImageContainer>
-      <img src={src} alt={alt} />
-    </ImageContainer>
-  );
-}
-
-const ImageContainer = styled.div`
-  flex: 1;
-
-  :first-child {
-    margin: 0 0 1rem;
-  }
-
-  img {
-    width: 100%;
-  }
-
-  @media screen and (min-width: 800px) {
-    :first-child {
-      margin: 0 1rem 0 0;
-    }
-  }
+const ComicImage = styled.img`
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+  width: 100%;
 `;

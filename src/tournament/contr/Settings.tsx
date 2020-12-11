@@ -2,7 +2,8 @@ import React, { useContext } from 'react';
 import styled from 'styled-components/macro';
 
 import TournamentContext from '../../common/contexts/TournamentContext';
-import { Paper, PaperList, PaperListItem, PaperTopic } from '../../common/ui/Paper';
+import { Heading2 } from '../../common/ui/Heading';
+import { Paper, PaperList, PaperListItem, PaperRow } from '../../common/ui/Paper';
 
 export default function Settings() {
   const tour = useContext(TournamentContext);
@@ -10,7 +11,9 @@ export default function Settings() {
 
   return (
     <Paper>
-      <PaperTopic>Settings</PaperTopic>
+      <PaperRow>
+        <Heading2>Settings</Heading2>
+      </PaperRow>
       <PaperList>
         {Object.keys(gameSettings).map(k => (
           <FlexedPaperListItem key={k}>

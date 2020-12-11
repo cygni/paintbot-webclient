@@ -66,7 +66,7 @@ const FlexContainer = styled.div`
   flex-direction: column-reverse;
   justify-content: center;
   padding-top: 20;
-  @media screen and (min-width: 1100px) {
+  @media screen and (min-width: 1000px) {
     flex-direction: row;
   }
 `;

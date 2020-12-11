@@ -1,161 +1,268 @@
 import React, { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components/macro';
+import FocusLock from 'react-focus-lock';
+import { Link, NavLink } from 'react-router-dom';
+import { HashLink } from 'react-router-hash-link';
+import styled, { css } from 'styled-components/macro';
+import { AnimatePresence, motion } from 'framer-motion';
 
-import yellowCharacter from '../../resources/images/yellow_character.png';
-import { CharacterColors, StandardColors } from '../Constants';
+import { ReactComponent as LogoSvg } from '../../resources/images/logo.svg';
+import { ReactComponent as BarsIcon } from '../../resources/icons/bars.svg';
+import { ReactComponent as TimesIcon } from '../../resources/icons/times.svg';
+import { CharacterColors } from '../Constants';
 import AccountContext from '../contexts/AccountContext';
 
-import ControlsButton from './ControlsButton';
-import { Indent } from './Indent';
-import { Row } from './Row';
-import { Spacing } from './Spacing';
+const SkipNavigation = styled(HashLink)`
+  position: fixed;
+  top: 70px;
+  left: -10rem;
+  z-index: 1002;
+  padding: 1rem;
+  background-color: white;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  transition: left 0.2s ease;
+  &:focus {
+    left: 10px;
+  }
+`;
+
+const Logo = styled(LogoSvg)`
+  display: block;
+  margin-left: 20px;
+  height: 60px;
+`;
+
+const iconStyle = css`
+  height: 1.25rem;
+  fill: #25313e;
+`;
+
+const HamburgerIcon = styled(BarsIcon)`
+  ${iconStyle};
+`;
+
+const CloseIcon = styled(TimesIcon)`
+  ${iconStyle};
+`;
+
+const StyledLink = styled(NavLink)`
+  height: 60px;
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #25313e;
+  font-size: 1rem;
+  cursor: pointer;
+  &:hover,
+  &:active,
+  &.active {
+    color: ${CharacterColors.Red};
+  }
+`;
+
+interface NavItemProps {
+  to: string;
+  exact?: boolean;
+  onClick?: () => void;
+  children: React.ReactNode;
+}
+
+function NavItem({ to, exact, onClick, children }: NavItemProps) {
+  return (
+    <li>
+      <StyledLink to={to} onClick={onClick} exact={exact}>
+        {children}
+      </StyledLink>
+    </li>
+  );
+}
+
+const NavList = styled.ul`
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Short Stack', cursive;
+  @media screen and (min-width: 900px) {
+    flex-direction: row;
+  }
+`;
+
+const DesktopNav = styled.div`
+  display: none;
+  @media screen and (min-width: 900px) {
+    display: flex;
+  }
+`;
+
+interface NavigationProps {
+  onClickItem?: () => void;
+  accountText: string;
+}
+
+function Nav({ onClickItem, accountText }: NavigationProps) {
+  return (
+    <nav>
+      <NavList>
+        <NavItem onClick={onClickItem} to="/" exact>
+          Home
+        </NavItem>
+        <NavItem onClick={onClickItem} to="/about">
+          About
+        </NavItem>
+        <NavItem onClick={onClickItem} to="/readme">
+          Getting started
+        </NavItem>
+        <NavItem onClick={onClickItem} to="/tournament">
+          Tournament
+        </NavItem>
+        <NavItem onClick={onClickItem} to="/search">
+          Old games
+        </NavItem>
+        <NavItem onClick={onClickItem} to="/account">
+          {accountText}
+        </NavItem>
+      </NavList>
+    </nav>
+  );
+}
+
+const HamburgerMenuButton = styled.button`
+  height: 60px;
+  width: 60px;
+  border: none;
+  cursor: pointer;
+  background-color: white;
+  &:hover {
+    background-color: #eee;
+  }
+  @media screen and (min-width: 900px) {
+    display: none;
+  }
+`;
+
+const HamburgerOverlay = styled(motion.div)`
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1001;
+  @media screen and (min-width: 900px) {
+    display: none;
+  }
+`;
+
+const HamburgerMenu = styled(motion.div)`
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 200px;
+  background-color: white;
+  box-shadow: -2px 0 4px 0 rgba(0, 0, 0, 0.2);
+  z-index: 1002;
+  transition: right 0.5s ease;
+  @media screen and (min-width: 900px) {
+    display: none;
+  }
+`;
+
+const JustifyRight = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+`;
+
+interface HamburgerNavProps {
+  open: boolean;
+  children: React.ReactNode;
+}
+
+const HamburgerNav = ({ open, children }: HamburgerNavProps) => <AnimatePresence>{open && children}</AnimatePresence>;
+
+const StyledHeader = styled.header`
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+  height: 60px;
+  background-color: white;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const scrollWithOffset = (element: HTMLElement) => {
+  const yCoordinate = element.getBoundingClientRect().top + window.pageYOffset;
+  const yOffset = -60;
+  window.scrollTo({ top: yCoordinate + yOffset, behavior: 'smooth' });
+};
 
 export default function Header() {
-  const accContext = useContext(AccountContext);
-  const [collapsed, setCollapsed] = useState(true);
-  const loggedIn = accContext.loggedIn;
-  const user = accContext.username;
+  const [open, setOpen] = useState(false);
+  const { loggedIn, username } = useContext(AccountContext);
+  const accountText = loggedIn ? username : 'Log in';
 
-  const toggleCollapse = () => {
-    setCollapsed(!collapsed);
+  const toggleMenu = () => {
+    setOpen(!open);
+  };
+
+  const closeMenu = () => {
+    setOpen(false);
+  };
+
+  const closeOnEscape = (event: React.KeyboardEvent) => {
+    if (event.keyCode === 27) {
+      closeMenu();
+    }
   };
 
   return (
-    <MenuContainer collapsed={collapsed}>
-      <Spacing>
-        <Row justifyContent="space-between" alignItems="center" height="100%">
-          <div className="logo">
-            <HeaderText>
-              <HeaderLetter color={CharacterColors.Magenta}>P</HeaderLetter>
-              <HeaderLetter color={CharacterColors.Lavender}>A</HeaderLetter>
-              <HeaderLetter color={CharacterColors.Cyan}>I</HeaderLetter>
-              <HeaderLetter color={CharacterColors.Orange}>N</HeaderLetter>
-              <HeaderLetter color={CharacterColors.Red}>T</HeaderLetter>
-              <HeaderLetter color={CharacterColors.Green}>B</HeaderLetter>
-              <HeaderLetter color={CharacterColors.Blue}>O</HeaderLetter>
-              <HeaderLetter color={CharacterColors.Yellow}>T</HeaderLetter>
-            </HeaderText>
-            <YellowCharacter src={yellowCharacter} />
-          </div>
-          <ControlsButton onClick={toggleCollapse} className="menu-toggler">
-            {collapsed ? 'Show menu' : 'Hide menu'}
-          </ControlsButton>
-        </Row>
-      </Spacing>
-      <div className="links">
-        <MenuItem oc={toggleCollapse} to="/">
-          Welcome
-        </MenuItem>
-        <MenuItem oc={toggleCollapse} to="/about">
-          About
-        </MenuItem>
-        <MenuItem oc={toggleCollapse} to="/readme">
-          Getting started
-        </MenuItem>
-        <MenuItem oc={toggleCollapse} to="/search">
-          Search for old games
-        </MenuItem>
-        <MenuItem oc={toggleCollapse} to="/tournament">
-          Tournament
-        </MenuItem>
-        <MenuItem oc={toggleCollapse} to="/account">
-          {loggedIn ? user : 'Log in'}
-        </MenuItem>
-      </div>
-    </MenuContainer>
+    <>
+      <SkipNavigation to="#content" scroll={element => scrollWithOffset(element)}>
+        Skip to content
+      </SkipNavigation>
+      <StyledHeader>
+        <Link to="/">
+          <Logo role="img" aria-label="Paintbot" />
+        </Link>
+        <DesktopNav>
+          <Nav accountText={accountText} />
+        </DesktopNav>
+        <HamburgerMenuButton onClick={toggleMenu}>
+          <HamburgerIcon role="img" aria-label="Open menu" />
+        </HamburgerMenuButton>
+      </StyledHeader>
+      <HamburgerNav open={open}>
+        <HamburgerOverlay
+          key="overlay"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={closeMenu}
+        />
+        <HamburgerMenu
+          key="menu"
+          initial={{ x: 210 }}
+          animate={{ x: 0 }}
+          exit={{ x: 210 }}
+          transition={{ ease: 'easeOut', duration: 0.3 }}
+          onKeyUp={closeOnEscape}
+        >
+          <FocusLock returnFocus>
+            <JustifyRight>
+              <HamburgerMenuButton onClick={closeMenu}>
+                <CloseIcon role="img" aria-label="Close menu" />
+              </HamburgerMenuButton>
+            </JustifyRight>
+            <Nav onClickItem={closeMenu} accountText={accountText} />
+          </FocusLock>
+        </HamburgerMenu>
+      </HamburgerNav>
+    </>
   );
 }
-
-function MenuItem(props: any) {
-  return (
-    <Spacing onClick={props.oc}>
-      <Indent num={2}>
-        <MenuButton to={props.to} width="100%">
-          {props.children}
-        </MenuButton>
-      </Indent>
-    </Spacing>
-  );
-}
-
-function MenuButton(props: any) {
-  const StyledLink = styled(Link)`
-    text-decoration: inherit;
-    color: black;
-    font-size: 25px;
-    cursor: pointer;
-    :hover,
-    :active,
-    :focus {
-      color: ${CharacterColors.Red};
-    }
-    :focus {
-      outline: none;
-    }
-  `;
-  return <StyledLink to={props.to}>{props.children}</StyledLink>;
-}
-
-interface MenuContainerProps {
-  collapsed: boolean;
-}
-
-const MenuContainer = styled.div<MenuContainerProps>`
-  width: 100%;
-  line-height: 50px;
-  background-color: white;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  display: flex;
-  flex-direction: column;
-  font-family: 'Nanum Pen Script', cursive;
-  .menu-toggler {
-    margin-right: 30px;
-  }
-  .logo {
-    display: flex;
-    flex-direction: row;
-  }
-  .links {
-    visibility: ${props => (props.collapsed ? 'hidden' : 'visible')};
-    width: 100%;
-    display: ${props => (props.collapsed ? 'none' : 'flex')};
-    flex-direction: column;
-    a {
-      width: auto;
-      display: block;
-    }
-  }
-  @media screen and (min-width: 1100px) {
-    flex-direction: row;
-    .menu-toggler {
-      display: none;
-    }
-    .links {
-      display: flex;
-      visibility: visible;
-      flex-direction: row;
-      justify-content: flex-end;
-      a {
-        display: inline;
-      }
-    }
-  }
-`;
-
-const HeaderText = styled.span`
-  font-size: 44px;
-  font-weight: bold;
-  height: 100%;
-  padding-left: 20px;
-  color: ${StandardColors.White};
-`;
-
-const HeaderLetter = styled.span`
-  color: ${props => props.color};
-`;
-
-const YellowCharacter = styled.img`
-  width: 30px;
-  height: 30px;
-`;

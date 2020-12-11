@@ -3,7 +3,7 @@ import React, { useContext } from 'react';
 import { REQUEST_TYPES } from '../common/API';
 import ArenaContext from '../common/contexts/ArenaContext';
 import WebSocketContext from '../common/contexts/WebSocketContext';
-import ControlsButton from '../common/ui/ControlsButton';
+import DefaultButton from '../common/ui/DefaultButton';
 
 export default function ArenaStarter() {
   const send = useContext(WebSocketContext);
@@ -17,5 +17,5 @@ export default function ArenaStarter() {
     });
   };
 
-  return <ControlsButton onClick={startArena}>Start new arena game</ControlsButton>;
+  return <DefaultButton onClick={startArena}>Start new arena game</DefaultButton>;
 }
