@@ -69,7 +69,7 @@ export default class ColouredTile extends React.Component<Props> {
     return (
       <Path
         data={this.svgData}
-        fill={colour || 'lightslategrey'}
+        fill={colour || 'black'}
         x={x}
         y={y}
         scale={scale}
