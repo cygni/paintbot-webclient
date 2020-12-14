@@ -17,10 +17,9 @@ export const Paper = styled.div<PaperProps>`
 
 export const PaperTopic = styled.h2`
   margin: 0px;
-  font-family: 'Nanum Gothic', sans-serif;
   text-transform: uppercase;
-  font-size: 14px;
-  color: #e7beff;
+  font-size: 0.875rem;
+  color: #8496ad;
   text-align: center;
 `;
 
@@ -45,10 +44,11 @@ export const PaperHeadingRow = styled(PaperRow)`
 `;
 
 export const PaperList = styled.ul`
-  margin-bottom: 0;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
   display: flex;
   flex-direction: column;
-  padding-inline-start: 0px;
 `;
 
 export const PaperListItem = styled.li`

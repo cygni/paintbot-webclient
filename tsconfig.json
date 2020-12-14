@@ -1,27 +1,29 @@
 {
   "compilerOptions": {
     "module": "esnext",
-    "target": "es2017",
-    "lib": ["dom", "es2017"],
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
     "sourceMap": true,
     "allowJs": true,
     "noEmit": true,
-    "jsx": "preserve",
+    "jsx": "react",
     "moduleResolution": "node",
     "rootDir": "src",
     "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": false,
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "noImplicitAny": true,
     "strict": true,
     "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": true,
-    "skipLibCheck": false,
+    "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "plugins": [{ "name": "typescript-styled-plugin" }]
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["**/*.json"]
 }

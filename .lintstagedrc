@@ -1,6 +1,6 @@
 {
-  "**/*.{js,jsx,ts,tsx}": [
-    "tslint --project tsconfig.json --format stylish --fix",
+  "src/**/*.{js,jsx,ts,tsx}": [
+    "eslint --format stylish --fix",
     "react-scripts test --passWithNoTests --findRelatedTests",
     "git add"
   ],

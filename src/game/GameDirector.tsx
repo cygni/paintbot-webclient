@@ -57,7 +57,7 @@ export default class GameDirector extends React.Component<Props, State> {
   private readonly events: any[] = [];
   private currentEventIndex = 0;
   private timeInMsPerTick: number = Config.DefaultGameSpeed;
-  private updateInterval?: NodeJS.Timer;
+  private updateInterval?: number;
 
   readonly state: State = {
     gameSettings: undefined,

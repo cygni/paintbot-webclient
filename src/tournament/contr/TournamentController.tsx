@@ -5,11 +5,12 @@ import AccountContext from '../../common/contexts/AccountContext';
 import TournamentContext from '../../common/contexts/TournamentContext';
 import { Player } from '../../common/types';
 import { Heading1 } from '../../common/ui/Heading';
+import { Paper, PaperRow } from '../../common/ui/Paper';
 
 import Controls from './Controls';
 import GamePlan, { PlayedGame } from './GamePlan';
 import Players from './Players';
-import TournamentPropertySetter from './propSetter/TournamentPropertySetter';
+import TournamentPropertySetter from './TournamentPropertySetter';
 import Settings from './Settings';
 
 interface NextGame {
@@ -17,6 +18,16 @@ interface NextGame {
   game: number;
   players: Player[];
 }
+
+const PaperGrid = styled.div`
+  width: 100%;
+  display: grid;
+  gap: 1rem;
+
+  @media screen and (min-width: 600px) {
+    grid-template-columns: 1fr auto;
+  }
+`;
 
 export default function TournamentController() {
   const tour = useContext(TournamentContext);
@@ -55,58 +66,24 @@ export default function TournamentController() {
   );
 
   return (
-    <>
-      <Heading1>{tour.tournamentName}</Heading1>
-      {acc.loggedIn && <Controls started={started} />}
-      {started && (
-        <Papers>
-          <PaperColumn flex={1}>
-            <GamePlan lvl={nextGame.lvl} game={nextGame.game} players={nextGame.players} playedGames={playedGames} />
-          </PaperColumn>
-          <PaperColumn>
-            <Players />
-            <Settings />
-          </PaperColumn>
-        </Papers>
-      )}
-      {!started && (
-        <Papers>
-          <PaperColumn flex={1}>
-            <Players />
-          </PaperColumn>
-          <PaperColumn>
-            {showSetters && <TournamentPropertySetter />}
-            {!showSetters && <Settings />}
-          </PaperColumn>
-        </Papers>
-      )}
-    </>
+    <PaperGrid>
+      <div>
+        <Paper>
+          <PaperRow>
+            <Heading1>{tour.tournamentName}</Heading1>
+            <p>It's on! Start the tournament once all players have joined.</p>
+            {acc.loggedIn && <Controls started={started} />}
+          </PaperRow>
+          <Players />
+        </Paper>
+        {started && (
+          <GamePlan lvl={nextGame.lvl} game={nextGame.game} players={nextGame.players} playedGames={playedGames} />
+        )}
+      </div>
+      <div>
+        {showSetters && <TournamentPropertySetter />}
+        {!showSetters && <Settings />}
+      </div>
+    </PaperGrid>
   );
 }
-
-const Papers = styled.div`
-  display: flex;
-  width: 100%;
-  max-width: 800px;
-  margin-top: 1rem;
-  @media screen and (max-width: 800px) {
-    flex-direction: column;
-  }
-`;
-
-interface PaperColumnProps {
-  flex?: number;
-}
-
-const PaperColumn = styled.div<PaperColumnProps>`
-  flex: ${props => props.flex};
-  display: flex;
-  flex-direction: column;
-  margin: 0 1rem;
-  & > div {
-    width: 100%;
-  }
-  @media screen and (max-width: 800px) {
-    flex: none;
-  }
-`;

@@ -18,7 +18,7 @@ export default class GameBoardContainer extends React.Component<Props> {
   private readonly boardHeight: number;
   private readonly tileSize: number;
   private readonly canvasRef = React.createRef<HTMLCanvasElement>();
-  private updateInterval?: NodeJS.Timer;
+  private updateInterval?: number;
   private fractionOfTick = 0;
 
   constructor(props: Props) {

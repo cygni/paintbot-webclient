@@ -1,7 +1,8 @@
 import React, { useContext } from 'react';
 
 import TournamentContext from '../../common/contexts/TournamentContext';
-import { Paper, PaperHeadingRow, PaperList, PaperListItem, PaperTopic } from '../../common/ui/Paper';
+import { Heading2 } from '../../common/ui/Heading';
+import { PaperRow, PaperList, PaperListItem } from '../../common/ui/Paper';
 import PlayerLink from '../../common/ui/PlayerLink';
 
 export default function Players() {
@@ -9,20 +10,22 @@ export default function Players() {
   const players = tour.gamePlan.players;
 
   return (
-    <Paper>
-      <PaperTopic>Players</PaperTopic>
-      {players.length < 1 && <PaperHeadingRow>No players online!</PaperHeadingRow>}
+    <>
+      <PaperRow>
+        <Heading2>Players</Heading2>
+      </PaperRow>
+      {players.length < 1 && <PaperRow>No players online!</PaperRow>}
       {players.length > 0 && (
         <PaperList>
           {players
             // .sort((p1, p2) => p2.points - p1.points)
-            .map((player, index) => (
-              <PaperListItem key={`row${player.name}${index}`}>
+            .map(player => (
+              <PaperListItem key={player.name}>
                 <PlayerLink name={player.name} />
               </PaperListItem>
             ))}
         </PaperList>
       )}
-    </Paper>
+    </>
   );
 }

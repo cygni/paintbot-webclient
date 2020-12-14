@@ -3,7 +3,7 @@ import styled, { keyframes } from 'styled-components/macro';
 
 import { CharacterColors } from '../Constants';
 
-const Loading = styled.div`
+const LoadingContainer = styled.div`
   width: 40px;
   height: 40px;
 
@@ -51,9 +51,11 @@ const BounceTwo = styled.div`
   animation-delay: -1s;
 `;
 
-export default () => (
-  <Loading>
+const Loading = () => (
+  <LoadingContainer>
     <BounceOne />
     <BounceTwo />
-  </Loading>
+  </LoadingContainer>
 );
+
+export default Loading;

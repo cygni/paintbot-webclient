@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { DefaultButton } from '../../common/ui/DefaultButton';
+import DefaultButton from '../../common/ui/DefaultButton';
 
 export interface PlayControlButtonProps {
   playing: boolean;
