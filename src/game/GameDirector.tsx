@@ -62,7 +62,7 @@ export default class GameDirector extends React.Component<Props, State> {
     const gameState = this.state.gameState;
     if (gameState) {
       gameState.map.characterInfos.forEach(c => {
-        c.points = gameResult.playerRanks.filter(p => p.playerId === c.id)[0].points;
+        c.points = gameResult.playerRanks.filter(p => p.playerId === c.id)[0]?.points || c.points;
       });
       this.setState({ gameState: gameState });
     }
