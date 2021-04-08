@@ -3,7 +3,7 @@ import React from 'react';
 import Config from '../Config';
 
 import GameContainer from './GameContainer';
-import { EventType, GameSettings, GameState } from './type';
+import { EventType, GameSettings, GameState, GameResult } from './type';
 
 interface Props {
   id?: string;
@@ -49,9 +49,25 @@ export default class GameDirector extends React.Component<Props, State> {
       } else if (data.type === EventType.GAME_UPDATE_EVENT) {
         this.setState({ gameState: data as GameState });
       }
+      else if (data.type === EventType.GAME_RESULT_EVENT) {
+        const gameResult = data as GameResult;
+        this.updatePointsFromGameResult(gameResult);
+      }
     }
 
     this.currentEventIndex++;
+  }
+
+  private updatePointsFromGameResult(gameResult: GameResult) {
+    const gameState = this.state.gameState;
+    if (gameState) {
+      const players = gameState.map.characterInfos;
+      players.forEach(c => {
+        c.points = gameResult.playerRanks.filter(p => p.playerId === c.id)[0].points;
+      });
+      gameState.map.characterInfos = players;
+      this.setState({ gameState: gameState });
+    }
   }
 
   private endGame() {
