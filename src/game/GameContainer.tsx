@@ -27,13 +27,21 @@ export default class GameContainer extends React.Component<GameContainerProps, G
     return this.gameBoardFactory.getGameBoard(gameMap);
   }
 
+  private getDurationInTicks({ gameDurationInSeconds, timeInMsPerTick }: GameSettings): number {
+    return gameDurationInSeconds * 1000 / timeInMsPerTick
+  }
+
   render() {
     const { gameSettings, gameMap, onGameSpeedChange, onPauseGame, onRestartGame } = this.props;
     const game = this.transformGameMapToModel(gameMap);
     return (
       <div>
         <FlexContainer>
-          <ScoreBoardContainer players={game.currentCharacters} worldTick={game.worldTick} />
+          <ScoreBoardContainer
+            players={game.currentCharacters}
+            worldTick={game.worldTick}
+            gameDurationInTicks={this.getDurationInTicks(gameSettings)}
+            ticksPerRender={5} />
           <div>
             <GameBoardContainer game={game} />
             <GamerControllerContainer>
