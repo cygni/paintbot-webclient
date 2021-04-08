@@ -29,7 +29,7 @@ export default class ScoreBoardContainer extends React.Component<Props> {
   }
   shouldComponentUpdate(nextProps: Props) {
     const { worldTick, ticksPerRender, gameDurationInTicks } = nextProps;
-    return worldTick % ticksPerRender === 0 || worldTick === gameDurationInTicks - 1;
+    return worldTick % ticksPerRender === 0 || worldTick === gameDurationInTicks - 1; // Updates on every ticksPerRender tick and also the last tick
   }
 
   render() {
