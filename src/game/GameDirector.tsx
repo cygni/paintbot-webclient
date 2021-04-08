@@ -61,11 +61,9 @@ export default class GameDirector extends React.Component<Props, State> {
   private updatePointsFromGameResult(gameResult: GameResult) {
     const gameState = this.state.gameState;
     if (gameState) {
-      const players = gameState.map.characterInfos;
-      players.forEach(c => {
+      gameState.map.characterInfos.forEach(c => {
         c.points = gameResult.playerRanks.filter(p => p.playerId === c.id)[0].points;
       });
-      gameState.map.characterInfos = players;
       this.setState({ gameState: gameState });
     }
   }
