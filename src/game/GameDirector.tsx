@@ -14,6 +14,7 @@ interface Props {
 interface State {
   gameSettings: GameSettings | undefined;
   gameState: GameState | undefined;
+  numberOfFetches: number;
   error?: string;
 }
 
@@ -26,6 +27,7 @@ export default class GameDirector extends React.Component<Props, State> {
   readonly state: State = {
     gameSettings: undefined,
     gameState: undefined,
+    numberOfFetches: 0,
     error: undefined,
   };
 
@@ -91,21 +93,32 @@ export default class GameDirector extends React.Component<Props, State> {
     this.currentEventIndex = 0;
   };
 
-  async componentDidMount() {
-    if (this.props.id) {
-      const response = await fetch(`${Config.BackendUrl}/history/${this.props.id}`);
-      if (response.status === 404) {
-        this.setState({error: "Game not found"});
+  private async fetchGame() {
+    const response = await fetch(`${Config.BackendUrl}/history/${this.props.id}`);
+    if (response.status === 404) {
+      if (this.state.numberOfFetches < 5) {
+        this.setState({numberOfFetches: this.state.numberOfFetches + 1});
+        setTimeout(() => this.fetchGame(), 2000);
       }
       else {
-        const json = await response.json();
-        json.messages.forEach((msg: any) => this.events.push(msg));
+        this.setState({error: "Game not found"});
       }
+    }
+    else {
+      const json = await response.json();
+      json.messages.forEach((msg: any) => this.events.push(msg));
+      this.updateGameSpeedInterval(Config.DefaultGameSpeed);
+    }
+  }
+
+  componentDidMount() {
+    if (this.props.id) {
+      this.fetchGame();
     } else {
       this.ws = new WebSocket(Config.WebSocketApiUrl);
       this.ws.onmessage = (evt: MessageEvent) => this.onUpdateFromServer(evt);
+      this.updateGameSpeedInterval(Config.DefaultGameSpeed);
     }
-    this.updateGameSpeedInterval(Config.DefaultGameSpeed);
   }
 
   componentWillUnmount() {
