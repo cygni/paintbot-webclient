@@ -28,11 +28,8 @@ export default function App() {
         setTourContext(newTour);
       };
       const accSetter = (li: boolean, un: string, t: string) => {
-        if (!docCookies.setItem('token', t)) {
-          console.log('could not set token cookie');
-        } else {
+        if (docCookies.setItem('token', t)) {
           if (!docCookies.setItem('name', un)) {
-            console.log('could not set name cookie');
             docCookies.removeItem('token');
           } else {
             setAccContext({

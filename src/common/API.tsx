@@ -80,8 +80,6 @@ export function useWebSocket() {
   const [queuedMessages, setQueuedMessages] = useState(new Array<string>());
 
   const handleError = (e: any) => {
-    console.log(e);
-    console.log(`CLOSING SOCKET: ${ws.url}`);
     ws.close();
     setWs(new WebSocket(Config.WebSocketApiUrl));
   };
@@ -95,8 +93,6 @@ export function useWebSocket() {
   };
 
   ws.onopen = () => {
-    console.log(`OPENING SOCKET: ${ws.url}`);
-    console.log(`SENDING ${queuedMessages.length} QUEUED MESSAGES`);
     for (const mess of queuedMessages) {
       sender(mess);
     }
@@ -106,7 +102,6 @@ export function useWebSocket() {
   ws.onmessage = e => {
     const jsonResponse = JSON.parse(e.data);
     const { type, ...response } = jsonResponse;
-    // console.log(`MESSAGE OF TYPE: ${type} \nRECEIVED FROM ${ws.url}`);
     switch (type) {
       case RESPONSE_TYPES.CURRENT_ARENA:
         sender({
@@ -131,8 +126,6 @@ export function useWebSocket() {
       // falls through
       case RESPONSE_TYPES.API_MESSAGE_EXCEPTION:
       default:
-        console.log(type);
-        console.log(response);
       // falls through
       case RESPONSE_TYPES.TOURNAMENT_INFO:
       case RESPONSE_TYPES.TOURNAMENT_GAME_PLAN:
@@ -171,14 +164,12 @@ export function useWebSocket() {
       const state = ws.readyState;
       if (state === ws.OPEN) {
         ws.send(mess);
-        // console.log(`SENT MESSAGE OF TYPE: ${message.type}`);
       } else if (state === ws.CONNECTING) {
         const messages = queuedMessages.concat(mess);
         setQueuedMessages(messages);
       } else {
         const messages = queuedMessages.concat(mess);
         setQueuedMessages(messages);
-        console.log(`SOCKET IS ${state === ws.CLOSING ? 'CLOSING' : 'CLOSED'}`);
         setWs(new WebSocket(Config.WebSocketApiUrl));
       }
     },

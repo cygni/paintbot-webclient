@@ -98,7 +98,6 @@ export default function SearchScreen() {
         try {
           games = await searchGames().then(resp => resp.items);
         } catch (e) {
-          console.log(e);
           setErrorMessage('Failed to search');
         }
 

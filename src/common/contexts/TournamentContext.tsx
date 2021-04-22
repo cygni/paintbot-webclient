@@ -49,8 +49,7 @@ export const validateTour = (tournamentInfo: any, currentContext: any, messType:
       const oldVal = oldObj[k];
       const newVal = newObj[k];
       if (oldVal === undefined || typeof oldVal !== typeof newVal) {
-        console.log(`WEIRDNESS IN THE NEW OBJECT`);
-        console.log(`oldVal: ${oldVal}, newVal: ${newVal}`);
+        // WEIRDNESS IN THE NEW OBJECT
       } else if (oldVal instanceof Array) {
         revisedNewObj[k] = newVal;
       } else if (typeof oldVal === 'object') {
