@@ -1,4 +1,6 @@
 import React from 'react';
+import { Heading1 } from '../common/ui/Heading';
+import { Paper, PaperRow } from '../common/ui/Paper';
 
 import Config from '../Config';
 
@@ -12,10 +14,9 @@ interface Props {
 interface State {
   gameSettings: GameSettings | undefined;
   gameState: GameState | undefined;
+  numberOfFetches: number;
+  error?: string;
 }
-
-// TODO Handle receiving game settings when EventType === GAME_STARTING_EVENT
-// TODO Handle receiving results when EventType === GAME_RESULT_EVENT
 
 export default class GameDirector extends React.Component<Props, State> {
   private ws?: WebSocket;
@@ -26,6 +27,8 @@ export default class GameDirector extends React.Component<Props, State> {
   readonly state: State = {
     gameSettings: undefined,
     gameState: undefined,
+    numberOfFetches: 0,
+    error: undefined,
   };
 
   private onUpdateFromServer(evt: MessageEvent) {
@@ -45,7 +48,10 @@ export default class GameDirector extends React.Component<Props, State> {
     const data = this.events[eventIndex];
     if (data) {
       if (data.type === EventType.GAME_STARTING_EVENT) {
-        this.setState({ gameSettings: data.gameSettings as GameSettings });
+        this.setState({
+          gameSettings: data.gameSettings as GameSettings,
+          gameState: data as GameState,
+        });
       } else if (data.type === EventType.GAME_UPDATE_EVENT) {
         this.setState({ gameState: data as GameState });
       }
@@ -87,15 +93,32 @@ export default class GameDirector extends React.Component<Props, State> {
     this.currentEventIndex = 0;
   };
 
-  async componentDidMount() {
+  private async fetchGame() {
+    const response = await fetch(`${Config.BackendUrl}/history/${this.props.id}`);
+    if (response.status === 404) {
+      if (this.state.numberOfFetches < 5) {
+        this.setState({numberOfFetches: this.state.numberOfFetches + 1});
+        setTimeout(() => this.fetchGame(), 2000);
+      }
+      else {
+        this.setState({error: "Game not found"});
+      }
+    }
+    else {
+      const json = await response.json();
+      json.messages.forEach((msg: any) => this.events.push(msg));
+      this.updateGameSpeedInterval(Config.DefaultGameSpeed);
+    }
+  }
+
+  componentDidMount() {
     if (this.props.id) {
-      const response = await fetch(`${Config.BackendUrl}/history/${this.props.id}`).then(r => r.json());
-      response.messages.forEach((msg: any) => this.events.push(msg));
+      this.fetchGame();
     } else {
       this.ws = new WebSocket(Config.WebSocketApiUrl);
       this.ws.onmessage = (evt: MessageEvent) => this.onUpdateFromServer(evt);
+      this.updateGameSpeedInterval(Config.DefaultGameSpeed);
     }
-    this.updateGameSpeedInterval(Config.DefaultGameSpeed);
   }
 
   componentWillUnmount() {
@@ -103,29 +126,42 @@ export default class GameDirector extends React.Component<Props, State> {
   }
 
   getComponentToRender() {
-    if (this.state.gameSettings && this.state.gameState) {
-      const gameStatus = this.state.gameState.type;
-      const { gameState, gameSettings } = this.state;
+    const gameStatus = this.state.gameState?.type;
+    const { gameState, gameSettings, error } = this.state;
 
-      if (!gameStatus) {
-        return <h1>Waiting for game</h1>;
-      } else if (gameStatus === EventType.GAME_STARTING_EVENT) {
-        return <h1>Game is starting</h1>;
-      } else if (gameStatus === EventType.GAME_UPDATE_EVENT) {
-        return (
-          <GameContainer
-            gameMap={gameState.map}
-            gameSettings={gameSettings}
-            onGameSpeedChange={this.updateGameSpeedInterval}
-            onPauseGame={this.pauseGame}
-            onRestartGame={this.restartGame}
-          />
-        );
-      } else if (gameStatus === EventType.GAME_ENDED_EVENT) {
-        this.endGame();
-        return <h1>Game finished</h1>;
-      }
+    if (error) {
+      return (
+        <Paper>
+          <PaperRow>
+            <Heading1>Game Not Found</Heading1>
+          </PaperRow>
+          <PaperRow>
+            This game is not in the archive.
+          </PaperRow>
+          <PaperRow>
+            If this is a recent game, it might not have been stored yet.
+            Try reloading the page in a few seconds.
+          </PaperRow>
+        </Paper>
+      );
     }
+
+    if (!gameStatus) {
+      return <p>Loading game...</p>;
+    } else if (gameStatus === EventType.GAME_STARTING_EVENT) {
+      return <p>Game is starting...</p>;
+    } else if ((gameStatus === EventType.GAME_UPDATE_EVENT || gameStatus === EventType.GAME_RESULT_EVENT) && gameState && gameSettings) {
+      return (
+        <GameContainer
+          gameMap={gameState.map}
+          gameSettings={gameSettings}
+          onGameSpeedChange={this.updateGameSpeedInterval}
+          onPauseGame={this.pauseGame}
+          onRestartGame={this.restartGame}
+        />
+      );
+    }
+
     return null;
   }
 
