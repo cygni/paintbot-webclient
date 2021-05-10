@@ -33,6 +33,11 @@ export default class GameBoardContainer extends React.Component<Props> {
     ctx.clearRect(0, 0, this.boardWidth, this.boardHeight);
   }
 
+  private renderBackground(ctx: CanvasRenderingContext2D) {
+    ctx.fillStyle = 'rgb(0,7,52)';
+    ctx.fillRect(0, 0, this.boardWidth, this.boardHeight);
+  }
+
   private renderTiles(ctx: CanvasRenderingContext2D) {
     const { tiles } = this.props.gameBoardState;
     tiles.forEach(tile => {
@@ -394,6 +399,7 @@ export default class GameBoardContainer extends React.Component<Props> {
     const ctx = canvas.getContext('2d');
     if (ctx) {
       this.clearCanvas(ctx);
+      this.renderBackground(ctx);
       this.renderTiles(ctx);
       this.renderNewTiles(ctx, this.fractionOfTick);
       this.renderCharacters(ctx, this.fractionOfTick);
@@ -405,6 +411,7 @@ export default class GameBoardContainer extends React.Component<Props> {
     const canvas = this.canvasRef.current as HTMLCanvasElement;
     const ctx = canvas.getContext('2d');
     if (ctx) {
+      this.renderBackground(ctx);
       this.renderTiles(ctx);
       this.renderCharacters(ctx, 1);
       this.renderPowerUps(ctx, 1);
