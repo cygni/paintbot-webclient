@@ -272,6 +272,7 @@ export default class GameBoardContainer extends React.Component<Props> {
 
   private draw(fractionOfTick: number) {
     this.fractionOfTick += fractionOfTick;
+    this.fractionOfTick = Math.min(this.fractionOfTick, 1);
     const canvas = this.canvasRef.current as HTMLCanvasElement;
     const ctx = canvas.getContext('2d');
     if (ctx) {
