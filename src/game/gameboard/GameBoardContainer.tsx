@@ -222,20 +222,17 @@ export default class GameBoardContainer extends React.Component<Props> {
   }
 
   private renderPowerUps(ctx: CanvasRenderingContext2D, fractionOfTick: number) {
-    const { powerUpCoordinates } = this.props.gameBoardState;
+    const { powerUpCoordinates, worldTick } = this.props.gameBoardState;
     powerUpCoordinates.forEach(powerUpCoordinate => {
       const boardCoordinate = this.getCircleBoardCoordinate(powerUpCoordinate);
-      ctx.fillStyle = 'white';
+      const currentRadiant = (((worldTick % 10) + fractionOfTick) / 10) * Math.PI * 2;
+      const r = Math.sin(currentRadiant) * 100 + 155;
+      const g = Math.cos(currentRadiant) * 100 + 155;
+      const b = Math.tan(currentRadiant) * 100 + 155;
+      ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
       ctx.strokeStyle = 'black';
       ctx.beginPath();
-      ctx.arc(
-        boardCoordinate.x,
-        boardCoordinate.y,
-        (this.tileSize / 2) * (1 - Math.abs(fractionOfTick - 0.5)),
-        0,
-        Math.PI * 2,
-        true,
-      );
+      ctx.arc(boardCoordinate.x, boardCoordinate.y, this.tileSize / 4, 0, Math.PI * 2, true);
       ctx.fill();
       ctx.stroke();
     });
