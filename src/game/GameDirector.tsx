@@ -188,6 +188,11 @@ export default class GameDirector extends React.Component<Props, State> {
     this.currentEventIndex = 0;
   };
 
+  private readonly setWorldTick = (worldTick: number) => {
+    this.currentEventIndex = worldTick;
+    this.playOneTick(this.currentEventIndex);
+  };
+
   async componentDidMount() {
     if (this.props.id) {
       const response = await fetch(`${Config.BackendUrl}/history/${this.props.id}`).then(r => r.json());
@@ -220,6 +225,7 @@ export default class GameDirector extends React.Component<Props, State> {
             onGameSpeedChange={this.updateGameSpeedInterval}
             onPauseGame={this.pauseGame}
             onRestartGame={this.restartGame}
+            onWorldTickChange={this.setWorldTick}
           />
         );
       } else if (gameStatus === EventType.GAME_ENDED_EVENT) {

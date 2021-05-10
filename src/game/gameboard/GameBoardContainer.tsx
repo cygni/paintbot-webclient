@@ -84,11 +84,6 @@ export default class GameBoardContainer extends React.Component<Props> {
     prevCharacter: Character,
   ) {
     const direction = this.getDirection(character.coordinate, prevCharacter.coordinate);
-    console.log(
-      `${character.name} moves ${this.getDirectionName(direction)} (${prevCharacter.coordinate.x}, ${
-        prevCharacter.coordinate.y
-      }) -> (${character.coordinate.x}, ${character.coordinate.y})`,
-    );
     const boardCoordinate = this.getCharacterBoardCoordinate(
       character.coordinate,
       prevCharacter.coordinate,
