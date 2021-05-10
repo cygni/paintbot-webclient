@@ -3,7 +3,7 @@ import React from 'react';
 import { CharacterColors } from '../common/Constants';
 import Config from '../Config';
 
-import GameContainer from './GameContainer';
+import { GameContainer } from './GameContainer';
 import {
   Character,
   CharacterInfo,

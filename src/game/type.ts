@@ -24,6 +24,7 @@ export interface Coordinate {
 export interface GameSettings {
   timeInMsPerTick: number;
   gameDurationInSeconds: number;
+  explosionRange: number;
 }
 
 export interface Game {

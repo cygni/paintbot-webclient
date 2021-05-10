@@ -4,6 +4,7 @@ import { Character, Coordinate, GameBoardState } from '../type';
 
 interface Props {
   gameBoardState: GameBoardState;
+  explosionRange: number;
 }
 
 enum Direction {
@@ -95,8 +96,8 @@ export default class GameBoardContainer extends React.Component<Props> {
     );
     ctx.fillStyle = character.colour;
     ctx.strokeStyle = 'black';
-    ctx.beginPath();
     if (character.carryingPowerUp) {
+      ctx.beginPath();
       ctx.arc(
         boardCoordinate.x,
         boardCoordinate.y,
@@ -105,19 +106,34 @@ export default class GameBoardContainer extends React.Component<Props> {
         Math.PI * 2,
         true,
       );
+      ctx.fill();
+      ctx.stroke();
     } else if (prevCharacter.carryingPowerUp) {
-      ctx.arc(boardCoordinate.x, boardCoordinate.y, (this.tileSize / 2) * (1 - fractionOfTick), 0, Math.PI * 2, true);
-    } else {
+      ctx.beginPath();
+      ctx.arc(
+        boardCoordinate.x,
+        boardCoordinate.y,
+        this.tileSize / 2 + fractionOfTick * this.tileSize * this.props.explosionRange * 0.75,
+        0,
+        Math.PI * 2,
+        true,
+      );
+      ctx.fill();
+      ctx.beginPath();
       ctx.arc(boardCoordinate.x, boardCoordinate.y, this.tileSize / 2, 0, Math.PI * 2, true);
+      ctx.stroke();
+    } else {
+      ctx.beginPath();
+      ctx.arc(boardCoordinate.x, boardCoordinate.y, this.tileSize / 2, 0, Math.PI * 2, true);
+      ctx.fill();
+      ctx.stroke();
     }
-    ctx.fill();
-    ctx.stroke();
 
     if (character.stunned) {
       this.renderStunnedEyes(ctx, direction, boardCoordinate);
       this.renderShine(ctx, direction, boardCoordinate);
       this.renderStunnedStars(ctx, boardCoordinate, fractionOfTick);
-    } else if (!(prevCharacter.carryingPowerUp && !character.carryingPowerUp)) {
+    } else {
       this.renderNormalEyes(ctx, direction, boardCoordinate);
       this.renderShine(ctx, direction, boardCoordinate);
     }
