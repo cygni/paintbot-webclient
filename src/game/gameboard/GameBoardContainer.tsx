@@ -108,113 +108,233 @@ export default class GameBoardContainer extends React.Component<Props> {
     ctx.fill();
     ctx.stroke();
 
-    // render eyes
-    if (!(prevCharacter.carryingPowerUp && !character.carryingPowerUp)) {
-      ctx.fillStyle = 'black';
-      ctx.beginPath();
-      switch (direction) {
-        case Direction.DOWN:
-          ctx.arc(
-            boardCoordinate.x - this.tileSize / 4,
-            boardCoordinate.y + this.tileSize / 4,
-            this.tileSize / 12,
-            0,
-            Math.PI * 2,
-            true,
-          );
-          ctx.fill();
-          ctx.beginPath();
-          ctx.arc(
-            boardCoordinate.x + this.tileSize / 4,
-            boardCoordinate.y + this.tileSize / 4,
-            this.tileSize / 12,
-            0,
-            Math.PI * 2,
-            true,
-          );
-          ctx.fill();
-          ctx.fillStyle = 'white';
-          ctx.beginPath();
-          ctx.arc(boardCoordinate.x, boardCoordinate.y - this.tileSize / 3, this.tileSize / 10, 0, Math.PI * 2, true);
-          ctx.fill();
-          break;
-        case Direction.UP:
-          ctx.arc(
-            boardCoordinate.x - this.tileSize / 4,
-            boardCoordinate.y - this.tileSize / 4,
-            this.tileSize / 12,
-            0,
-            Math.PI * 2,
-            true,
-          );
-          ctx.fill();
-          ctx.beginPath();
-          ctx.arc(
-            boardCoordinate.x + this.tileSize / 4,
-            boardCoordinate.y - this.tileSize / 4,
-            this.tileSize / 12,
-            0,
-            Math.PI * 2,
-            true,
-          );
-          ctx.fill();
-          ctx.fillStyle = 'white';
-          ctx.beginPath();
-          ctx.arc(boardCoordinate.x, boardCoordinate.y + this.tileSize / 3, this.tileSize / 10, 0, Math.PI * 2, true);
-          ctx.fill();
-          break;
-        case Direction.LEFT:
-          ctx.arc(
-            boardCoordinate.x - this.tileSize / 4,
-            boardCoordinate.y - this.tileSize / 4,
-            this.tileSize / 12,
-            0,
-            Math.PI * 2,
-            true,
-          );
-          ctx.fill();
-          ctx.beginPath();
-          ctx.arc(
-            boardCoordinate.x - this.tileSize / 4,
-            boardCoordinate.y + this.tileSize / 4,
-            this.tileSize / 12,
-            0,
-            Math.PI * 2,
-            true,
-          );
-          ctx.fill();
-          ctx.fillStyle = 'white';
-          ctx.beginPath();
-          ctx.arc(boardCoordinate.x + this.tileSize / 3, boardCoordinate.y, this.tileSize / 10, 0, Math.PI * 2, true);
-          ctx.fill();
-          break;
-        case Direction.RIGHT:
-          ctx.arc(
-            boardCoordinate.x + this.tileSize / 4,
-            boardCoordinate.y - this.tileSize / 4,
-            this.tileSize / 12,
-            0,
-            Math.PI * 2,
-            true,
-          );
-          ctx.fill();
-          ctx.beginPath();
-          ctx.arc(
-            boardCoordinate.x + this.tileSize / 4,
-            boardCoordinate.y + this.tileSize / 4,
-            this.tileSize / 12,
-            0,
-            Math.PI * 2,
-            true,
-          );
-          ctx.fill();
-          ctx.fillStyle = 'white';
-          ctx.beginPath();
-          ctx.arc(boardCoordinate.x - this.tileSize / 3, boardCoordinate.y, this.tileSize / 10, 0, Math.PI * 2, true);
-          ctx.fill();
-          break;
-      }
+    if (character.stunned) {
+      this.renderStunnedEyes(ctx, direction, boardCoordinate);
+      this.renderShine(ctx, direction, boardCoordinate);
+      this.renderStunnedStars(ctx, boardCoordinate, fractionOfTick);
+    } else if (!(prevCharacter.carryingPowerUp && !character.carryingPowerUp)) {
+      this.renderNormalEyes(ctx, direction, boardCoordinate);
+      this.renderShine(ctx, direction, boardCoordinate);
     }
+  }
+
+  private renderShine(ctx: CanvasRenderingContext2D, direction: Direction, boardCoordinate: Coordinate) {
+    ctx.fillStyle = 'white';
+    ctx.beginPath();
+    switch (direction) {
+      case Direction.DOWN:
+        ctx.arc(boardCoordinate.x, boardCoordinate.y - this.tileSize / 3, this.tileSize / 10, 0, Math.PI * 2, true);
+        break;
+      case Direction.UP:
+        ctx.arc(boardCoordinate.x, boardCoordinate.y + this.tileSize / 3, this.tileSize / 10, 0, Math.PI * 2, true);
+        break;
+      case Direction.LEFT:
+        ctx.arc(boardCoordinate.x + this.tileSize / 3, boardCoordinate.y, this.tileSize / 10, 0, Math.PI * 2, true);
+        break;
+      case Direction.RIGHT:
+        ctx.arc(boardCoordinate.x - this.tileSize / 3, boardCoordinate.y, this.tileSize / 10, 0, Math.PI * 2, true);
+        break;
+    }
+    ctx.fill();
+  }
+
+  private renderNormalEyes(ctx: CanvasRenderingContext2D, direction: Direction, boardCoordinate: Coordinate) {
+    ctx.fillStyle = 'black';
+    switch (direction) {
+      case Direction.DOWN:
+        ctx.beginPath();
+        ctx.arc(
+          boardCoordinate.x - this.tileSize / 4,
+          boardCoordinate.y + this.tileSize / 4,
+          this.tileSize / 12,
+          0,
+          Math.PI * 2,
+          true,
+        );
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(
+          boardCoordinate.x + this.tileSize / 4,
+          boardCoordinate.y + this.tileSize / 4,
+          this.tileSize / 12,
+          0,
+          Math.PI * 2,
+          true,
+        );
+        ctx.fill();
+        break;
+      case Direction.UP:
+        ctx.beginPath();
+        ctx.arc(
+          boardCoordinate.x - this.tileSize / 4,
+          boardCoordinate.y - this.tileSize / 4,
+          this.tileSize / 12,
+          0,
+          Math.PI * 2,
+          true,
+        );
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(
+          boardCoordinate.x + this.tileSize / 4,
+          boardCoordinate.y - this.tileSize / 4,
+          this.tileSize / 12,
+          0,
+          Math.PI * 2,
+          true,
+        );
+        ctx.fill();
+        break;
+      case Direction.LEFT:
+        ctx.beginPath();
+        ctx.arc(
+          boardCoordinate.x - this.tileSize / 4,
+          boardCoordinate.y - this.tileSize / 4,
+          this.tileSize / 12,
+          0,
+          Math.PI * 2,
+          true,
+        );
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(
+          boardCoordinate.x - this.tileSize / 4,
+          boardCoordinate.y + this.tileSize / 4,
+          this.tileSize / 12,
+          0,
+          Math.PI * 2,
+          true,
+        );
+        ctx.fill();
+        break;
+      case Direction.RIGHT:
+        ctx.beginPath();
+        ctx.arc(
+          boardCoordinate.x + this.tileSize / 4,
+          boardCoordinate.y - this.tileSize / 4,
+          this.tileSize / 12,
+          0,
+          Math.PI * 2,
+          true,
+        );
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(
+          boardCoordinate.x + this.tileSize / 4,
+          boardCoordinate.y + this.tileSize / 4,
+          this.tileSize / 12,
+          0,
+          Math.PI * 2,
+          true,
+        );
+        ctx.fill();
+        break;
+    }
+  }
+
+  private renderStunnedEyes(ctx: CanvasRenderingContext2D, direction: Direction, boardCoordinate: Coordinate) {
+    ctx.strokeStyle = 'black';
+    switch (direction) {
+      case Direction.DOWN:
+        ctx.beginPath();
+        ctx.moveTo(boardCoordinate.x - this.tileSize / 3, boardCoordinate.y + this.tileSize / 3);
+        ctx.lineTo(boardCoordinate.x - this.tileSize / 6, boardCoordinate.y + this.tileSize / 6);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(boardCoordinate.x - this.tileSize / 3, boardCoordinate.y + this.tileSize / 6);
+        ctx.lineTo(boardCoordinate.x - this.tileSize / 6, boardCoordinate.y + this.tileSize / 3);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(boardCoordinate.x + this.tileSize / 3, boardCoordinate.y + this.tileSize / 3);
+        ctx.lineTo(boardCoordinate.x + this.tileSize / 6, boardCoordinate.y + this.tileSize / 6);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(boardCoordinate.x + this.tileSize / 3, boardCoordinate.y + this.tileSize / 6);
+        ctx.lineTo(boardCoordinate.x + this.tileSize / 6, boardCoordinate.y + this.tileSize / 3);
+        ctx.stroke();
+        break;
+      case Direction.UP:
+        ctx.beginPath();
+        ctx.moveTo(boardCoordinate.x - this.tileSize / 3, boardCoordinate.y - this.tileSize / 3);
+        ctx.lineTo(boardCoordinate.x - this.tileSize / 6, boardCoordinate.y - this.tileSize / 6);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(boardCoordinate.x - this.tileSize / 3, boardCoordinate.y - this.tileSize / 6);
+        ctx.lineTo(boardCoordinate.x - this.tileSize / 6, boardCoordinate.y - this.tileSize / 3);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(boardCoordinate.x + this.tileSize / 3, boardCoordinate.y - this.tileSize / 3);
+        ctx.lineTo(boardCoordinate.x + this.tileSize / 6, boardCoordinate.y - this.tileSize / 6);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(boardCoordinate.x + this.tileSize / 3, boardCoordinate.y - this.tileSize / 6);
+        ctx.lineTo(boardCoordinate.x + this.tileSize / 6, boardCoordinate.y - this.tileSize / 3);
+        ctx.stroke();
+        break;
+      case Direction.LEFT:
+        ctx.beginPath();
+        ctx.moveTo(boardCoordinate.x - this.tileSize / 3, boardCoordinate.y - this.tileSize / 3);
+        ctx.lineTo(boardCoordinate.x - this.tileSize / 6, boardCoordinate.y - this.tileSize / 6);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(boardCoordinate.x - this.tileSize / 3, boardCoordinate.y - this.tileSize / 6);
+        ctx.lineTo(boardCoordinate.x - this.tileSize / 6, boardCoordinate.y - this.tileSize / 3);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(boardCoordinate.x - this.tileSize / 3, boardCoordinate.y + this.tileSize / 3);
+        ctx.lineTo(boardCoordinate.x - this.tileSize / 6, boardCoordinate.y + this.tileSize / 6);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(boardCoordinate.x - this.tileSize / 3, boardCoordinate.y + this.tileSize / 6);
+        ctx.lineTo(boardCoordinate.x - this.tileSize / 6, boardCoordinate.y + this.tileSize / 3);
+        ctx.stroke();
+        break;
+      case Direction.RIGHT:
+        ctx.beginPath();
+        ctx.moveTo(boardCoordinate.x + this.tileSize / 3, boardCoordinate.y - this.tileSize / 3);
+        ctx.lineTo(boardCoordinate.x + this.tileSize / 6, boardCoordinate.y - this.tileSize / 6);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(boardCoordinate.x + this.tileSize / 3, boardCoordinate.y - this.tileSize / 6);
+        ctx.lineTo(boardCoordinate.x + this.tileSize / 6, boardCoordinate.y - this.tileSize / 3);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(boardCoordinate.x + this.tileSize / 3, boardCoordinate.y + this.tileSize / 3);
+        ctx.lineTo(boardCoordinate.x + this.tileSize / 6, boardCoordinate.y + this.tileSize / 6);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(boardCoordinate.x + this.tileSize / 3, boardCoordinate.y + this.tileSize / 6);
+        ctx.lineTo(boardCoordinate.x + this.tileSize / 6, boardCoordinate.y + this.tileSize / 3);
+        ctx.stroke();
+        break;
+    }
+  }
+
+  private renderStunnedStars(ctx: CanvasRenderingContext2D, boardCoordinate: Coordinate, fractionOfTick: number) {
+    const { worldTick } = this.props.gameBoardState;
+    ctx.strokeStyle = 'white';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(
+      boardCoordinate.x + this.tileSize / 3,
+      boardCoordinate.y,
+      (this.tileSize / 4) * (((2 + worldTick + fractionOfTick) % 5) / 5),
+      0,
+      Math.PI * 2,
+      true,
+    );
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(
+      boardCoordinate.x - this.tileSize / 3,
+      boardCoordinate.y - this.tileSize / 3,
+      (this.tileSize / 4) * (((worldTick + fractionOfTick) % 5) / 5),
+      0,
+      Math.PI * 2,
+      true,
+    );
+    ctx.stroke();
+    ctx.lineWidth = 1;
   }
 
   private sameCoordinates(c1: Coordinate, c2: Coordinate): boolean {
