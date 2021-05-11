@@ -1,8 +1,6 @@
 import React, { useEffect, useReducer, useState } from 'react';
 import styled from 'styled-components/macro';
 
-import Slider from '../../common/ui/Slider';
-import { Spacing } from '../../common/ui/Spacing';
 import Config from '../../Config';
 
 import { PlayControlButton } from './PlayControlButton';
@@ -43,26 +41,36 @@ export function GameController({ onGameSpeedChange, onPauseGame }: GameControlle
     [playing, onPauseGame],
   );
 
+  const handleOnGameSpeedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = Number.parseInt(event.target.value, 10);
+    if (!Number.isNaN(value)) {
+      setGameSpeed(value);
+    }
+  };
+
   return (
-    <Spacing>
-      <FlexContainer>
-        <PlayControlButton playing={playing} onClick={togglePlaying} />
-        <GameSpeedContainer>
-          <div>Game Speed</div>
-          <Slider
-            reverse
-            minValue={Config.GameSpeedMin}
-            maxValue={Config.GameSpeedMax}
-            value={gameSpeed}
-            onChange={setGameSpeed}
-          />
-        </GameSpeedContainer>
-      </FlexContainer>
-    </Spacing>
+    <FlexContainer>
+      <PlayControlButton playing={playing} onClick={togglePlaying} />
+      <GameSpeedContainer role="radiogroup">
+        <label>
+          <input type="radio" name="gameSpeed" value={Config.GameSpeedMax} onChange={handleOnGameSpeedChange} />
+          x0.5
+        </label>
+        <label>
+          <input type="radio" name="gameSpeed" value={Config.DefaultGameSpeed} onChange={handleOnGameSpeedChange} />
+          x1
+        </label>
+        <label>
+          <input type="radio" name="gameSpeed" value={Config.GameSpeedMin} onChange={handleOnGameSpeedChange} />
+          x6
+        </label>
+      </GameSpeedContainer>
+    </FlexContainer>
   );
 }
 
 const FlexContainer = styled.div`
   display: flex;
   flex-direction: row;
+  align-items: center;
 `;

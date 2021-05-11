@@ -10,7 +10,7 @@ interface Props {
 }
 
 const TimerContainer = styled.div`
-  font-size: 2rem;
+  font-size: 1rem;
   font-family: 'Short Stack', sans-serif;
 `;
 

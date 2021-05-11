@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 
 interface ProgressBarProps {
   lastWorldTick: number;
@@ -17,6 +17,7 @@ export const ProgressBar = ({ lastWorldTick, worldTick, onWorldTickChange }: Pro
 
   return (
     <ProgressBarContainer>
+      <Progress style={{ width: `${(100 * worldTick) / lastWorldTick}%` }} />
       <ProgressBarSlider type="range" min={0} max={lastWorldTick} value={worldTick} onChange={setWorldTick} />
     </ProgressBarContainer>
   );
@@ -26,7 +27,23 @@ const ProgressBarContainer = styled.div`
   position: relative;
   width: 100%;
   height: 8px;
-  background-color: white;
+  background-color: #000735;
+`;
+
+const Progress = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 8px;
+  margin: 0;
+  background-color: #eab8b2;
+`;
+
+const thumbCss = css`
+  height: 8px;
+  width: 0;
+  border-radius: none;
+  background-color: #eab8b2;
 `;
 
 const ProgressBarSlider = styled.input`
@@ -36,4 +53,22 @@ const ProgressBarSlider = styled.input`
   width: 100%;
   height: 8px;
   margin: 0;
+  z-index: 1;
+  cursor: pointer;
+
+  -webkit-appearance: none;
+  background-color: transparent;
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    ${thumbCss};
+  }
+
+  &::-moz-range-thumb {
+    ${thumbCss};
+  }
+
+  &::-ms-thumb {
+    ${thumbCss};
+  }
 `;

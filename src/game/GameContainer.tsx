@@ -62,6 +62,7 @@ const Column = styled.div`
 const GamerControllerContainer = styled.div`
   display: flex;
   justify-content: space-between;
+  background-color: white;
 `;
 
 const FlexContainer = styled.div`
